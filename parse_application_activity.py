@@ -1,242 +1,458 @@
 #!/usr/bin/env python3
 """
-parse_application_activity.py
-Parse Windows Prefetch (.pf) files directly → application_activity.json
+parse_event_logs.py
+Artifact : Event Logs + Network Activity
+Sources  : .evtx (Windows Vista+) via python-evtx
+           .evt  (Windows XP)     via basic binary parsing (no deprecated libs)
 
-Supports format versions:
-  17 = Windows XP / 2003
-  23 = Windows Vista / 7
-  26 = Windows 8 / 8.1
-  30 = Windows 10 (uncompressed — MAM-compressed files noted but skipped)
-
-No EZ Tools required.
+Usage:
+    python3 parse_event_logs.py --mount <mount_point> --output <event.json> --network <network.json>
+    python3 parse_event_logs.py --raw-dir <raw/event_logs> --output <event.json> --network <network.json>
 """
 
 import argparse
 import json
 import os
 import struct
-import sys
-from datetime import datetime, timezone, timedelta
+import xml.etree.ElementTree as ET
+from datetime import datetime, timezone
 from pathlib import Path
 
-WINDOWS_EPOCH = datetime(1601, 1, 1, tzinfo=timezone.utc)
-SCCA_MAGIC = b"SCCA"
-MAM_MAGIC  = b"MAM\x04"  # Windows 10 compressed
+# ── Event ID categories ───────────────────────────────────────────────────────
+
+NETWORK_EVENT_IDS = {
+    # Sysmon network connection
+    3,
+    # DNS query (Sysmon)
+    22,
+    # Windows Filtering Platform — allowed/blocked connection
+    5156, 5157, 5158,
+    # RDP session connect/disconnect
+    4778, 4779,
+    # Network share access
+    5140, 5142, 5144, 5145,
+    # WLAN connect/disconnect (WLAN-AutoConfig)
+    4001, 4002, 4003, 4004, 4005,
+    8001, 8002, 8003,
+    11000, 11001, 11002,
+    # Network Profile changes
+    10000, 10001,
+    # DHCP
+    50066, 50067, 50068, 50073, 50074,
+    # VPN / RAS
+    20225, 20226,
+    # Windows Firewall rule changes
+    2003, 2004, 2005,
+    # SMB client connectivity
+    30800, 30803, 30804,
+    # DNS Client
+    3020, 3008,
+    # Network logon (includes network-type logons)
+    4624, 4625,
+}
+
+LOGON_EVENT_IDS    = {4624, 4625, 4634, 4647, 4648, 4672, 4768, 4769}
+PROCESS_EVENT_IDS  = {4688, 4689}
+SERVICE_EVENT_IDS  = {7045, 4697, 7036}
+
+# ── Helpers ───────────────────────────────────────────────────────────────────
+
+def now_iso() -> str:
+    return datetime.now(timezone.utc).isoformat()
 
 
-def filetime_to_iso(ft: int) -> str:
-    if ft == 0:
-        return ""
+def normalize_ts(ts: str | None) -> str | None:
+    if not ts:
+        return None
+    ts = ts.strip().rstrip("Z")
+    for fmt in [
+        "%Y-%m-%dT%H:%M:%S.%f",
+        "%Y-%m-%dT%H:%M:%S",
+        "%Y-%m-%d %H:%M:%S",
+    ]:
+        try:
+            return datetime.strptime(ts, fmt).replace(tzinfo=timezone.utc).isoformat()
+        except ValueError:
+            continue
+    return ts
+
+
+def filetime_to_iso(filetime: int) -> str | None:
+    """Convert Windows FILETIME (100ns intervals since 1601-01-01) to ISO 8601."""
     try:
-        return (WINDOWS_EPOCH + timedelta(microseconds=ft // 10)).isoformat()
+        unix_ts = (filetime - 116444736000000000) / 10_000_000
+        return datetime.fromtimestamp(unix_ts, tz=timezone.utc).isoformat()
     except Exception:
-        return ""
+        return None
 
+# ── EVTX parser (python-evtx) ─────────────────────────────────────────────────
 
-def read_utf16(data: bytes, offset: int, max_bytes: int) -> str:
-    chunk = data[offset:offset + max_bytes]
+def _parse_evtx_xml(xml_str: str, file_name: str) -> dict | None:
+    """Parse a single EVTX record XML into a normalized dict."""
     try:
-        s = chunk.decode("utf-16-le", errors="replace")
-        return s.split("\x00")[0]
+        root = ET.fromstring(xml_str)
+        ns = {"e": "http://schemas.microsoft.com/win/2004/08/events/event"}
+
+        system = root.find("e:System", ns)
+        if system is None:
+            system = root.find("System")
+        if system is None:
+            return None
+
+        def get_text(tag: str) -> str | None:
+            n = system.find(f"e:{tag}", ns)
+            if n is None:
+                n = system.find(tag)
+            return n.text if n is not None else None
+
+        def get_attr(tag: str, attr: str) -> str | None:
+            n = system.find(f"e:{tag}", ns)
+            if n is None:
+                n = system.find(tag)
+            return n.attrib.get(attr) if n is not None else None
+
+        event_id_raw = get_text("EventID")
+        event_id = int(event_id_raw) if event_id_raw and event_id_raw.isdigit() else None
+
+        # EventData — grab all Data elements
+        event_data_el = root.find("e:EventData", ns)
+        if event_data_el is None:
+            event_data_el = root.find("EventData")
+        event_data = {}
+        if event_data_el is not None:
+            for data in event_data_el:
+                name = data.attrib.get("Name", f"Data_{len(event_data)}")
+                event_data[name] = data.text or ""
+
+        return {
+            "source_format": "evtx",
+            "file":          file_name,
+            "event_id":      event_id,
+            "provider":      get_attr("Provider", "Name"),
+            "timestamp":     normalize_ts(get_attr("TimeCreated", "SystemTime")),
+            "computer":      get_text("Computer"),
+            "level":         get_text("Level"),
+            "channel":       get_text("Channel"),
+            "record_id":     get_text("EventRecordID"),
+            "event_data":    event_data,
+        }
     except Exception:
-        return ""
-
-
-def parse_pf_v17(data: bytes, filename: str) -> dict | None:
-    """Windows XP prefetch format (version 17)."""
-    if len(data) < 0x98:
         return None
 
-    exe_name = read_utf16(data, 0x10, 60)
-    pf_hash  = struct.unpack_from("<I", data, 0x4C)[0]
 
-    # Section offsets
-    sec_a_off = struct.unpack_from("<I", data, 0x54)[0]  # file metrics
-    sec_a_cnt = struct.unpack_from("<I", data, 0x58)[0]
-    sec_c_off = struct.unpack_from("<I", data, 0x64)[0]  # filename strings
-    sec_c_len = struct.unpack_from("<I", data, 0x68)[0]
-
-    last_run_ft = struct.unpack_from("<Q", data, 0x78)[0]
-    run_count   = struct.unpack_from("<I", data, 0x90)[0]
-
-    # Parse referenced filenames (section C = UTF-16LE string pool)
-    filenames = []
-    if sec_c_off and sec_c_len and sec_c_off + sec_c_len <= len(data):
-        pool = data[sec_c_off:sec_c_off + sec_c_len]
-        raw = pool.decode("utf-16-le", errors="replace")
-        filenames = [f for f in raw.split("\x00") if f.strip()]
-
-    return {
-        "executable":    exe_name,
-        "pf_hash":       f"{pf_hash:08X}",
-        "format_version": 17,
-        "run_count":     run_count,
-        "last_run":      filetime_to_iso(last_run_ft),
-        "previous_runs": [],
-        "files_loaded":  filenames,
-        "source_file":   filename,
-    }
-
-
-def parse_pf_v23_v26(data: bytes, version: int, filename: str) -> dict | None:
-    """Windows Vista/7 (v23) and Win8/8.1 (v26) prefetch format."""
-    if len(data) < 0xF0:
-        return None
-
-    exe_name = read_utf16(data, 0x10, 60)
-    pf_hash  = struct.unpack_from("<I", data, 0x4C)[0]
-
-    sec_c_off = struct.unpack_from("<I", data, 0x64)[0]
-    sec_c_len = struct.unpack_from("<I", data, 0x68)[0]
-
-    last_run_ft = struct.unpack_from("<Q", data, 0x80)[0]
-    run_count   = struct.unpack_from("<I", data, 0x98)[0]
-
-    filenames = []
-    if sec_c_off and sec_c_len and sec_c_off + sec_c_len <= len(data):
-        pool = data[sec_c_off:sec_c_off + sec_c_len]
-        raw = pool.decode("utf-16-le", errors="replace")
-        filenames = [f for f in raw.split("\x00") if f.strip()]
-
-    return {
-        "executable":    exe_name,
-        "pf_hash":       f"{pf_hash:08X}",
-        "format_version": version,
-        "run_count":     run_count,
-        "last_run":      filetime_to_iso(last_run_ft),
-        "previous_runs": [],
-        "files_loaded":  filenames,
-        "source_file":   filename,
-    }
-
-
-def parse_pf_v30(data: bytes, filename: str) -> dict | None:
-    """Windows 10 uncompressed prefetch (version 30)."""
-    if len(data) < 0x130:
-        return None
-
-    exe_name = read_utf16(data, 0x10, 60)
-    pf_hash  = struct.unpack_from("<I", data, 0x4C)[0]
-
-    sec_c_off = struct.unpack_from("<I", data, 0x64)[0]
-    sec_c_len = struct.unpack_from("<I", data, 0x68)[0]
-
-    # v30 has 8 run timestamps at 0x80
-    run_times = []
-    for i in range(8):
-        ft = struct.unpack_from("<Q", data, 0x80 + i * 8)[0]
-        ts = filetime_to_iso(ft)
-        if ts:
-            run_times.append(ts)
-
-    last_run = run_times[0] if run_times else ""
-    prev_runs = run_times[1:] if len(run_times) > 1 else []
-
-    run_count = struct.unpack_from("<I", data, 0xD0)[0] if len(data) > 0xD4 else 0
-
-    filenames = []
-    if sec_c_off and sec_c_len and sec_c_off + sec_c_len <= len(data):
-        pool = data[sec_c_off:sec_c_off + sec_c_len]
-        raw = pool.decode("utf-16-le", errors="replace")
-        filenames = [f for f in raw.split("\x00") if f.strip()]
-
-    return {
-        "executable":    exe_name,
-        "pf_hash":       f"{pf_hash:08X}",
-        "format_version": 30,
-        "run_count":     run_count,
-        "last_run":      last_run,
-        "previous_runs": prev_runs,
-        "files_loaded":  filenames,
-        "source_file":   filename,
-    }
-
-
-def parse_prefetch_file(pf_path: Path) -> dict | None:
+def parse_evtx_file(file_path: Path) -> list[dict]:
+    """Parse a .evtx file using python-evtx library."""
+    events = []
     try:
-        data = pf_path.read_bytes()
-    except Exception as e:
-        print(f"[!] Cannot read {pf_path}: {e}", file=sys.stderr)
+        from Evtx.Evtx import Evtx
+        with Evtx(str(file_path)) as log:
+            for record in log.records():
+                try:
+                    e = _parse_evtx_xml(record.xml(), file_path.name)
+                    if e:
+                        events.append(e)
+                except Exception:
+                    continue
+    except ImportError:
+        print("  [!] python-evtx not installed — install: sudo pip install python-evtx --break-system-packages")
+    except Exception as err:
+        print(f"  [!] EVTX error {file_path.name}: {err}")
+    return events
+
+# ── EVT parser (Windows XP binary format — no deprecated libs) ───────────────
+#
+# EVT record structure (each record starts at offset after header):
+#   0x00  DWORD  Length
+#   0x04  DWORD  Reserved (0x4C664C65 = "LfLe")
+#   0x08  DWORD  RecordNumber
+#   0x0C  DWORD  TimeGenerated  (Unix timestamp)
+#   0x10  DWORD  TimeWritten    (Unix timestamp)
+#   0x14  DWORD  EventID (low 16 bits) | EventType (high 16 bits)
+#   0x18  WORD   EventType
+#   0x1A  WORD   NumStrings
+#   0x1C  WORD   EventCategory
+#   0x1E  WORD   ReservedFlags
+#   0x20  DWORD  ClosingRecordNumber
+#   0x24  DWORD  StringOffset
+#   0x28  DWORD  UserSidLength
+#   0x2C  DWORD  UserSidOffset
+#   0x30  DWORD  DataLength
+#   0x34  DWORD  DataOffset
+#   0x38  ...    SourceName (null-terminated UTF-16LE)
+#          ...    ComputerName (null-terminated UTF-16LE)
+#          ...    UserSID (if present)
+#          ...    Strings (null-separated UTF-16LE)
+# ─────────────────────────────────────────────────────────────────────────────
+
+EVT_HEADER_MAGIC = b"LfLe"
+EVT_FILE_MAGIC   = b"ELfL"
+EVT_RECORD_FIXED = 56  # bytes of fixed fields before variable data
+
+EVT_LEVEL_MAP = {
+    1: "Error",
+    2: "Warning",
+    4: "Information",
+    8: "Success Audit",
+    16: "Failure Audit",
+}
+
+
+def _read_utf16_string(data: bytes, offset: int) -> tuple[str, int]:
+    """Read null-terminated UTF-16LE string at offset. Returns (string, new_offset)."""
+    end = offset
+    while end + 1 < len(data):
+        if data[end] == 0 and data[end + 1] == 0:
+            break
+        end += 2
+    try:
+        s = data[offset:end].decode("utf-16-le", errors="replace")
+    except Exception:
+        s = ""
+    return s, end + 2  # skip the null terminator
+
+
+def _parse_evt_record(data: bytes, file_name: str) -> dict | None:
+    """
+    Parse a single EVT record from raw bytes.
+    Returns normalized event dict or None on error.
+    """
+    if len(data) < EVT_RECORD_FIXED:
         return None
+
+    try:
+        length       = struct.unpack_from("<I", data, 0x00)[0]
+        magic        = data[0x04:0x08]
+        record_num   = struct.unpack_from("<I", data, 0x08)[0]
+        time_gen     = struct.unpack_from("<I", data, 0x0C)[0]
+        event_id_raw = struct.unpack_from("<I", data, 0x14)[0]
+        event_type   = struct.unpack_from("<H", data, 0x18)[0]
+        num_strings  = struct.unpack_from("<H", data, 0x1A)[0]
+        str_offset   = struct.unpack_from("<I", data, 0x24)[0]
+        sid_length   = struct.unpack_from("<I", data, 0x28)[0]
+        sid_offset   = struct.unpack_from("<I", data, 0x2C)[0]
+
+        if magic != EVT_HEADER_MAGIC:
+            return None
+
+        event_id = event_id_raw & 0xFFFF
+
+        # Timestamp
+        try:
+            timestamp = datetime.fromtimestamp(time_gen, tz=timezone.utc).isoformat()
+        except Exception:
+            timestamp = None
+
+        # Source name + computer name start at offset 0x38
+        source_name, pos = _read_utf16_string(data, 0x38)
+        computer_name, _ = _read_utf16_string(data, pos)
+
+        # Strings (event message parameters)
+        strings = []
+        if str_offset < len(data) and num_strings > 0:
+            str_pos = str_offset
+            for _ in range(num_strings):
+                if str_pos >= len(data):
+                    break
+                s, str_pos = _read_utf16_string(data, str_pos)
+                strings.append(s)
+
+        return {
+            "source_format": "evt",
+            "file":          file_name,
+            "event_id":      event_id,
+            "provider":      source_name,
+            "timestamp":     timestamp,
+            "computer":      computer_name,
+            "level":         EVT_LEVEL_MAP.get(event_type, str(event_type)),
+            "channel":       file_name.replace(".Evt", "").replace(".evt", ""),
+            "record_id":     record_num,
+            "event_data":    {f"String{i}": s for i, s in enumerate(strings)},
+        }
+    except Exception:
+        return None
+
+
+def parse_evt_file(file_path: Path) -> list[dict]:
+    """
+    Parse a Windows XP binary .evt file without any deprecated libraries.
+    Walks the file finding records by the LfLe magic signature.
+    """
+    events = []
+    try:
+        data = file_path.read_bytes()
+    except Exception as err:
+        print(f"  [!] Cannot read {file_path.name}: {err}")
+        return events
 
     if len(data) < 8:
-        return None
+        return events
 
-    # MAM compressed (Windows 10) — skip, would need decompression
-    if data[:4] == MAM_MAGIC:
+    # Scan for record magic "LfLe" (0x4C664C65)
+    # EVT file header is 48 bytes; records follow
+    pos = 48
+    while pos < len(data) - 4:
+        # Find next LfLe marker
+        idx = data.find(EVT_HEADER_MAGIC, pos)
+        if idx == -1:
+            break
+
+        # The record Length field is 4 bytes BEFORE the magic
+        rec_start = idx - 4
+        if rec_start < 0:
+            pos = idx + 4
+            continue
+
         try:
-            import ctypes
-            # Try xpress huffman decompression via RtlDecompressBufferEx
-            # Not available on Linux — note and skip
-            pass
+            rec_len = struct.unpack_from("<I", data, rec_start)[0]
         except Exception:
-            pass
-        print(f"[!] {pf_path.name}: MAM-compressed (Win10), skipping", file=sys.stderr)
-        return {
-            "executable":     pf_path.name,
-            "format_version": "MAM-compressed",
-            "note":           "Windows 10 compressed prefetch — use PECmd on Windows to parse",
-            "source_file":    pf_path.name,
-        }
+            pos = idx + 4
+            continue
 
-    if data[4:8] != SCCA_MAGIC:
-        print(f"[!] {pf_path.name}: not a valid prefetch file", file=sys.stderr)
-        return None
+        # Sanity check record length (between 56 bytes and 512KB)
+        if rec_len < EVT_RECORD_FIXED or rec_len > 524288:
+            pos = idx + 4
+            continue
 
-    version = struct.unpack_from("<I", data, 0)[0]
-    fname   = pf_path.name
+        rec_end = rec_start + rec_len
+        if rec_end > len(data):
+            pos = idx + 4
+            continue
 
-    if version == 17:
-        return parse_pf_v17(data, fname)
-    elif version == 23:
-        return parse_pf_v23_v26(data, 23, fname)
-    elif version == 26:
-        return parse_pf_v23_v26(data, 26, fname)
-    elif version == 30:
-        return parse_pf_v30(data, fname)
-    else:
-        print(f"[!] {fname}: unknown version {version}", file=sys.stderr)
-        return {"executable": fname, "format_version": version, "source_file": fname}
+        record_data = data[rec_start:rec_end]
+        event = _parse_evt_record(record_data, file_path.name)
+        if event:
+            events.append(event)
 
+        pos = rec_end
 
-def main() -> int:
-    ap = argparse.ArgumentParser(description="Parse .pf prefetch files → application_activity.json")
-    ap.add_argument("--raw-dir",  required=True, help="raw/ directory from extraction")
-    ap.add_argument("--output",   required=True, help="Output JSON file")
-    ap.add_argument("--json-dir", default="", help="(unused, legacy compat)")
-    args = ap.parse_args()
+    return events
 
-    prefetch_dir = Path(args.raw_dir) / "prefetch"
-    if not prefetch_dir.is_dir():
-        print(f"[!] Prefetch dir not found: {prefetch_dir}", file=sys.stderr)
-        records = []
-    else:
-        pf_files = sorted(prefetch_dir.glob("*.pf"))
-        print(f"[*] Found {len(pf_files)} .pf files")
-        records = []
-        for pf in pf_files:
-            rec = parse_prefetch_file(pf)
-            if rec:
-                records.append(rec)
-        print(f"[✓] Parsed {len(records)} prefetch entries")
+# ── Directory scanner ─────────────────────────────────────────────────────────
 
-    # Sort by last_run descending so most recent appears first
-    records.sort(key=lambda r: r.get("last_run", "") or "", reverse=True)
+def parse_event_logs_dir(log_dir: Path) -> list[dict]:
+    """Parse all .evtx and .evt files in a directory."""
+    all_events = []
 
-    result = {
-        "artifact":  "application_activity",
-        "parsed_at": datetime.now(timezone.utc).isoformat() + "Z",
-        "count":     len(records),
-        "records":   records,
+    if not log_dir.exists():
+        print(f"  [!] Event logs dir not found: {log_dir}")
+        return all_events
+
+    evtx_files = list(log_dir.rglob("*.evtx"))
+    evt_files  = list(log_dir.rglob("*.evt")) + list(log_dir.rglob("*.Evt"))
+
+    print(f"  [*] Found {len(evtx_files)} .evtx, {len(evt_files)} .evt files")
+
+    for f in evtx_files:
+        events = parse_evtx_file(f)
+        print(f"    evtx {f.name}: {len(events)} records")
+        all_events.extend(events)
+
+    for f in evt_files:
+        events = parse_evt_file(f)
+        print(f"    evt  {f.name}: {len(events)} records")
+        all_events.extend(events)
+
+    return all_events
+
+# ── Categorize events ─────────────────────────────────────────────────────────
+
+def categorize(events: list[dict]) -> dict[str, list[dict]]:
+    network = []
+    logon   = []
+    process = []
+    service = []
+
+    for e in events:
+        eid = e.get("event_id")
+        if eid in NETWORK_EVENT_IDS:  network.append(e)
+        if eid in LOGON_EVENT_IDS:    logon.append(e)
+        if eid in PROCESS_EVENT_IDS:  process.append(e)
+        if eid in SERVICE_EVENT_IDS:  service.append(e)
+
+    return {
+        "network": network,
+        "logon":   logon,
+        "process": process,
+        "service": service,
     }
 
-    Path(args.output).parent.mkdir(parents=True, exist_ok=True)
-    with open(args.output, "w", encoding="utf-8") as fh:
-        json.dump(result, fh, indent=2, ensure_ascii=False, default=str)
-    print(f"[✓] Written → {args.output}")
-    return 0
+# ── Main ──────────────────────────────────────────────────────────────────────
+
+def main():
+    parser = argparse.ArgumentParser(description="Parse Event Logs (.evtx + .evt) → JSON")
+    parser.add_argument("--mount",   help="Mount point (script finds winevt/Logs automatically)")
+    parser.add_argument("--raw-dir", help="Directory containing pre-copied .evtx/.evt files")
+    parser.add_argument("--output",  required=True, help="Output JSON for all event logs")
+    parser.add_argument("--network", required=True, help="Output JSON for network events")
+    args = parser.parse_args()
+
+    # Determine source directory
+    if args.raw_dir:
+        log_dir = Path(args.raw_dir)
+    elif args.mount:
+        # Try common paths
+        mount = Path(args.mount)
+        candidates = [
+            mount / "Windows/System32/winevt/Logs",
+            mount / "WINDOWS/System32/winevt/Logs",
+            mount / "WINDOWS/system32/config",   # XP .evt location
+        ]
+        log_dir = next((p for p in candidates if p.exists()), None)
+        if not log_dir:
+            # Fallback: search
+            found = list(mount.rglob("*.evtx"))[:1] or list(mount.rglob("*.evt"))[:1]
+            log_dir = found[0].parent if found else Path("/nonexistent")
+    else:
+        parser.error("Provide --mount or --raw-dir")
+
+    print(f"  [*] Parsing event logs from: {log_dir}")
+    all_events = parse_event_logs_dir(log_dir)
+
+    cats = categorize(all_events)
+
+    srt = lambda lst: sorted(lst, key=lambda x: x.get("timestamp") or "", reverse=True)
+
+    # Write event_logs.json
+    out_path = Path(args.output)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump({
+            "metadata": {
+                "artifact_type": "event_logs",
+                "parsed_at":     now_iso(),
+                "source":        str(log_dir),
+            },
+            "summary": {
+                "total_events":   len(all_events),
+                "network_events": len(cats["network"]),
+                "logon_events":   len(cats["logon"]),
+                "process_events": len(cats["process"]),
+                "service_events": len(cats["service"]),
+            },
+            "logon_events":   srt(cats["logon"]),
+            "process_events": srt(cats["process"]),
+            "service_events": srt(cats["service"]),
+            "all_events":     srt(all_events),
+        }, f, indent=2, ensure_ascii=False)
+
+    print(f"  [✓] {len(all_events)} total events → {out_path}")
+
+    # Write network_activity.json
+    net_path = Path(args.network)
+    net_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(net_path, "w", encoding="utf-8") as f:
+        json.dump({
+            "metadata": {
+                "artifact_type": "network_activity",
+                "parsed_at":     now_iso(),
+                "source":        str(log_dir),
+            },
+            "summary": {"total_network_events": len(cats["network"])},
+            "network_events": srt(cats["network"]),
+        }, f, indent=2, ensure_ascii=False)
+
+    print(f"  [✓] {len(cats['network'])} network events → {net_path}")
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()
