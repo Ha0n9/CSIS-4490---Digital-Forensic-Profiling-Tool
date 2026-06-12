@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-# mount_and_extract.sh
+# mount_and_extract_hives.sh
 # Mount E01 image and extract ALL forensic artifacts:
 #   - User Accounts      (SAM, NTUSER.DAT, UsrClass.dat)
 #   - Application Activity (Prefetch)
@@ -10,17 +10,17 @@
 #   - Event Logs         (.evtx / .evt)
 #   - Network Activity   (hosts, network hives, DNS cache artifacts)
 #
-# Supports: Windows XP, Vista, 7, 8, 10, 11
+# Supports: Windows XP, 10, 11
 #
 # Usage:
-#   bash mount_and_extract.sh -e /path/to/image.E01 -o /path/to/output
-#   bash mount_and_extract.sh -e /path/to/image.E01 -o /path/to/output -k
-#   bash mount_and_extract.sh -e /path/to/image.E01 -o /path/to/output -v
+#   bash mount_and_extract_hives.sh -e /path/to/image.E01 -o /path/to/output
+#   bash mount_and_extract_hives.sh -e /path/to/image.E01 -o /path/to/output -k
+#   bash mount_and_extract_hives.sh -e /path/to/image.E01 -o /path/to/output -v
 # =============================================================================
 
 # ── Shell compat ──────────────────────────────────────────────────────────────
 if [ -n "${ZSH_VERSION:-}" ]; then
-    setopt errexit nounset pipefail 2>/dev/null || true
+    setopt nounset pipefail 2>/dev/null || true
 else
     set -uo pipefail
 fi
@@ -83,15 +83,18 @@ EWF_MOUNT="/mnt/ewf_$$"
 IMG_MOUNT="/mnt/img_$$"
 
 # ── Cleanup on exit ───────────────────────────────────────────────────────────
-LOOP_DEV=""  # initialise here so cleanup always has it in scope
+LOOP_DEV=""
 
 cleanup() {
-    [[ -n "${LOOP_DEV:-}" ]] && sudo losetup -d "$LOOP_DEV" 2>/dev/null || true
+    if [[ -n "${LOOP_DEV:-}" ]]; then
+        sudo losetup -d "$LOOP_DEV" 2>/dev/null || true
+        LOOP_DEV=""
+    fi
 
     if [[ "$KEEP_MOUNTED" == false ]]; then
         log_info "Unmounting and cleaning up..."
         sudo umount "$IMG_MOUNT" 2>/dev/null || true
-        sudo umount "$EWF_MOUNT" 2>/dev/null || true
+        sudo umount -l "$EWF_MOUNT" 2>/dev/null || true
         sudo rmdir  "$IMG_MOUNT" 2>/dev/null || true
         sudo rmdir  "$EWF_MOUNT" 2>/dev/null || true
         log_success "Cleanup done"
@@ -101,7 +104,9 @@ cleanup() {
         log_info  "  EWF  : $EWF_MOUNT"
         log_info  "  Image: $IMG_MOUNT"
         log_info  "To unmount manually:"
-        log_info  "  sudo umount $IMG_MOUNT && sudo umount $EWF_MOUNT"
+        log_info  "  sudo umount $IMG_MOUNT"
+        log_info  "  sudo umount -l $EWF_MOUNT"
+        [[ -n "${LOOP_DEV:-}" ]] && log_info "  sudo losetup -d $LOOP_DEV"
     fi
 }
 trap cleanup EXIT
@@ -111,7 +116,7 @@ TOTAL_EXTRACTED=0
 TOTAL_FAILED=0
 LOG_FILE="$OUTPUT_DIR/extraction.log"
 
-# ── Helper: copy a single file, log it ───────────────────────────────────────
+# ── Helper: copy a single file (always with sudo) ────────────────────────────
 cp_artifact() {
     local src="$1" dest="$2" label="$3"
     [[ ! -f "$src" ]] && return 1
@@ -138,7 +143,7 @@ cp_dir() {
     return 0
 }
 
-# ── Skip list for user profiles ───────────────────────────────────────────────
+# ── Skip list for system user profiles ───────────────────────────────────────
 is_system_user() {
     case "$1" in
         "All Users"|"Default User"|"Default"|"Public"|"LocalService"|"NetworkService"|"systemprofile") return 0 ;;
@@ -153,7 +158,7 @@ echo ""
 echo -e "${CYAN}${BOLD}"
 echo "  ╔══════════════════════════════════════════════════════╗"
 echo "  ║     E01 Mount & Full Forensic Artifact Extractor    ║"
-echo "  ║     Supports: Windows XP / Vista / 7 / 8 / 10 / 11 ║"
+echo "  ║     Supports: Windows XP / 10 / 11                  ║"
 echo "  ╚══════════════════════════════════════════════════════╝"
 echo -e "${NC}"
 echo -e "  E01 Image : ${YELLOW}$E01_FILE${NC}"
@@ -184,7 +189,7 @@ if [[ $MISSING -gt 0 ]]; then
 fi
 
 # =============================================================================
-# STEP 2: Verify E01 integrity (MODIFIED ONLY HERE)
+# STEP 2: Verify E01 integrity
 # =============================================================================
 log_step "Step 2: Verifying E01 image integrity"
 
@@ -197,7 +202,6 @@ if [[ "$SKIP_VERIFY" == true ]]; then
     log_warn "Skipping ewfverify (-v enabled)"
 else
     log_info "Running ewfverify (this may take a while)..."
-
     VERIFY_OUTPUT=$(ewfverify "$E01_FILE" 2>&1)
     if [[ $? -eq 0 ]]; then
         log_success "Image integrity verified OK"
@@ -216,6 +220,8 @@ ewfinfo "$E01_FILE" 2>/dev/null \
 
 # =============================================================================
 # STEP 3: Mount E01
+# FIX: ewfmount 20140816 crashes with -X allow_other
+#      → mount as root (sudo), use sudo find/ls everywhere after this point
 # =============================================================================
 log_step "Step 3: Mounting E01 image"
 
@@ -223,11 +229,21 @@ sudo mkdir -p "$EWF_MOUNT" "$IMG_MOUNT"
 sudo ewfmount "$E01_FILE" "$EWF_MOUNT"
 log_success "ewfmount OK → $EWF_MOUNT"
 
-EWF_DEVICE="$EWF_MOUNT/ewf1"
-[[ ! -e "$EWF_DEVICE" ]] && { log_error "ewf1 not found in $EWF_MOUNT"; exit 1; }
+# FIX: use sudo find — FUSE mount owned by root, non-root find returns nothing
+EWF_DEVICE=$(sudo find "$EWF_MOUNT" -maxdepth 1 \( -type f -o -type b \) 2>/dev/null | head -1 || true)
+
+if [[ -z "$EWF_DEVICE" ]]; then
+    log_error "No device found in $EWF_MOUNT after ewfmount"
+    log_error "Contents: $(sudo ls -la "$EWF_MOUNT" 2>/dev/null || echo 'empty')"
+    exit 1
+fi
+
+log_info "EWF device: $EWF_DEVICE"
 
 # =============================================================================
-# STEP 4: Detect partition + mount Windows filesystem
+# STEP 4: Detect partition layout
+# FIX: mmls GPT format columns are Start($3) End($4) Length($5) Description($6+)
+#      Old code used $4 as Length — that was End sector, causing wrong partition selection
 # =============================================================================
 log_step "Step 4: Detecting partition layout"
 
@@ -237,35 +253,53 @@ echo "$MMLS_OUTPUT"
 
 WINDOWS_OFFSET=""
 WINDOWS_SIZE=0
+
 while IFS= read -r line; do
-    [[ "$line" =~ ^[[:space:]]*$ || "$line" =~ ^[A-Z] ]] && continue
+    # Skip blank, header, and meta/unallocated lines
+    [[ "$line" =~ ^[[:space:]]*$ ]] && continue
+    [[ "$line" =~ ^[A-Za-z] ]]     && continue
     echo "$line" | grep -qE "Meta|Unallocated|\-\-\-\-\-" && continue
+
+    # GPT mmls format: "NNN:  SSS  Start  End  Length  Description"
+    # FIX: $3=Start(offset), $5=Length — NOT $4
     OFFSET=$(echo "$line" | awk '{print $3}' | tr -d '[:space:]')
-    LENGTH=$(echo "$line" | awk '{print $4}' | tr -d '[:space:]')
+    LENGTH=$(echo "$line" | awk '{print $5}' | tr -d '[:space:]')
     DESC=$(echo "$line"   | awk '{for(i=6;i<=NF;i++) printf $i" "}' | tr '[:upper:]' '[:lower:]')
-    [[ -z "$LENGTH" || "$LENGTH" == "0000000000" ]] && continue
+
+    [[ -z "$OFFSET" || -z "$LENGTH" || "$LENGTH" == "0000000000" ]] && continue
+
     if echo "$DESC" | grep -qiE "ntfs|basic data|windows"; then
-        LEN_DEC=$(echo "$LENGTH" | sed 's/^0*//' | tr -d '[:space:]')
+        # Strip leading zeros → decimal
+        LEN_DEC=$(echo "$LENGTH" | sed 's/^0*//')
         LEN_DEC=${LEN_DEC:-0}
         if [[ "$LEN_DEC" -gt "$WINDOWS_SIZE" ]]; then
             WINDOWS_SIZE=$LEN_DEC
             WINDOWS_OFFSET="$OFFSET"
-            log_info "Candidate: offset=$OFFSET size=$LENGTH ($DESC)"
+            log_info "Candidate: offset=$OFFSET length=$LENGTH ($DESC)"
         fi
     fi
 done <<< "$MMLS_OUTPUT"
-[[ -n "$WINDOWS_OFFSET" ]] && log_success "Selected largest Windows partition at offset $WINDOWS_OFFSET"
 
+[[ -n "$WINDOWS_OFFSET" ]] && log_success "Selected largest Windows partition at offset $WINDOWS_OFFSET sectors"
+
+# =============================================================================
+# STEP 5: Mount Windows partition
+# FIX: ntfs-3g does NOT support -o offset= (that's a kernel mount option)
+#      Correct flow: losetup first → ntfs-3g on loop device (no offset needed)
+#      Release loop device between failed attempts to avoid "device busy"
+# =============================================================================
 log_step "Step 5: Mounting Windows partition"
 
 MOUNT_SUCCESS=false
 MOUNT_METHOD=""
 
-# ── Setup loopback device ─────────────────────────────────────────────────────
 setup_loop() {
     local offset_bytes="$1"
-    # Release any previous loop device
-    [[ -n "$LOOP_DEV" ]] && sudo losetup -d "$LOOP_DEV" 2>/dev/null || true
+    # Release previous loop device before creating new one
+    if [[ -n "${LOOP_DEV:-}" ]]; then
+        sudo losetup -d "$LOOP_DEV" 2>/dev/null || true
+        LOOP_DEV=""
+    fi
     LOOP_DEV=$(sudo losetup --find --show --read-only \
         --offset "$offset_bytes" "$EWF_DEVICE" 2>/dev/null || true)
     [[ -n "$LOOP_DEV" ]]
@@ -275,46 +309,38 @@ try_mount() {
     local offset_bytes="$1" label="$2"
     local err
 
-    # ── Attempt 1: ntfs-3g (best for NTFS — handles Win10/11 metadata) ────────
-    if command -v ntfs-3g &>/dev/null; then
-        err=$(sudo ntfs-3g -o ro,noatime,offset="$offset_bytes" \
-            "$EWF_DEVICE" "$IMG_MOUNT" 2>&1) \
-            && { log_success "Mounted via ntfs-3g ($label)"; MOUNT_METHOD="ntfs-3g"; MOUNT_SUCCESS=true; return 0; }
-        log_info "    ntfs-3g with offset: ${err##*$'\n'}"
-
-        # ntfs-3g also accepts loopback device (needed on some kernels)
-        if setup_loop "$offset_bytes"; then
+    # Attempt 1: losetup + ntfs-3g (most reliable on modern Kali kernels)
+    if setup_loop "$offset_bytes"; then
+        log_info "    Loop device: $LOOP_DEV"
+        if command -v ntfs-3g &>/dev/null; then
             err=$(sudo ntfs-3g -o ro,noatime "$LOOP_DEV" "$IMG_MOUNT" 2>&1) \
                 && { log_success "Mounted via ntfs-3g + loop ($label)"; MOUNT_METHOD="ntfs-3g-loop"; MOUNT_SUCCESS=true; return 0; }
-            log_info "    ntfs-3g + loop: ${err##*$'\n'}"
+            log_info "    ntfs-3g + loop failed: ${err##*$'\n'}"
         fi
+
+        # Attempt 2: kernel auto-detect via loop
+        err=$(sudo mount -o ro,noatime "$LOOP_DEV" "$IMG_MOUNT" 2>&1) \
+            && { log_success "Mounted via kernel + loop ($label)"; MOUNT_METHOD="kernel-loop"; MOUNT_SUCCESS=true; return 0; }
+        log_info "    kernel loop failed: ${err##*$'\n'}"
+
+        # Release loop before offset-based attempt
+        sudo losetup -d "$LOOP_DEV" 2>/dev/null || true
+        LOOP_DEV=""
+    else
+        log_info "    losetup failed for offset $offset_bytes"
     fi
 
-    # ── Attempt 2: kernel mount -t ntfs (read-only, no metadata writes) ───────
-    err=$(sudo mount -t ntfs -o ro,noatime,offset="$offset_bytes" \
-        "$EWF_DEVICE" "$IMG_MOUNT" 2>&1) \
-        && { log_success "Mounted via kernel ntfs ($label)"; MOUNT_METHOD="kernel-ntfs"; MOUNT_SUCCESS=true; return 0; }
-    log_info "    kernel ntfs: ${err##*$'\n'}"
-
-    # ── Attempt 3: generic mount (auto-detect fs type) ────────────────────────
+    # Attempt 3: kernel mount -o offset= (works on some kernels, not ntfs-3g)
     err=$(sudo mount -o ro,noatime,offset="$offset_bytes" \
         "$EWF_DEVICE" "$IMG_MOUNT" 2>&1) \
-        && { log_success "Mounted via auto-detect ($label)"; MOUNT_METHOD="auto"; MOUNT_SUCCESS=true; return 0; }
-    log_info "    auto-detect: ${err##*$'\n'}"
-
-    # ── Attempt 4: via loopback + auto-detect ─────────────────────────────────
-    if setup_loop "$offset_bytes"; then
-        err=$(sudo mount -o ro,noatime "$LOOP_DEV" "$IMG_MOUNT" 2>&1) \
-            && { log_success "Mounted via loop ($label)"; MOUNT_METHOD="loop"; MOUNT_SUCCESS=true; return 0; }
-        log_info "    loop auto: ${err##*$'\n'}"
-    fi
+        && { log_success "Mounted via kernel offset ($label)"; MOUNT_METHOD="kernel-offset"; MOUNT_SUCCESS=true; return 0; }
+    log_info "    kernel offset failed: ${err##*$'\n'}"
 
     return 1
 }
 
-# ── Try auto-detected offset first ───────────────────────────────────────────
+# Try auto-detected offset first
 if [[ -n "$WINDOWS_OFFSET" ]]; then
-    # Strip leading zeros to force decimal interpretation (avoid octal errors)
     _offset_dec=$(echo "$WINDOWS_OFFSET" | sed 's/^0*//')
     _offset_dec=${_offset_dec:-0}
     OFFSET_BYTES=$(( _offset_dec * 512 ))
@@ -322,40 +348,37 @@ if [[ -n "$WINDOWS_OFFSET" ]]; then
     try_mount "$OFFSET_BYTES" "offset=$_offset_dec" || true
 fi
 
-# ── Fallback: common offsets ─────────────────────────────────────────────────
+# Fallback: common offsets (covers XP MBR=63, modern MBR=2048, GPT variants)
 if [[ "$MOUNT_SUCCESS" == false ]]; then
     log_warn "Auto-detect failed — trying common offsets..."
-    for FALLBACK_OFFSET in 2048 63 206848 1026048; do
-        [[ "$FALLBACK_OFFSET" == "$WINDOWS_OFFSET" ]] && continue  # already tried
+    for FALLBACK_OFFSET in 1259520 2048 206848 1026048 63; do
+        # Skip if already tried
+        _fb_dec=$(echo "$FALLBACK_OFFSET" | sed 's/^0*//')
+        _wd_dec=$(echo "${WINDOWS_OFFSET:-0}" | sed 's/^0*//')
+        [[ "$_fb_dec" == "$_wd_dec" ]] && continue
         log_info "Trying offset $FALLBACK_OFFSET sectors..."
         try_mount $(( FALLBACK_OFFSET * 512 )) "offset=$FALLBACK_OFFSET" && break || true
     done
 fi
 
-# ── Last resort: no offset ───────────────────────────────────────────────────
+# Last resort: direct mount without offset
 if [[ "$MOUNT_SUCCESS" == false ]]; then
-    log_warn "All partition offsets failed — trying direct mount (no offset)..."
+    log_warn "All offsets failed — trying direct mount (no offset)..."
     sudo mount -o ro,noatime "$EWF_DEVICE" "$IMG_MOUNT" 2>/dev/null \
         && { log_success "Direct mount succeeded"; MOUNT_METHOD="direct"; MOUNT_SUCCESS=true; } || true
 fi
 
 if [[ "$MOUNT_SUCCESS" == false ]]; then
-    log_error "All mount attempts failed."
-    log_error ""
-    log_error "Manual steps to diagnose:"
+    log_error "All mount attempts failed. Manual diagnosis:"
     log_error "  sudo mmls $EWF_DEVICE"
-    log_error "  sudo fsstat -o <sector_offset> $EWF_DEVICE"
-    log_error "  sudo ntfs-3g -o ro,offset=<offset_bytes> $EWF_DEVICE $IMG_MOUNT"
-    log_error ""
-    log_error "Install ntfs-3g if missing:"
-    log_error "  sudo apt install ntfs-3g"
+    log_error "  sudo losetup --find --show --read-only --offset <bytes> $EWF_DEVICE"
+    log_error "  sudo ntfs-3g -o ro,noatime <loop_dev> $IMG_MOUNT"
     exit 1
 fi
 
-log_info "Mount method : $MOUNT_METHOD"
-
+log_info "Mount method: $MOUNT_METHOD"
 log_info "Filesystem root:"
-ls "$IMG_MOUNT" 2>/dev/null || true
+sudo ls "$IMG_MOUNT" 2>/dev/null || true
 
 # =============================================================================
 # STEP 6: Detect Windows version
@@ -370,53 +393,33 @@ for d in "$IMG_MOUNT/Windows" "$IMG_MOUNT/WINDOWS" "$IMG_MOUNT/windows"; do
     [[ -d "$d" ]] && WIN_ROOT="$d" && break
 done
 
-# ── Detect Windows version ────────────────────────────────────────────────────
-# Priority: Users/ (modern) wins over "Documents and Settings"
-# because Win10 creates "Documents and Settings" as an NTFS junction point
-# that appears as a real directory when mounted — check Users first.
-#
-# Distinguish real XP "Documents and Settings" from Win10 junction:
-#   - Real XP dir: contains actual user subdirs with NTUSER.DAT
-#   - Win10 junction: empty or only contains redirects, no NTUSER.DAT inside
-
 _has_users_dir=false
-_has_dos_real=false   # real XP "Documents and Settings" (not a junction)
+_has_dos_real=false
 
 [[ -d "$IMG_MOUNT/Users" ]] && _has_users_dir=true
 
 if [[ -d "$IMG_MOUNT/Documents and Settings" ]]; then
-    # Check if it contains any real user profile (NTUSER.DAT)
-    # A junction point on Win10 will be empty or inaccessible when mounted read-only
-    _dos_user_count=$(find "$IMG_MOUNT/Documents and Settings" \
+    _dos_user_count=$(sudo find "$IMG_MOUNT/Documents and Settings" \
         -maxdepth 2 -iname "NTUSER.DAT" 2>/dev/null | wc -l)
     [[ "$_dos_user_count" -gt 0 ]] && _has_dos_real=true
 fi
 
 if [[ "$_has_users_dir" == true ]]; then
-    # Modern Windows (Vista/7/8/10/11) — Users/ is the real profile store
     WIN_VER="modern"
     USERS_DIR="$IMG_MOUNT/Users"
-    # Narrow down version using WinSxS (Vista+) and absence of WinSxS (rare)
-    if find "${WIN_ROOT:-$IMG_MOUNT}" -maxdepth 2 \
-            -type d -iname "WinSxS" 2>/dev/null | grep -q .; then
-        log_success "Detected: Windows Vista / 7 / 8 / 10 / 11 (modern)"
-    else
-        log_success "Detected: Windows (modern, version unclear)"
-    fi
+    log_success "Detected: Windows 10 / 11 (modern)"
 elif [[ "$_has_dos_real" == true ]]; then
-    # Real XP — "Documents and Settings" contains actual NTUSER.DAT files
     WIN_VER="xp"
     USERS_DIR="$IMG_MOUNT/Documents and Settings"
     log_success "Detected: Windows XP"
 else
-    log_warn "Could not detect Windows version from directory structure"
+    log_warn "Could not detect Windows version"
     log_warn "  Users/: $_has_users_dir  |  D&S real: $_has_dos_real"
 fi
 
 log_info "Windows root : ${WIN_ROOT:-NOT FOUND}"
 log_info "Users dir    : ${USERS_DIR:-NOT FOUND}"
 
-# Export for subshells
 export WIN_VER IMG_MOUNT WIN_ROOT USERS_DIR OUTPUT_DIR
 
 # =============================================================================
@@ -444,13 +447,12 @@ log_step "Step 7: User Accounts — Registry Hives"
 
 log_info "Extracting system hives..."
 for LABEL in SAM SYSTEM SOFTWARE SECURITY; do
-    MATCH=$(find "$IMG_MOUNT" -maxdepth 8 -type f \
+    MATCH=$(sudo find "$IMG_MOUNT" -maxdepth 8 -type f \
         -iname "$LABEL" -path "*/config/*" \
         ! -ipath "*/repair/*" ! -ipath "*/RegBack/*" \
         2>/dev/null | head -1 || true)
     if [[ -n "$MATCH" ]]; then
         cp_artifact "$MATCH" "$RAW/hives/system/$LABEL" "HIVE/$LABEL"
-        # Transaction logs
         for ext in .LOG .LOG1 .LOG2; do
             [[ -f "${MATCH}${ext}" ]] && \
                 sudo cp "${MATCH}${ext}" "$RAW/hives/system/${LABEL}${ext}" 2>/dev/null || true
@@ -471,7 +473,6 @@ if [[ -n "$USERS_DIR" ]]; then
         mkdir -p "$USER_HIVE_DIR"
         FOUND=0
 
-        # NTUSER.DAT
         for f in "$USER_DIR/NTUSER.DAT" "$USER_DIR/ntuser.dat"; do
             if cp_artifact "$f" "$USER_HIVE_DIR/NTUSER.DAT" "HIVE/$USERNAME"; then
                 for ext in .LOG .LOG1 .LOG2; do
@@ -482,7 +483,6 @@ if [[ -n "$USERS_DIR" ]]; then
             fi
         done
 
-        # UsrClass.dat
         for usrclass in \
             "$USER_DIR/AppData/Local/Microsoft/Windows/UsrClass.dat" \
             "$USER_DIR/Local Settings/Application Data/Microsoft/Windows/UsrClass.dat"; do
@@ -492,7 +492,7 @@ if [[ -n "$USERS_DIR" ]]; then
         done
 
         [[ $FOUND -eq 0 ]] && rmdir "$USER_HIVE_DIR" 2>/dev/null || true
-    done < <(find "$USERS_DIR" -mindepth 1 -maxdepth 1 -type d -print0 2>/dev/null)
+    done < <(sudo find "$USERS_DIR" -mindepth 1 -maxdepth 1 -type d -print0 2>/dev/null)
 fi
 
 # =============================================================================
@@ -500,43 +500,44 @@ fi
 # =============================================================================
 log_step "Step 8: Application Activity — Prefetch"
 
-PREFETCH_SRC=$(find "$IMG_MOUNT" -maxdepth 4 -type d -iname "Prefetch" 2>/dev/null | head -1 || true)
+PREFETCH_SRC=$(sudo find "$IMG_MOUNT" -maxdepth 4 -type d -iname "Prefetch" 2>/dev/null | head -1 || true)
 
 if [[ -n "$PREFETCH_SRC" ]]; then
-    PF_COUNT=$(find "$PREFETCH_SRC" -iname "*.pf" 2>/dev/null | wc -l)
+    PF_COUNT=$(sudo find "$PREFETCH_SRC" -iname "*.pf" 2>/dev/null | wc -l)
     log_info "Found $PF_COUNT .pf files in $PREFETCH_SRC"
-    find "$PREFETCH_SRC" -iname "*.pf" 2>/dev/null | while read -r pf; do
+    sudo find "$PREFETCH_SRC" -iname "*.pf" 2>/dev/null | while read -r pf; do
         sudo cp "$pf" "$RAW/prefetch/" 2>/dev/null || true
     done
     TOTAL_EXTRACTED=$((TOTAL_EXTRACTED + PF_COUNT))
     log_success "  $PF_COUNT prefetch files → $RAW/prefetch"
     echo "$(date '+%Y-%m-%d %H:%M:%S') | PREFETCH | $PF_COUNT files from $PREFETCH_SRC" >> "$LOG_FILE"
 else
-    log_warn "Prefetch directory not found (may be disabled or WinXP pre-SP3)"
+    log_warn "Prefetch directory not found"
     TOTAL_FAILED=$((TOTAL_FAILED + 1))
 fi
 
 # =============================================================================
 # STEP 9: EVENT LOGS + NETWORK ACTIVITY
+# FIX: all find/cp commands use sudo (FUSE mount root-only)
+#      XP: search system32/config for .evt files (case-insensitive)
+#      Modern: search winevt/Logs for .evtx, copy network-relevant logs to network/
 # =============================================================================
 log_step "Step 9: Event Logs + Network Activity"
 
-# ── Re-derive WIN_ROOT if Step 6 missed it (case-insensitive) ────────────────
 if [[ -z "$WIN_ROOT" ]]; then
-    WIN_ROOT=$(find "$IMG_MOUNT" -maxdepth 1 -type d -iname "windows" \
+    WIN_ROOT=$(sudo find "$IMG_MOUNT" -maxdepth 1 -type d -iname "windows" \
         2>/dev/null | head -1 || true)
     [[ -n "$WIN_ROOT" ]] && log_info "WIN_ROOT re-derived: $WIN_ROOT"
 fi
 
 if [[ "$WIN_VER" == "xp" ]]; then
-    # XP: AppEvent.Evt / SecEvent.Evt / SysEvent.Evt in system32\config
-    # Find the config dir case-insensitively under WIN_ROOT, or scan whole image
-    EVT_SRC=$(find "${WIN_ROOT:-$IMG_MOUNT}" -maxdepth 3 -type d \
+    # XP: .evt files live in WINDOWS/system32/config/
+    EVT_SRC=$(sudo find "${WIN_ROOT:-$IMG_MOUNT}" -maxdepth 3 -type d \
         -iname "config" -path "*/system32/*" 2>/dev/null | head -1 || true)
 
-    # Fallback: locate any .Evt file and use its directory
+    # Fallback: find any known XP evt file directly
     if [[ -z "$EVT_SRC" ]]; then
-        EVT_SRC=$(find "$IMG_MOUNT" -maxdepth 8 \
+        EVT_SRC=$(sudo find "$IMG_MOUNT" -maxdepth 8 \
             \( -iname "AppEvent.Evt" -o -iname "SecEvent.Evt" -o -iname "SysEvent.Evt" \) \
             2>/dev/null | head -1 | xargs -r dirname || true)
     fi
@@ -544,34 +545,40 @@ if [[ "$WIN_VER" == "xp" ]]; then
     if [[ -n "$EVT_SRC" ]]; then
         EVT_COUNT=0
         while IFS= read -r -d '' f; do
-            cp "$f" "$RAW/event_logs/" 2>/dev/null || true
+            sudo cp "$f" "$RAW/event_logs/" 2>/dev/null || true
+            # FIX: also copy network-relevant XP logs (SecEvent, SysEvent) to network/
+            fname=$(basename "$f" | tr '[:upper:]' '[:lower:]')
+            case "$fname" in
+                secevent.evt|sysevent.evt)
+                    sudo cp "$f" "$RAW/network/" 2>/dev/null || true ;;
+            esac
             EVT_COUNT=$((EVT_COUNT + 1))
-        done < <(find "$EVT_SRC" -maxdepth 1 -iname "*.evt" -print0 2>/dev/null)
+        done < <(sudo find "$EVT_SRC" -maxdepth 1 -iname "*.evt" -print0 2>/dev/null)
         TOTAL_EXTRACTED=$((TOTAL_EXTRACTED + EVT_COUNT))
         log_success "  $EVT_COUNT .evt files (XP) ← $EVT_SRC"
+        log_success "  Network-relevant XP logs (SecEvent, SysEvent) → $RAW/network"
         echo "$(date '+%Y-%m-%d %H:%M:%S') | EVENT_LOGS | $EVT_COUNT XP .evt" >> "$LOG_FILE"
     else
         log_warn "XP event log dir not found"
-        log_warn "  Searched: ${WIN_ROOT:-$IMG_MOUNT}/*/system32/config and full image scan"
+        log_warn "  Searched: ${WIN_ROOT:-$IMG_MOUNT}/*/system32/config + full image scan"
         TOTAL_FAILED=$((TOTAL_FAILED + 1))
     fi
 
 else
-    # Win10/11: .evtx files in %SystemRoot%\System32\winevt\Logs\
-    # Try 3 strategies in order:
+    # Modern: .evtx files in Windows/System32/winevt/Logs/
+    EVTX_SRC=""
 
-    # 1. find winevt/Logs directory anywhere in image (most reliable)
-    EVTX_SRC=$(find "$IMG_MOUNT" -maxdepth 8 -type d \
+    # Strategy 1: find winevt/Logs dir anywhere in image
+    EVTX_SRC=$(sudo find "$IMG_MOUNT" -maxdepth 8 -type d \
         -iname "Logs" -path "*/winevt/*" 2>/dev/null | head -1 || true)
 
-    # 2. locate Security.evtx and use its parent
+    # Strategy 2: locate Security.evtx and use parent dir
     if [[ -z "$EVTX_SRC" ]]; then
-        EVTX_SRC=$(find "$IMG_MOUNT" -maxdepth 10 \
-            -iname "Security.evtx" 2>/dev/null \
-            | head -1 | xargs -r dirname || true)
+        EVTX_SRC=$(sudo find "$IMG_MOUNT" -maxdepth 10 \
+            -iname "Security.evtx" 2>/dev/null | head -1 | xargs -r dirname || true)
     fi
 
-    # 3. construct path from WIN_ROOT with both case variants
+    # Strategy 3: construct from WIN_ROOT
     if [[ -z "$EVTX_SRC" && -n "$WIN_ROOT" ]]; then
         for _cand in \
             "$WIN_ROOT/System32/winevt/Logs" \
@@ -582,14 +589,14 @@ else
     fi
 
     if [[ -n "$EVTX_SRC" ]]; then
-        EVTX_COUNT=$(find "$EVTX_SRC" -maxdepth 1 -iname "*.evtx" 2>/dev/null | wc -l)
-        find "$EVTX_SRC" -maxdepth 1 -iname "*.evtx" 2>/dev/null \
-            -exec cp {} "$RAW/event_logs/" \;
+        EVTX_COUNT=$(sudo find "$EVTX_SRC" -maxdepth 1 -iname "*.evtx" 2>/dev/null | wc -l)
+        sudo find "$EVTX_SRC" -maxdepth 1 -iname "*.evtx" 2>/dev/null \
+            -exec sudo cp {} "$RAW/event_logs/" \;
         TOTAL_EXTRACTED=$((TOTAL_EXTRACTED + EVTX_COUNT))
         log_success "  $EVTX_COUNT .evtx files ← $EVTX_SRC"
         echo "$(date '+%Y-%m-%d %H:%M:%S') | EVENT_LOGS | $EVTX_COUNT .evtx" >> "$LOG_FILE"
 
-        # Network-relevant logs → also in network/ for easy triage
+        # Copy network-relevant logs to network/ for easy triage
         for _ename in \
             "Security" \
             "System" \
@@ -599,26 +606,23 @@ else
             "Microsoft-Windows-DNS-Client%4Operational" \
             "Microsoft-Windows-TerminalServices-RDPClient%4Operational" \
             "Microsoft-Windows-RemoteDesktopServices-RdpCoreTS%4Operational"; do
-            _src=$(find "$EVTX_SRC" -maxdepth 1 \
+            _src=$(sudo find "$EVTX_SRC" -maxdepth 1 \
                 -iname "${_ename}.evtx" 2>/dev/null | head -1 || true)
-            [[ -f "$_src" ]] && cp "$_src" "$RAW/network/" 2>/dev/null || true
+            [[ -f "$_src" ]] && sudo cp "$_src" "$RAW/network/" 2>/dev/null || true
         done
         log_success "  Network-relevant logs → $RAW/network"
     else
-        log_warn "EVTX directory not found after 3 search strategies"
+        log_warn "EVTX directory not found after 3 strategies"
         log_warn "  WIN_ROOT=${WIN_ROOT:-NOT FOUND}"
-        log_warn "  Try manually: find $IMG_MOUNT -iname '*.evtx' 2>/dev/null | head -5"
         TOTAL_FAILED=$((TOTAL_FAILED + 1))
     fi
 fi
 
-# ── Network config files (hosts, lmhosts) ────────────────────────────────────
+# Network config files (hosts, lmhosts)
 if [[ -n "$WIN_ROOT" ]]; then
     for _f in \
         "$WIN_ROOT/System32/drivers/etc/hosts" \
         "$WIN_ROOT/system32/drivers/etc/hosts" \
-        "$WIN_ROOT/System32/drivers/etc/networks" \
-        "$WIN_ROOT/system32/drivers/etc/networks" \
         "$WIN_ROOT/System32/drivers/etc/lmhosts.sam" \
         "$WIN_ROOT/system32/drivers/etc/lmhosts.sam"; do
         [[ -f "$_f" ]] && \
@@ -639,16 +643,16 @@ if [[ -n "$USERS_DIR" ]]; then
         USERNAME=$(basename "$USER_DIR")
         is_system_user "$USERNAME" && continue
 
-        # ── Internet Explorer — index.dat ──────────────────────────────────
+        # IE — index.dat
         while IFS= read -r -d '' idat; do
             PARENT=$(basename "$(dirname "$idat")")
             GPARENT=$(basename "$(dirname "$(dirname "$idat")")")
             DEST="$RAW/browser/ie/${USERNAME}_${GPARENT}_${PARENT}_index.dat"
             sudo cp "$idat" "$DEST" 2>/dev/null || true
             IE_COUNT=$((IE_COUNT + 1))
-        done < <(find "$USER_DIR" -iname "index.dat" -print0 2>/dev/null)
+        done < <(sudo find "$USER_DIR" -iname "index.dat" -print0 2>/dev/null)
 
-        # ── Firefox — places.sqlite + extras ──────────────────────────────
+        # Firefox — places.sqlite
         while IFS= read -r -d '' pdb; do
             PROFILE=$(basename "$(dirname "$pdb")")
             BASE="$RAW/browser/firefox/${USERNAME}_${PROFILE}"
@@ -658,9 +662,9 @@ if [[ -n "$USERS_DIR" ]]; then
                 [[ -f "$SRC" ]] && sudo cp "$SRC" "${BASE}_${extra}" 2>/dev/null || true
             done
             FF_COUNT=$((FF_COUNT + 1))
-        done < <(find "$USER_DIR" -iname "places.sqlite" -print0 2>/dev/null)
+        done < <(sudo find "$USER_DIR" -iname "places.sqlite" -print0 2>/dev/null)
 
-        # ── Chrome / Edge / Brave ─────────────────────────────────────────
+        # Chrome / Edge / Brave
         for browser_path in "Google/Chrome" "Microsoft/Edge" "BraveSoftware/Brave-Browser"; do
             BNAME=$(echo "$browser_path" | cut -d'/' -f2)
             for user_data in \
@@ -677,14 +681,14 @@ if [[ -n "$USERS_DIR" ]]; then
                         [[ -f "$SRC" ]] && sudo cp "$SRC" "${BASE}_${SAFE_NAME}" 2>/dev/null || true
                     done
                     CR_COUNT=$((CR_COUNT + 1))
-                done < <(find "$user_data" -name "History" ! -path "*/Cache/*" -print0 2>/dev/null)
+                done < <(sudo find "$user_data" -name "History" ! -path "*/Cache/*" -print0 2>/dev/null)
             done
         done
 
-    done < <(find "$USERS_DIR" -mindepth 1 -maxdepth 1 -type d -print0 2>/dev/null)
+    done < <(sudo find "$USERS_DIR" -mindepth 1 -maxdepth 1 -type d -print0 2>/dev/null)
 
     TOTAL_EXTRACTED=$((TOTAL_EXTRACTED + IE_COUNT + FF_COUNT + CR_COUNT))
-    log_success "  IE: $IE_COUNT files | Firefox: $FF_COUNT | Chrome/Edge/Brave: $CR_COUNT"
+    log_success "  IE: $IE_COUNT | Firefox: $FF_COUNT | Chrome/Edge/Brave: $CR_COUNT"
     echo "$(date '+%Y-%m-%d %H:%M:%S') | BROWSER | IE=$IE_COUNT FF=$FF_COUNT Chrome=$CR_COUNT" >> "$LOG_FILE"
 fi
 
@@ -704,7 +708,6 @@ if [[ -n "$USERS_DIR" ]]; then
         USER_JL="$RAW/jump_lists/$USERNAME"
         mkdir -p "$USER_LNK" "$USER_JL"
 
-        # LNK files from Recent
         for recent in \
             "$USER_DIR/Recent" \
             "$USER_DIR/AppData/Roaming/Microsoft/Windows/Recent"; do
@@ -712,10 +715,9 @@ if [[ -n "$USERS_DIR" ]]; then
             while IFS= read -r -d '' f; do
                 sudo cp "$f" "$USER_LNK/" 2>/dev/null || true
                 LNK_COUNT=$((LNK_COUNT + 1))
-            done < <(find "$recent" -maxdepth 1 -iname "*.lnk" -print0 2>/dev/null)
+            done < <(sudo find "$recent" -maxdepth 1 -iname "*.lnk" -print0 2>/dev/null)
         done
 
-        # Jump Lists (AutomaticDestinations + CustomDestinations)
         for jl_dir in \
             "$USER_DIR/AppData/Roaming/Microsoft/Windows/Recent/AutomaticDestinations" \
             "$USER_DIR/AppData/Roaming/Microsoft/Windows/Recent/CustomDestinations"; do
@@ -723,10 +725,10 @@ if [[ -n "$USERS_DIR" ]]; then
             while IFS= read -r -d '' f; do
                 sudo cp "$f" "$USER_JL/" 2>/dev/null || true
                 JL_COUNT=$((JL_COUNT + 1))
-            done < <(find "$jl_dir" -type f -print0 2>/dev/null)
+            done < <(sudo find "$jl_dir" -type f -print0 2>/dev/null)
         done
 
-    done < <(find "$USERS_DIR" -mindepth 1 -maxdepth 1 -type d -print0 2>/dev/null)
+    done < <(sudo find "$USERS_DIR" -mindepth 1 -maxdepth 1 -type d -print0 2>/dev/null)
 
     TOTAL_EXTRACTED=$((TOTAL_EXTRACTED + LNK_COUNT + JL_COUNT))
     log_success "  LNK: $LNK_COUNT | Jump Lists: $JL_COUNT"
@@ -738,7 +740,7 @@ fi
 # =============================================================================
 log_step "Step 12: Deleted Files — Recycle Bin"
 
-RECYCLE_SRC=$(find "$IMG_MOUNT" -maxdepth 2 -type d \
+RECYCLE_SRC=$(sudo find "$IMG_MOUNT" -maxdepth 2 -type d \
     \( -iname "RECYCLER" -o -iname "\$Recycle.Bin" \) 2>/dev/null | head -1 || true)
 
 if [[ -n "$RECYCLE_SRC" ]]; then
@@ -753,7 +755,7 @@ else
 fi
 
 # =============================================================================
-# STEP 13: Generate report
+# STEP 13: Generate extraction report
 # =============================================================================
 log_step "Step 13: Generating extraction report"
 
@@ -767,6 +769,7 @@ REPORT_FILE="$OUTPUT_DIR/extraction_report.txt"
     echo "  E01 Image      : $E01_FILE"
     echo "  Image Size     : $IMAGE_SIZE"
     echo "  Windows Ver    : $WIN_VER"
+    echo "  Mount Method   : $MOUNT_METHOD"
     echo "  Output Dir     : $RAW"
     echo "  Total Extracted: $TOTAL_EXTRACTED files"
     echo "  Failed/Missing : $TOTAL_FAILED"
@@ -792,21 +795,8 @@ REPORT_FILE="$OUTPUT_DIR/extraction_report.txt"
         printf "  %-40s %d files\n" "$LABEL" "$COUNT"
     done
     echo ""
-    echo "  ALL EXTRACTED FILES:"
-    find "$RAW" -type f 2>/dev/null | sort | while read -r f; do
-        SIZE=$(du -h "$f" | cut -f1)
-        printf "  %-60s %s\n" "${f#$OUTPUT_DIR/}" "$SIZE"
-    done
-    echo ""
     echo "  NEXT STEPS:"
-    echo "  1. Parse with EZ Tools:"
-    echo "     PECmd    -d $RAW/prefetch     --csv <output>"
-    echo "     EvtxECmd -d $RAW/event_logs   --csv <output>"
-    echo "     LECmd    -d $RAW/lnk_files    --csv <output>"
-    echo "     JLECmd   -d $RAW/jump_lists   --csv <output>"
-    echo "     RBCmd    -d $RAW/recycle_bin  --csv <output>"
-    echo "     RECmd    -f $RAW/hives/system/SAM --bn ~/EZTools/bin/net9/RECmd/BatchExamples/Kroll_Batch.reb --csv <output>"
-    echo "  2. Run extract_artifacts.sh -m $IMG_MOUNT -o <output>"
+    echo "  bash extract_artifacts.sh -m $IMG_MOUNT -o $OUTPUT_DIR"
     echo "================================================================================"
 } | tee "$REPORT_FILE"
 
