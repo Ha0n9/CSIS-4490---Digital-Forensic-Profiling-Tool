@@ -171,13 +171,11 @@ run_parser "user_accounts" "parse_user_accounts.py" \
 # =============================================================================
 log_step "Step 2: Application Activity — Prefetch"
 
-if [[ "$HAS_EZ" == true && -n "$PECMD" ]]; then
-    _pf_count=$(find "$RAW/prefetch" -iname "*.pf" 2>/dev/null | wc -l)
-    if [[ "$_pf_count" -gt 0 ]]; then
-        run_ez "PECmd" "$PECMD" \
-            -d "$RAW/prefetch" --csv "$JSON_DIR" --csvf app_prefetch_ez -q
-    fi
-fi
+# PECmd is Windows-only (uses Windows decompression DLLs) — skip on Linux
+    # # PECmd uses Windows-only decompression DLLs — skip on Linux/Kali
+# if [[ "$HAS_EZ" == true && -n "$PECMD" ]]; then
+#     run_ez "PECmd" "$PECMD" -d "$RAW/prefetch" --csv "$JSON_DIR" --csvf app_prefetch_ez -q
+# fi
 
 run_parser "application_activity" "parse_application_activity.py" \
     --raw-dir "$RAW" \
@@ -213,7 +211,7 @@ else
         run_ez "EvtxECmd" "$EVTXECMD" \
             -d "$EVT_DIR" \
             --csv "$JSON_DIR" \
-            --csvf event_logs_ez -q
+            --csvf event_logs_ez
     fi
 
     # FIX: always pass --raw-dir (pre-copied files), never --mount
@@ -243,9 +241,9 @@ if [[ "$HAS_EZ" == true ]]; then
     _lnk_count=$(find "$RAW/lnk_files" -iname "*.lnk" 2>/dev/null | wc -l)
     _jl_count=$(find "$RAW/jump_lists" -type f 2>/dev/null | wc -l)
     [[ -n "$LECMD"  && "$_lnk_count" -gt 0 ]] && \
-        run_ez "LECmd" "$LECMD" -d "$RAW/lnk_files" --csv "$JSON_DIR" --csvf lnk_ez -q
+        run_ez "LECmd" "$LECMD" -d "$RAW/lnk_files" --csv "$JSON_DIR" --csvf lnk_ez
     [[ -n "$JLECMD" && "$_jl_count"  -gt 0 ]] && \
-        run_ez "JLECmd" "$JLECMD" -d "$RAW/jump_lists" --csv "$JSON_DIR" --csvf jl_ez -q
+        run_ez "JLECmd" "$JLECMD" -d "$RAW/jump_lists" --csv "$JSON_DIR" --csvf jl_ez
 fi
 
 run_parser "document_folder_access" "parse_document_folder_access.py" \

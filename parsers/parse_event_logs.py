@@ -2,12 +2,15 @@
 """
 parse_event_logs.py
 Artifact : Event Logs + Network Activity
-Sources  : .evtx (Windows Vista+) via python-evtx
-           .evt  (Windows XP)     via basic binary parsing (no deprecated libs)
+Sources  : .evtx (Windows Vista+) — primary: evtx (fast parser), fallback: python-evtx
+           .evt  (Windows XP)     — raw struct parsing
+
+Install:
+    pip install evtx --break-system-packages          # primary (handles Win10/11)
+    pip install python-evtx --break-system-packages   # fallback
 
 Usage:
-    python3 parse_event_logs.py --raw-dir <raw/event_logs> --output <event.json> --network <network.json>
-    python3 parse_event_logs.py --mount <mount_point>      --output <event.json> --network <network.json>
+    python3 parse_event_logs.py --raw-dir <raw/event_logs> --output <out.json> --network <net.json>
 """
 
 import argparse
@@ -18,199 +21,218 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 # =============================================================================
-# Event ID categories
-# NOTE: includes both modern (Vista+) and legacy XP IDs
+# Event ID categories — Modern (Vista+) AND XP legacy
 # =============================================================================
 
 NETWORK_EVENT_IDS = {
-    # ── Modern Windows (Vista/7/10/11) ────────────────────────────────────────
-    3,                              # Sysmon: network connection
-    22,                             # Sysmon: DNS query
-    4001, 4002, 4004,               # WLAN connect/disconnect
-    10000, 10001, 1002,             # Network profile / firewall
-    5156, 5157, 5158,               # WFP allow/block connection
-    4778, 4779,                     # RDP session connect/disconnect
-    5140, 5142, 5144, 5145,         # Network share access
-    8001, 8002, 8003,               # WLAN-AutoConfig operational
-    11000, 11001, 11002,            # WLAN association
-    20225, 20226,                   # VPN / RAS
-    2003, 2004, 2005,               # Windows Firewall rule changes
-    30800, 30803, 30804,            # SMB client connectivity
-    3008, 3020,                     # DNS Client
-    50066, 50067, 50068, 50073, 50074,  # DHCP
-    # ── Windows XP legacy (.evt) ──────────────────────────────────────────────
-    528,    # Successful logon (XP) — type 3 = network logon
-    529,    # Logon failure: unknown username or bad password
-    530,    # Logon failure: account logon time restriction
-    531,    # Logon failure: account currently disabled
-    532,    # Logon failure: user account has expired
-    533,    # Logon failure: user not allowed to log on to this computer
-    534,    # Logon failure: user has not been granted the requested logon type
-    535,    # Logon failure: the specified account's password has expired
-    536,    # Logon failure: the NetLogon component is not active
-    537,    # Logon failure: unexpected error
-    539,    # Logon failure: account locked out
-    540,    # Successful network logon (XP key network event)
-    541,    # IPsec main mode SA established
-    542,    # IPsec main mode SA ended
-    543,    # IPsec main mode SA ended (initiator)
-    544,    # IPsec main mode authentication failed
-    545,    # IPsec peer authentication failed
-    546,    # IKE security association establishment failed
-    547,    # IKE negotiation failed
-    576,    # Special privileges assigned to new logon (admin escalation)
-    682,    # Session reconnected to window station
-    683,    # Session disconnected from window station
-    861,    # Windows Firewall: allowed a new program to accept incoming connections
-}
-
-LOGON_EVENT_IDS = {
     # Modern
-    4624, 4625, 4634, 4647, 4648, 4672, 4768, 4769,
+    3, 22,
+    4001, 4002, 4004,
+    5156, 5157, 5158,
+    4778, 4779,
+    5140, 5142, 5144, 5145,
+    8001, 8002, 8003,
+    11000, 11001, 11002,
+    10000, 10001, 1002,
+    20225, 20226,
+    2003, 2004, 2005,
+    30800, 30803, 30804,
+    3008, 3020,
+    50066, 50067, 50068, 50073, 50074,
     # XP legacy
-    528, 529, 538,   # logon success, failure, logoff
-    540,             # network logon (XP)
-    576,             # special privileges
-    680,             # account used for logon by SAM
+    528, 529, 530, 531, 532, 533, 534, 535, 536, 537, 539,
+    540, 541, 542, 543, 544, 545, 546, 547,
+    576, 682, 683, 861,
 }
 
-PROCESS_EVENT_IDS = {
-    4688, 4689,   # modern: process create/exit
-    592,  593,    # XP: process create/exit
-}
-
-SERVICE_EVENT_IDS = {
-    7045, 4697, 7036,   # modern: service installed/changed/state-change
-    7000, 7001, 7002,   # XP: service failed, stopped, start-pending
-}
+LOGON_EVENT_IDS   = {4624, 4625, 4634, 4647, 4648, 4672, 4768, 4769,
+                     528, 529, 538, 540, 576, 680}
+PROCESS_EVENT_IDS = {4688, 4689, 592, 593}
+SERVICE_EVENT_IDS = {7045, 4697, 7036, 7000, 7001, 7002}
 
 # =============================================================================
 # Helpers
 # =============================================================================
 
+NS = "http://schemas.microsoft.com/win/2004/08/events/event"
+
 def now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
-
 
 def normalize_ts(ts: str | None) -> str | None:
     if not ts:
         return None
     ts = ts.strip().rstrip("Z")
-    for fmt in (
-        "%Y-%m-%dT%H:%M:%S.%f",
-        "%Y-%m-%dT%H:%M:%S",
-        "%Y-%m-%d %H:%M:%S",
-    ):
+    for fmt in ("%Y-%m-%dT%H:%M:%S.%f", "%Y-%m-%dT%H:%M:%S", "%Y-%m-%d %H:%M:%S"):
         try:
             return datetime.strptime(ts, fmt).replace(tzinfo=timezone.utc).isoformat()
         except ValueError:
             continue
     return ts
 
-
-def filetime_to_iso(filetime: int) -> str | None:
-    try:
-        unix_ts = (filetime - 116444736000000000) / 10_000_000
-        return datetime.fromtimestamp(unix_ts, tz=timezone.utc).isoformat()
-    except Exception:
-        return None
-
 # =============================================================================
-# EVTX parser (python-evtx)
+# XML parser — shared by both evtx libraries
+# Tries with namespace, then strips namespace and retries
 # =============================================================================
 
-def _parse_evtx_xml(xml_str: str, file_name: str) -> dict | None:
-    try:
-        root = ET.fromstring(xml_str)
-        ns = {"e": "http://schemas.microsoft.com/win/2004/08/events/event"}
+def _parse_xml(xml_str: str, file_name: str) -> dict | None:
+    """Parse EVTX record XML string into normalized dict."""
 
-        system = root.find("e:System", ns) or root.find("System")
-        if system is None:
-            return None
+    def extract(root: ET.Element, use_ns: bool) -> dict:
+        p = f"{{{NS}}}" if use_ns else ""
 
-        def get_text(tag: str) -> str | None:
-            n = system.find(f"e:{tag}", ns) or system.find(tag)
-            return n.text if n is not None else None
+        system = root.find(f"{p}System")
+        event_data_el = root.find(f"{p}EventData")
 
-        def get_attr(tag: str, attr: str) -> str | None:
-            n = system.find(f"e:{tag}", ns) or system.find(tag)
-            return n.attrib.get(attr) if n is not None else None
+        result: dict = {
+            "event_id": None, "provider": None, "timestamp": None,
+            "computer": None, "level": None, "channel": None, "record_id": None,
+        }
 
-        event_id_raw = get_text("EventID")
-        event_id = int(event_id_raw) if event_id_raw and event_id_raw.isdigit() else None
+        if system is not None:
+            def txt(tag):
+                n = system.find(f"{p}{tag}")
+                return n.text if n is not None else None
+            def atr(tag, a):
+                n = system.find(f"{p}{tag}")
+                return n.attrib.get(a) if n is not None else None
 
-        event_data_el = root.find("e:EventData", ns) or root.find("EventData")
+            raw_id = txt("EventID")
+            result["event_id"]  = int(raw_id) if raw_id and raw_id.strip().isdigit() else None
+            result["provider"]  = atr("Provider", "Name")
+            result["timestamp"] = normalize_ts(atr("TimeCreated", "SystemTime"))
+            result["computer"]  = txt("Computer")
+            result["level"]     = txt("Level")
+            result["channel"]   = txt("Channel")
+            result["record_id"] = txt("EventRecordID")
+
         event_data: dict = {}
         if event_data_el is not None:
-            for data in event_data_el:
-                name = data.attrib.get("Name", f"Data_{len(event_data)}")
-                event_data[name] = data.text or ""
+            for i, child in enumerate(event_data_el):
+                name = child.attrib.get("Name") or child.tag.split("}")[-1] or f"Data_{i}"
+                event_data[name] = child.text or ""
+        result["event_data"] = event_data
+        return result
 
-        return {
-            "source_format": "evtx",
-            "file":          file_name,
-            "event_id":      event_id,
-            "provider":      get_attr("Provider", "Name"),
-            "timestamp":     normalize_ts(get_attr("TimeCreated", "SystemTime")),
-            "computer":      get_text("Computer"),
-            "level":         get_text("Level"),
-            "channel":       get_text("Channel"),
-            "record_id":     get_text("EventRecordID"),
-            "event_data":    event_data,
-        }
-    except Exception:
+    # Strategy 1: parse with namespace
+    try:
+        root = ET.fromstring(xml_str)
+        fields = extract(root, use_ns=True)
+        # If System block parsed ok, return
+        if fields["event_id"] is not None or fields["timestamp"] is not None:
+            fields.update({"source_format": "evtx", "file": file_name})
+            return fields
+    except ET.ParseError:
+        pass
+
+    # Strategy 2: strip namespace and retry
+    try:
+        clean = xml_str.replace(f' xmlns="{NS}"', "").replace(f"xmlns='{NS}'", "")
+        root2 = ET.fromstring(clean)
+        fields = extract(root2, use_ns=False)
+        fields.update({"source_format": "evtx", "file": file_name})
+        return fields
+    except ET.ParseError:
         return None
 
+# =============================================================================
+# EVTX — primary parser: evtx (fast, handles Win10/11 correctly)
+# =============================================================================
 
-def parse_evtx_file(file_path: Path) -> list[dict]:
+def _parse_evtx_fast(file_path: Path) -> list[dict]:
+    """Parse using the 'evtx' package (pip install evtx)."""
+    events = []
+    try:
+        from evtx import PyEvtxParser
+        parser = PyEvtxParser(str(file_path))
+        for record in parser.records():
+            try:
+                xml_str = record.get("data", "")
+                if not xml_str:
+                    continue
+                e = _parse_xml(xml_str, file_path.name)
+                if e:
+                    events.append(e)
+            except Exception:
+                continue
+    except ImportError:
+        raise  # caller will fallback to python-evtx
+    except Exception as err:
+        print(f"  [!] evtx fast parser error {file_path.name}: {err}")
+    return events
+
+# =============================================================================
+# EVTX — fallback parser: python-evtx
+# =============================================================================
+
+def _parse_evtx_legacy(file_path: Path) -> list[dict]:
+    """Fallback using python-evtx library."""
     events = []
     try:
         from Evtx.Evtx import Evtx
         with Evtx(str(file_path)) as log:
             for record in log.records():
                 try:
-                    e = _parse_evtx_xml(record.xml(), file_path.name)
+                    e = _parse_xml(record.xml(), file_path.name)
                     if e:
                         events.append(e)
                 except Exception:
                     continue
     except ImportError:
-        print("  [!] python-evtx not installed: sudo pip install python-evtx --break-system-packages")
+        print("  [!] No EVTX parser available.")
+        print("  [!] Install: pip install evtx --break-system-packages")
+        print("  [!]      or: pip install python-evtx --break-system-packages")
     except Exception as err:
-        print(f"  [!] EVTX error {file_path.name}: {err}")
+        print(f"  [!] python-evtx error {file_path.name}: {err}")
     return events
 
+# Detect available parser once at import time
+_HAS_FAST_EVTX = False
+try:
+    import evtx  # noqa: F401
+    _HAS_FAST_EVTX = True
+except ImportError:
+    pass
+
+_HAS_LEGACY_EVTX = False
+try:
+    import Evtx  # noqa: F401
+    _HAS_LEGACY_EVTX = True
+except ImportError:
+    pass
+
+def parse_evtx_file(file_path: Path) -> list[dict]:
+    if _HAS_FAST_EVTX:
+        try:
+            events = _parse_evtx_fast(file_path)
+            null_count = sum(1 for e in events if e.get("event_id") is None)
+            if null_count:
+                print(f"    evtx {file_path.name}: {len(events)} records "
+                      f"({null_count} null event_id — XML namespace issue)")
+            else:
+                print(f"    evtx {file_path.name}: {len(events)} records")
+            return events
+        except ImportError:
+            pass  # fall through to legacy
+
+    if _HAS_LEGACY_EVTX:
+        events = _parse_evtx_legacy(file_path)
+        print(f"    evtx {file_path.name}: {len(events)} records (via python-evtx fallback)")
+        return events
+
+    print(f"  [!] Skipping {file_path.name} — no EVTX parser installed")
+    return []
+
 # =============================================================================
-# EVT parser — Windows XP binary format, pure struct (no deprecated libs)
-#
-# Record layout:
-#   0x00  DWORD  Length
-#   0x04  DWORD  Magic = "LfLe"
-#   0x08  DWORD  RecordNumber
-#   0x0C  DWORD  TimeGenerated  (Unix timestamp)
-#   0x10  DWORD  TimeWritten    (Unix timestamp)
-#   0x14  DWORD  EventID (low 16 bits)
-#   0x18  WORD   EventType
-#   0x1A  WORD   NumStrings
-#   0x24  DWORD  StringOffset
-#   0x38  ...    SourceName (null-terminated UTF-16LE)
-#          ...    ComputerName
-#          ...    Strings
+# EVT parser — Windows XP binary, pure struct
 # =============================================================================
 
 EVT_HEADER_MAGIC = b"LfLe"
 EVT_RECORD_FIXED = 56
+EVT_LEVEL_MAP = {1:"Error", 2:"Warning", 4:"Information",
+                 8:"Success Audit", 16:"Failure Audit"}
 
-EVT_LEVEL_MAP = {
-    1: "Error",
-    2: "Warning",
-    4: "Information",
-    8: "Success Audit",
-    16: "Failure Audit",
-}
-
-
-def _read_utf16_string(data: bytes, offset: int) -> tuple[str, int]:
+def _read_utf16(data: bytes, offset: int) -> tuple[str, int]:
     end = offset
     while end + 1 < len(data):
         if data[end] == 0 and data[end + 1] == 0:
@@ -222,15 +244,10 @@ def _read_utf16_string(data: bytes, offset: int) -> tuple[str, int]:
         s = ""
     return s, end + 2
 
-
 def _parse_evt_record(data: bytes, file_name: str) -> dict | None:
-    if len(data) < EVT_RECORD_FIXED:
+    if len(data) < EVT_RECORD_FIXED or data[0x04:0x08] != EVT_HEADER_MAGIC:
         return None
     try:
-        magic        = data[0x04:0x08]
-        if magic != EVT_HEADER_MAGIC:
-            return None
-
         record_num   = struct.unpack_from("<I", data, 0x08)[0]
         time_gen     = struct.unpack_from("<I", data, 0x0C)[0]
         event_id_raw = struct.unpack_from("<I", data, 0x14)[0]
@@ -239,39 +256,37 @@ def _parse_evt_record(data: bytes, file_name: str) -> dict | None:
         str_offset   = struct.unpack_from("<I", data, 0x24)[0]
 
         event_id = event_id_raw & 0xFFFF
-
         try:
             timestamp = datetime.fromtimestamp(time_gen, tz=timezone.utc).isoformat()
         except Exception:
             timestamp = None
 
-        source_name, pos = _read_utf16_string(data, 0x38)
-        computer_name, _ = _read_utf16_string(data, pos)
+        source_name, pos = _read_utf16(data, 0x38)
+        computer_name, _ = _read_utf16(data, pos)
 
         strings: list[str] = []
         if str_offset < len(data) and num_strings > 0:
-            str_pos = str_offset
+            sp = str_offset
             for _ in range(num_strings):
-                if str_pos >= len(data):
+                if sp >= len(data):
                     break
-                s, str_pos = _read_utf16_string(data, str_pos)
+                s, sp = _read_utf16(data, sp)
                 strings.append(s)
 
         return {
             "source_format": "evt",
-            "file":          file_name,
-            "event_id":      event_id,
-            "provider":      source_name,
-            "timestamp":     timestamp,
-            "computer":      computer_name,
-            "level":         EVT_LEVEL_MAP.get(event_type, str(event_type)),
-            "channel":       file_name.replace(".Evt", "").replace(".evt", ""),
-            "record_id":     record_num,
-            "event_data":    {f"String{i}": s for i, s in enumerate(strings)},
+            "file":       file_name,
+            "event_id":   event_id,
+            "provider":   source_name,
+            "timestamp":  timestamp,
+            "computer":   computer_name,
+            "level":      EVT_LEVEL_MAP.get(event_type, str(event_type)),
+            "channel":    file_name.replace(".Evt","").replace(".evt",""),
+            "record_id":  record_num,
+            "event_data": {f"String{i}": s for i, s in enumerate(strings)},
         }
     except Exception:
         return None
-
 
 def parse_evt_file(file_path: Path) -> list[dict]:
     events = []
@@ -280,42 +295,33 @@ def parse_evt_file(file_path: Path) -> list[dict]:
     except Exception as err:
         print(f"  [!] Cannot read {file_path.name}: {err}")
         return events
-
     if len(data) < 8:
         return events
-
-    pos = 48  # skip EVT file header
+    pos = 48
     while pos < len(data) - 4:
         idx = data.find(EVT_HEADER_MAGIC, pos)
         if idx == -1:
             break
-
         rec_start = idx - 4
         if rec_start < 0:
             pos = idx + 4
             continue
-
         try:
             rec_len = struct.unpack_from("<I", data, rec_start)[0]
         except Exception:
             pos = idx + 4
             continue
-
         if rec_len < EVT_RECORD_FIXED or rec_len > 524288:
             pos = idx + 4
             continue
-
         rec_end = rec_start + rec_len
         if rec_end > len(data):
             pos = idx + 4
             continue
-
         event = _parse_evt_record(data[rec_start:rec_end], file_path.name)
         if event:
             events.append(event)
-
         pos = rec_end
-
     return events
 
 # =============================================================================
@@ -324,7 +330,6 @@ def parse_evt_file(file_path: Path) -> list[dict]:
 
 def parse_event_logs_dir(log_dir: Path) -> list[dict]:
     all_events: list[dict] = []
-
     if not log_dir.exists():
         print(f"  [!] Event logs dir not found: {log_dir}")
         return all_events
@@ -332,12 +337,15 @@ def parse_event_logs_dir(log_dir: Path) -> list[dict]:
     evtx_files = list(log_dir.rglob("*.evtx"))
     evt_files  = list(log_dir.rglob("*.evt")) + list(log_dir.rglob("*.Evt"))
 
+    parser_info = []
+    if _HAS_FAST_EVTX:   parser_info.append("evtx (fast)")
+    if _HAS_LEGACY_EVTX: parser_info.append("python-evtx (fallback)")
+    if not parser_info:   parser_info.append("NONE — install evtx package!")
+    print(f"  [*] EVTX parser: {', '.join(parser_info)}")
     print(f"  [*] Found {len(evtx_files)} .evtx, {len(evt_files)} .evt files")
 
     for f in evtx_files:
-        events = parse_evtx_file(f)
-        print(f"    evtx {f.name}: {len(events)} records")
-        all_events.extend(events)
+        all_events.extend(parse_evtx_file(f))
 
     for f in evt_files:
         events = parse_evt_file(f)
@@ -351,19 +359,14 @@ def parse_event_logs_dir(log_dir: Path) -> list[dict]:
 # =============================================================================
 
 def categorize(events: list[dict]) -> dict[str, list[dict]]:
-    network: list[dict] = []
-    logon:   list[dict] = []
-    process: list[dict] = []
-    service: list[dict] = []
-
+    out: dict[str, list[dict]] = {"network":[], "logon":[], "process":[], "service":[]}
     for e in events:
         eid = e.get("event_id")
-        if eid in NETWORK_EVENT_IDS:  network.append(e)
-        if eid in LOGON_EVENT_IDS:    logon.append(e)
-        if eid in PROCESS_EVENT_IDS:  process.append(e)
-        if eid in SERVICE_EVENT_IDS:  service.append(e)
-
-    return {"network": network, "logon": logon, "process": process, "service": service}
+        if eid in NETWORK_EVENT_IDS:  out["network"].append(e)
+        if eid in LOGON_EVENT_IDS:    out["logon"].append(e)
+        if eid in PROCESS_EVENT_IDS:  out["process"].append(e)
+        if eid in SERVICE_EVENT_IDS:  out["service"].append(e)
+    return out
 
 # =============================================================================
 # Main
@@ -371,10 +374,10 @@ def categorize(events: list[dict]) -> dict[str, list[dict]]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Parse Event Logs (.evtx + .evt) → JSON")
-    parser.add_argument("--mount",   help="Mount point (searches winevt/Logs or system32/config)")
-    parser.add_argument("--raw-dir", help="Directory containing pre-copied .evtx/.evt files (preferred)")
-    parser.add_argument("--output",  required=True, help="Output JSON for all event logs")
-    parser.add_argument("--network", required=True, help="Output JSON for network events")
+    parser.add_argument("--mount",   help="Mount point (auto-searches winevt/Logs or system32/config)")
+    parser.add_argument("--raw-dir", help="Directory with pre-copied .evtx/.evt files (preferred)")
+    parser.add_argument("--output",  required=True)
+    parser.add_argument("--network", required=True)
     args = parser.parse_args()
 
     if args.raw_dir:
@@ -402,11 +405,8 @@ def main() -> None:
     out_path.parent.mkdir(parents=True, exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump({
-            "metadata": {
-                "artifact_type": "event_logs",
-                "parsed_at":     now_iso(),
-                "source":        str(log_dir),
-            },
+            "metadata": {"artifact_type": "event_logs", "parsed_at": now_iso(),
+                         "source": str(log_dir)},
             "summary": {
                 "total_events":   len(all_events),
                 "network_events": len(cats["network"]),
@@ -425,16 +425,12 @@ def main() -> None:
     net_path.parent.mkdir(parents=True, exist_ok=True)
     with open(net_path, "w", encoding="utf-8") as f:
         json.dump({
-            "metadata": {
-                "artifact_type": "network_activity",
-                "parsed_at":     now_iso(),
-                "source":        str(log_dir),
-            },
+            "metadata": {"artifact_type": "network_activity", "parsed_at": now_iso(),
+                         "source": str(log_dir)},
             "summary": {"total_network_events": len(cats["network"])},
             "network_events": srt(cats["network"]),
         }, f, indent=2, ensure_ascii=False)
     print(f"  [✓] {len(cats['network'])} network events → {net_path}")
-
 
 if __name__ == "__main__":
     main()

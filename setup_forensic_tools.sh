@@ -10,9 +10,8 @@
 # =============================================================================
 
 # ── Shell compat ──────────────────────────────────────────────────────────────
-# pipefail works in both bash and zsh
 if [ -n "$ZSH_VERSION" ]; then
-    setopt errexit nounset pipefail 2>/dev/null || true
+    setopt nounset pipefail 2>/dev/null || true
 else
     set -uo pipefail
 fi
@@ -33,27 +32,18 @@ EZTOOLS_DIR="$HOME/EZTools"
 EZTOOLS_NET9="$EZTOOLS_DIR/bin/net9"
 PWSH_VERSION="7.5.4"
 
-# ── Detect RC file (update both if both exist) ────────────────────────────────
+# ── Detect RC file ────────────────────────────────────────────────────────────
 RC_FILES=()
 [[ -f "$HOME/.zshrc" ]]  && RC_FILES+=("$HOME/.zshrc")
 [[ -f "$HOME/.bashrc" ]] && RC_FILES+=("$HOME/.bashrc")
 
-# If neither exists yet, create one matching the running shell
 if [[ ${#RC_FILES[@]} -eq 0 ]]; then
     if [ -n "${ZSH_VERSION:-}" ]; then
-        touch "$HOME/.zshrc"
-        RC_FILES+=("$HOME/.zshrc")
+        touch "$HOME/.zshrc"; RC_FILES+=("$HOME/.zshrc")
     else
-        touch "$HOME/.bashrc"
-        RC_FILES+=("$HOME/.bashrc")
+        touch "$HOME/.bashrc"; RC_FILES+=("$HOME/.bashrc")
     fi
 fi
-
-# ── Portable regex helper (no grep -P) ───────────────────────────────────────
-# Usage: regex_extract <pattern_ERE> <string>
-regex_extract() {
-    echo "$2" | grep -oE "$1" | head -1
-}
 
 # =============================================================================
 # BANNER
@@ -61,8 +51,8 @@ regex_extract() {
 echo ""
 echo -e "${CYAN}${BOLD}"
 echo "  ╔══════════════════════════════════════════════════════╗"
-echo "  ║       Forensic Tools Setup — Kali Linux 2026         ║"
-echo "  ║  .NET 9 + PowerShell + EZ Tools + Python libs        ║"
+echo "  ║       Forensic Tools Setup — Kali Linux 2026        ║"
+echo "  ║  .NET 9 + PowerShell + EZ Tools + Python libs       ║"
 echo "  ╚══════════════════════════════════════════════════════╝"
 echo -e "${NC}"
 echo -e "  Shell     : ${YELLOW}${SHELL}${NC}"
@@ -78,20 +68,50 @@ sudo apt update -qq
 
 sudo apt install -y \
     ewf-tools \
+    ntfs-3g \
     regripper \
     python3-evtx \
     python3-pylnk3 \
     liblnk-utils \
     sleuthkit \
+    python3-pip \
     wget \
     curl
 
-log_success "APT packages installed successfully"
+log_success "APT packages installed"
 
 # =============================================================================
-# STEP 2: .NET 9 SDK
+# STEP 2: Python libraries (pip)
+# New additions:
+#   evtx             — fast EVTX parser, handles Win10/11 correctly
+#                      replaces python-evtx as primary for .evtx files
+#   python-registry  — parse SAM / NTUSER.DAT registry hives
+#   pylnk3           — parse LNK shortcut files (apt version may be outdated)
+#
+# python-evtx kept as fallback in case evtx fails on edge-case files
 # =============================================================================
-log_step "Step 2: Installing .NET 9 SDK"
+log_step "Step 2: Installing Python libraries"
+
+PIP_PKGS=(
+    "evtx"             # primary EVTX parser — handles Win10/11 namespace correctly
+    "python-evtx"      # fallback EVTX parser
+    "python-registry"  # SAM / NTUSER.DAT hive parser
+    "pylnk3"           # LNK shortcut parser (newer than apt version)
+)
+
+for pkg in "${PIP_PKGS[@]}"; do
+    log_info "  pip install $pkg..."
+    if pip install "$pkg" --break-system-packages -q 2>/dev/null; then
+        log_success "  $pkg installed"
+    else
+        log_warn "  $pkg failed — continuing"
+    fi
+done
+
+# =============================================================================
+# STEP 3: .NET 9 SDK
+# =============================================================================
+log_step "Step 3: Installing .NET 9 SDK"
 
 if "$DOTNET_BIN" --version 2>/dev/null | grep -q "^9\."; then
     log_success ".NET 9 already installed: $("$DOTNET_BIN" --version)"
@@ -110,11 +130,10 @@ export DOTNET_ROOT="$DOTNET_DIR"
 export PATH="$DOTNET_DIR:$DOTNET_DIR/tools:$PATH"
 
 # =============================================================================
-# STEP 3: PowerShell
+# STEP 4: PowerShell
 # =============================================================================
-log_step "Step 3: Installing PowerShell $PWSH_VERSION"
+log_step "Step 4: Installing PowerShell $PWSH_VERSION"
 
-# grep -oE instead of grep -oP for portability
 CURRENT_PWSH=$(pwsh --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1 || echo "")
 
 if [[ "$CURRENT_PWSH" == "$PWSH_VERSION" ]]; then
@@ -124,15 +143,17 @@ else
     wget -q "https://github.com/PowerShell/PowerShell/releases/download/v${PWSH_VERSION}/powershell_${PWSH_VERSION}-1.deb_amd64.deb" \
         -O /tmp/pwsh.deb
     sudo dpkg -i /tmp/pwsh.deb > /dev/null 2>&1
-    sudo apt install -f -y > /dev/null 2>&1  # fix any missing deps
+    sudo apt install -f -y > /dev/null 2>&1
     rm /tmp/pwsh.deb
     log_success "PowerShell $(pwsh --version) installed"
 fi
 
 # =============================================================================
-# STEP 4: EZ Tools
+# STEP 5: EZ Tools
+# NOTE: PECmd, SBECmd use Windows-only decompression DLLs and will not run
+#       on Linux/Kali. All other tools (EvtxECmd, LECmd, RECmd, etc.) work fine.
 # =============================================================================
-log_step "Step 4: Downloading EZ Tools"
+log_step "Step 5: Downloading EZ Tools"
 
 TOOL_COUNT=0
 if [[ -d "$EZTOOLS_NET9" ]]; then
@@ -147,18 +168,16 @@ else
     mkdir -p "$EZTOOLS_DIR"
     wget -q "https://raw.githubusercontent.com/EricZimmerman/Get-ZimmermanTools/master/Get-ZimmermanTools.ps1" \
         -O "$EZTOOLS_DIR/Get-ZimmermanTools.ps1"
-
     log_info "Running Get-ZimmermanTools.ps1 (this may take a few minutes)..."
     pwsh "$EZTOOLS_DIR/Get-ZimmermanTools.ps1" -Dest "$EZTOOLS_DIR/bin" -NetVersion 9
-
     TOOL_COUNT=$(find "$EZTOOLS_NET9" -maxdepth 2 -name "*.dll" 2>/dev/null | wc -l)
     log_success "EZ Tools downloaded ($TOOL_COUNT DLLs)"
 fi
 
 # =============================================================================
-# STEP 5: Sync RECmd Batch Files
+# STEP 6: Sync RECmd Batch Files
 # =============================================================================
-log_step "Step 5: Syncing RECmd Batch Files"
+log_step "Step 6: Syncing RECmd Batch Files"
 
 RECMD_DLL=$(find "$EZTOOLS_NET9" -name "RECmd.dll" 2>/dev/null | head -1 || true)
 if [[ -f "${RECMD_DLL:-}" ]]; then
@@ -171,11 +190,10 @@ else
 fi
 
 # =============================================================================
-# STEP 6: Write PATH + Aliases to RC file(s)
+# STEP 7: Write PATH + Aliases to RC file(s)
 # =============================================================================
-log_step "Step 6: Updating shell RC file(s)"
+log_step "Step 7: Updating shell RC file(s)"
 
-# Resolve DLL paths once
 find_dll() { find "$EZTOOLS_NET9" -name "${1}.dll" 2>/dev/null | head -1 || true; }
 
 RECMD=$(find_dll "RECmd")
@@ -190,7 +208,6 @@ MFTECMD=$(find_dll "MFTECmd")
 SQLEMD=$(find_dll "SQLECmd")
 SRUMECMD=$(find_dll "SrumECmd")
 
-# Build the config block as a variable (written once, applied to each RC file)
 build_config_block() {
     printf '\n# ── Forensic Tools Setup ──────────────────────────────────────────────────────\n'
     printf 'export DOTNET_ROOT="$HOME/.dotnet"\n'
@@ -201,7 +218,6 @@ build_config_block() {
     write_alias() {
         local aname="$1" dll="$2"
         if [[ -n "$dll" && -f "$dll" ]]; then
-            # Quote dotnet path and DLL path; works in both bash and zsh
             printf "alias %s='%s' '%s'\n" "$aname" "$DOTNET_BIN" "$dll"
         else
             printf '# %s: DLL not found\n' "$aname"
@@ -226,10 +242,8 @@ build_config_block() {
 BLOCK=$(build_config_block)
 
 for RC in "${RC_FILES[@]}"; do
-    # Remove old block if present
     if grep -q "# ── Forensic Tools Setup" "$RC" 2>/dev/null; then
         log_warn "Old config found in $RC — removing and rewriting"
-        # Use a temp file for in-place edit (works on both Linux and macOS)
         TMPRC=$(mktemp)
         awk '/# ── Forensic Tools Setup/{skip=1} /# ── End Forensic Tools/{skip=0; next} !skip' \
             "$RC" > "$TMPRC" && mv "$TMPRC" "$RC"
@@ -239,16 +253,14 @@ for RC in "${RC_FILES[@]}"; do
 done
 
 # =============================================================================
-# STEP 7: Verify everything
+# STEP 8: Verify everything
 # =============================================================================
-log_step "Step 7: Verification"
+log_step "Step 8: Verification"
 
 ERRORS=0
 
 check_cmd() {
-    local label="$1"
-    # shift past label so remaining args are the command to eval
-    shift
+    local label="$1"; shift
     if eval "$@" &>/dev/null; then
         log_success "$label"
     else
@@ -257,10 +269,22 @@ check_cmd() {
     fi
 }
 
+check_py() {
+    local label="$1" module="$2"
+    if python3 -c "import $module" &>/dev/null; then
+        local ver
+        ver=$(python3 -c "import $module; print(getattr($module, '__version__', 'ok'))" 2>/dev/null || echo "ok")
+        log_success "$label ($ver)"
+    else
+        log_warn "$label — NOT INSTALLED"
+        ERRORS=$((ERRORS + 1))
+    fi
+}
+
 check_dll() {
     local label="$1" dll="${2:-}"
     if [[ -n "$dll" && -f "$dll" ]]; then
-        log_success "$label → $(basename "$(dirname "$dll")")/$(basename "$dll")"
+        log_success "$label"
     else
         log_warn "$label — not found"
         ERRORS=$((ERRORS + 1))
@@ -272,27 +296,31 @@ log_info "System tools:"
 check_cmd "dotnet 9.x"      '"$DOTNET_BIN" --version | grep -q "^9\."'
 check_cmd "pwsh"             'pwsh --version'
 check_cmd "ewfmount"         'command -v ewfmount'
+check_cmd "ntfs-3g"          'command -v ntfs-3g'
 check_cmd "mmls (sleuthkit)" 'command -v mmls'
 check_cmd "regripper"        'command -v regripper'
 check_cmd "python3"          'python3 --version'
-check_cmd "python3-evtx"     'python3 -c "import Evtx"'
-check_cmd "python3-pylnk3"   'python3 -c "import pylnk3"'
+
+echo ""
+log_info "Python libraries:"
+check_py  "evtx (fast parser — primary)"    "evtx"
+check_py  "python-evtx (fallback)"          "Evtx"
+check_py  "python-registry (SAM/NTUSER)"    "Registry"
+check_py  "pylnk3 (LNK parser)"             "pylnk3"
 
 echo ""
 log_info "EZ Tools DLLs:"
-check_dll "RECmd"          "$RECMD"
-check_dll "PECmd"          "$PECMD"
-check_dll "LECmd"          "$LECMD"
-check_dll "JLECmd"         "$JLECMD"
-check_dll "SBECmd"         "$SBECMD"
-check_dll "EvtxECmd"       "$EVTXECMD"
-check_dll "AmcacheParser"  "$AMCACHE"
-check_dll "RBCmd"          "$RBCMD"
-check_dll "MFTECmd"        "$MFTECMD"
-check_dll "SQLECmd"        "$SQLEMD"
-
+RECMD=$(find_dll "RECmd");       check_dll "RECmd"         "$RECMD"
+PECMD=$(find_dll "PECmd");       check_dll "PECmd (Windows-only — skip on Linux)" "$PECMD"
+LECMD=$(find_dll "LECmd");       check_dll "LECmd"         "$LECMD"
+JLECMD=$(find_dll "JLECmd");     check_dll "JLECmd"        "$JLECMD"
+EVTXECMD=$(find_dll "EvtxECmd"); check_dll "EvtxECmd"      "$EVTXECMD"
+AMCACHE=$(find_dll "AmcacheParser"); check_dll "AmcacheParser" "$AMCACHE"
+RBCMD=$(find_dll "RBCmd");       check_dll "RBCmd"         "$RBCMD"
+MFTECMD=$(find_dll "MFTECmd");   check_dll "MFTECmd"       "$MFTECMD"
+SQLEMD=$(find_dll "SQLECmd");    check_dll "SQLECmd"        "$SQLEMD"
 KROLL=$(find "$EZTOOLS_NET9" -name "Kroll_Batch.reb" 2>/dev/null | head -1 || true)
-check_dll "Kroll_Batch.reb" "$KROLL"
+check_dll "Kroll_Batch.reb"  "$KROLL"
 
 # =============================================================================
 # DONE
@@ -307,15 +335,19 @@ else
 fi
 echo "  ╚══════════════════════════════════════════════════════╝"
 echo -e "${NC}"
-echo -e "  RC files updated  :  ${YELLOW}${RC_FILES[*]}${NC}"
+echo -e "  RC files updated  : ${YELLOW}${RC_FILES[*]}${NC}"
 echo ""
-echo -e "  Reload shell       :"
+echo -e "  Reload shell:"
 for RC in "${RC_FILES[@]}"; do
     echo -e "    ${GREEN}source $RC${NC}"
 done
 echo ""
-echo -e "  Quick test         :"
+echo -e "  Quick test:"
+echo -e "  ${GREEN}python3 -c \"import evtx; print('evtx OK')\"${NC}"
+echo -e "  ${GREEN}python3 -c \"import Registry; print('python-registry OK')\"${NC}"
 echo -e "  ${GREEN}RECmd --version${NC}"
-echo -e "  ${GREEN}PECmd --version${NC}"
 echo -e "  ${GREEN}EvtxECmd --version${NC}"
+echo ""
+echo -e "  ${YELLOW}Note: PECmd and SBECmd use Windows-only DLLs and will not run on Kali.${NC}"
+echo -e "  ${YELLOW}      Prefetch parsing is handled by the Python parser instead.${NC}"
 echo ""
