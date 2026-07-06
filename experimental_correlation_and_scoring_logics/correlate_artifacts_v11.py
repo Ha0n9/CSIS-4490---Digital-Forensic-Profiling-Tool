@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-correlate_artifacts_v10.1.py  -  Review & Hardened Version
+correlate_artifacts_v11.py  -  Review & Hardened Version
 Forensic artifact correlation -> per-user suspicion scoring
 
 Changes from v10:
@@ -15,7 +15,7 @@ Inherited from v10:
   [FIX-10C] Percentile uses real_evidence users only
 
 Usage:
-    python3 correlate_artifacts_v10.1.py --json-dir output/json --output output/scores.json
+    python3 correlate_artifacts_v11.py --json-dir output/json --output output/scores.json
 """
 
 import argparse
@@ -1149,7 +1149,7 @@ def evaluate_results(results: list[dict], ground_truth: dict,
 
 def main() -> None:
     ap = argparse.ArgumentParser(
-        description="Correlate forensic artifacts -> per-user suspicion scores (v10.1)"
+        description="Correlate forensic artifacts -> per-user suspicion scores (v11)"
     )
     ap.add_argument("--json-dir",     required=True)
     ap.add_argument("--output",       required=True)
@@ -1165,7 +1165,7 @@ def main() -> None:
 
     print()
     print("  ╔══════════════════════════════════════════════════════╗")
-    print("  ║       Forensic Artifact Correlator - v10.1          ║")
+    print("  ║       Forensic Artifact Correlator - v11          ║")
     print("  ║    zero-guard · evidence-gated risk classification  ║")
     print("  ║    + real-evidence gate (browser flagged only)      ║")
     print("  ╚══════════════════════════════════════════════════════╝")
@@ -1251,7 +1251,7 @@ def main() -> None:
     # Write output
     output = {
         "metadata": {
-            "version":                "v10.1",
+            "version":                "v11",
             "generated_at":           now_iso(),
             "json_source":            str(json_dir),
             "total_accounts":         len(results),
