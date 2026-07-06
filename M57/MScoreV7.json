@@ -1,0 +1,1637 @@
+{
+  "metadata": {
+    "version": "v7",
+    "generated_at": "2026-07-06T10:56:02.158513+00:00",
+    "json_source": "M57/json",
+    "total_accounts": 10,
+    "rankable_accounts": 10,
+    "scoring_method": "log1p_hybrid_70_30_normfix",
+    "network_classification": "3-bucket (external/internal_suspicious/internal_benign)",
+    "system_accounts": "tagged, retained in data, excluded from ranking",
+    "app_attribution": "per-user path-based + shared pool fallback",
+    "max_norm_score": 18.0,
+    "timeline_bonus_caps": {
+      "file_access_then_deletion": 15,
+      "app_exec_then_network": 12,
+      "activity_then_log_gap": 6,
+      "rapid_actions": 9,
+      "multi_source_consistency": 10
+    },
+    "log_gap_min_pre_events": 3,
+    "weights_used": {
+      "deleted_files": 4,
+      "event_anomalies": 4,
+      "app_activity": 3,
+      "network_activity": 3,
+      "document_access": 2,
+      "browser_history": 1,
+      "user_accounts": 1
+    },
+    "timeline_bonuses_used": {
+      "file_access_then_deletion": 5,
+      "app_exec_then_network": 4,
+      "activity_then_log_gap": 6,
+      "rapid_actions": 3,
+      "multi_source_consistency": 5
+    },
+    "changes_from_v6": [
+      "FIX-D: __apps__ shared pool REMOVED from per-user timelines (caused all-HIGH)",
+      "FIX-E: Timeline bonus gated on artifact_score > 0 (no evidence = no bonus)",
+      "FIX-G: Risk label tie-breaking uses rank to prevent boundary inflation"
+    ],
+    "changes_from_v5": [
+      "FIX-A: norm_scaled now uses /MAX_NORM_SCORE (was *100 then clipped — always 100)",
+      "FIX-B: evt_wc/4 divisor removed; event anomaly uses full weighted count",
+      "FIX-C: Risk label percentile uses floor((n-1)*p) for correct inclusive index"
+    ],
+    "changes_from_v4": [
+      "FIX-1: App scoring per-user via path resolution",
+      "FIX-2: Timeline bonus capped multi-match (no early break)",
+      "FIX-3: Log gap requires >=3 prior events to avoid idle FP",
+      "FIX-4: log1p scaling for raw score (outlier dampening)",
+      "FIX-5: Dynamic evaluation threshold (sigma/percentile)",
+      "NEW-6: Evidence diversity score (category spread)",
+      "NEW-7: HIGH/MEDIUM/LOW risk classification"
+    ]
+  },
+  "users": [
+    {
+      "username": "Jean",
+      "username_key": "jean",
+      "account_type": "user",
+      "rankable": true,
+      "account_info": {
+        "rid": 1004,
+        "last_login": "2008-07-20T00:00:41.640625+00:00",
+        "login_count": 80,
+        "failed_logins": 0,
+        "account_disabled": false
+      },
+      "artifact_scores": {
+        "deleted_files": {
+          "raw_count": 1,
+          "score": 4
+        },
+        "event_anomalies": {
+          "raw_count": 0,
+          "weighted_count": 0.0,
+          "score": 0.0
+        },
+        "app_activity": {
+          "attributed_count": 0,
+          "shared_pool_count": 78,
+          "effective_weighted": 14.55,
+          "score": 43.65
+        },
+        "network_activity": {
+          "raw_count": 0,
+          "external": 0,
+          "internal_suspicious": 0,
+          "weighted_count": 0.0,
+          "score": 0.0
+        },
+        "document_access": {
+          "raw_count": 5,
+          "sensitive_count": 1,
+          "score": 2
+        },
+        "browser_history": {
+          "raw_count": 6327,
+          "flagged_count": 1,
+          "flagged_weight": 3.0,
+          "score": 3.0
+        },
+        "user_accounts": {
+          "raw_count": 0,
+          "score": 0
+        }
+      },
+      "raw_score": 52.65,
+      "normalized_score": 3.0,
+      "artifact_score": 75.0,
+      "timeline_bonus": 0,
+      "timeline_patterns": [],
+      "final_score": 75.0,
+      "diversity": {
+        "category_count": 4,
+        "diversity_score": 0.5714,
+        "categories_hit": [
+          "deleted_files",
+          "app_activity",
+          "document_access",
+          "browser_history"
+        ]
+      },
+      "risk_label": "HIGH",
+      "evidence": {
+        "deleted_files": [
+          {
+            "path": "C:\\Documents and Settings\\Jean\\Desktop\\tag-cloud.jpg",
+            "deleted_at": "",
+            "file_size": "1952797472",
+            "source": "INFO2"
+          }
+        ],
+        "event_anomalies": [],
+        "network_activity": [],
+        "document_access": [
+          {
+            "target": "C:\\Documents and Settings\\Jean\\Desktop\\m57biz.xls",
+            "accessed_at": "2008-07-20T01:28:03.953125+00:00",
+            "extension": ".xls"
+          }
+        ],
+        "browser_history": [
+          {
+            "url": "http://spe.atdmt.com/ds/AAAVEWAMUWAM/TribalFusion_DL/160x600_Friendly_Amped_DL.swf?ver=1&clickTag1=http://pn1.ard.yahoo.com/SIG=15fojkbs6/M=635054.12841984.13112227.9068246/D=eb_clothng/S=2022124037:SKY/Y=EBAY_US/E=ebay:/EXP=1216079825/L=BgxsA9j8fU_z8.fkSHGo6I2pR8YR40h7y7EACOaJ/B=phBcAdj8fco-/J=1216072625585424/A=5328171/R=0/*http://clk.atdmt.com/go/yhxxxwam0450000056ave/direct;wi.160;hi.600;ai.46381911;ct.1/01&clickTag=http://pn1.ard.yahoo.com/SIG=15fojkbs6/M=635054.12841984.13112227.9068246/D=eb_clothng/S=202212",
+            "title": "",
+            "category": "anonymization",
+            "weight": 3,
+            "visited": "",
+            "browser": "IE"
+          }
+        ],
+        "app_activity": [
+          {
+            "exe": "rundll32.exe\u0000舖\u0000\u0000\u0000\u0000ꓣ}㵀눡ꇢ}㰘눡ﰘ航㵀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 1,
+            "last_run": "2008-07-20T01:26:14.265625+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舚\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000ꪀ舌",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 7,
+            "last_run": "2008-07-19T23:32:24.285875+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "msiexec.exe\u0000и自\u0000\u0000\u0000\u0000幀聓嵀￿￿尘஠臣嵀",
+            "category": "execution",
+            "multiplier": 1.5,
+            "run_count": 20,
+            "last_run": "2008-07-19T23:31:34.207750+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臙\u0000\u0000\u0000\u0000帓b絀愖e簘挐臙絀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 3,
+            "last_run": "2008-07-19T23:31:16.004625+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臅\u0000\u0000\u0000\u0000힨舨�뇏�뇏�뇏眈舔�",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 1,
+            "last_run": "2008-07-18T04:37:17.718750+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臤\u0000\u0000\u0000\u0000\u0010\u0000굀ꀀ갘怠臱굀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 7,
+            "last_run": "2008-07-12T21:16:08.953125+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "regsvr32.exe\u0000舆\u0000\u0000\u0000\u0000幀聓ⵀ￿￿ⱈ趨臨ⵀ",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 5,
+            "last_run": "2008-07-12T03:05:36.642125+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臢\u0000\u0000\u0000\u0000\u0010\u0000浀\u0000氘琈臢浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:27.314000+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舰\u0000\u0000\u0000\u0000\u0010\u0000浀\u0000氘ӑ舯浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:23.845250+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舀\u0000\u0000\u0000\u0000\u0010\u0000浀氘樐臽浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:22.751500+00:00",
+            "attributed": false
+          }
+        ],
+        "user_accounts": []
+      },
+      "rank": 1
+    },
+    {
+      "username": "Abijah",
+      "username_key": "abijah",
+      "account_type": "user",
+      "rankable": true,
+      "account_info": {
+        "rid": 1006,
+        "last_login": "",
+        "login_count": 0,
+        "failed_logins": 0,
+        "account_disabled": false
+      },
+      "artifact_scores": {
+        "deleted_files": {
+          "raw_count": 0,
+          "score": 0
+        },
+        "event_anomalies": {
+          "raw_count": 0,
+          "weighted_count": 0.0,
+          "score": 0.0
+        },
+        "app_activity": {
+          "attributed_count": 0,
+          "shared_pool_count": 78,
+          "effective_weighted": 0.0,
+          "score": 0.0
+        },
+        "network_activity": {
+          "raw_count": 0,
+          "external": 0,
+          "internal_suspicious": 0,
+          "weighted_count": 0.0,
+          "score": 0.0
+        },
+        "document_access": {
+          "raw_count": 0,
+          "sensitive_count": 0,
+          "score": 0
+        },
+        "browser_history": {
+          "raw_count": 0,
+          "flagged_count": 0,
+          "flagged_weight": 0.0,
+          "score": 0.0
+        },
+        "user_accounts": {
+          "raw_count": 0,
+          "score": 0
+        }
+      },
+      "raw_score": 0.0,
+      "normalized_score": 0.0,
+      "artifact_score": 0.0,
+      "timeline_bonus": 0,
+      "timeline_patterns": [],
+      "final_score": 0.0,
+      "diversity": {
+        "category_count": 0,
+        "diversity_score": 0.0,
+        "categories_hit": []
+      },
+      "risk_label": "HIGH",
+      "evidence": {
+        "deleted_files": [],
+        "event_anomalies": [],
+        "network_activity": [],
+        "document_access": [],
+        "browser_history": [],
+        "app_activity": [
+          {
+            "exe": "rundll32.exe\u0000舖\u0000\u0000\u0000\u0000ꓣ}㵀눡ꇢ}㰘눡ﰘ航㵀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 1,
+            "last_run": "2008-07-20T01:26:14.265625+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舚\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000ꪀ舌",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 7,
+            "last_run": "2008-07-19T23:32:24.285875+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "msiexec.exe\u0000и自\u0000\u0000\u0000\u0000幀聓嵀￿￿尘஠臣嵀",
+            "category": "execution",
+            "multiplier": 1.5,
+            "run_count": 20,
+            "last_run": "2008-07-19T23:31:34.207750+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臙\u0000\u0000\u0000\u0000帓b絀愖e簘挐臙絀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 3,
+            "last_run": "2008-07-19T23:31:16.004625+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臅\u0000\u0000\u0000\u0000힨舨�뇏�뇏�뇏眈舔�",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 1,
+            "last_run": "2008-07-18T04:37:17.718750+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臤\u0000\u0000\u0000\u0000\u0010\u0000굀ꀀ갘怠臱굀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 7,
+            "last_run": "2008-07-12T21:16:08.953125+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "regsvr32.exe\u0000舆\u0000\u0000\u0000\u0000幀聓ⵀ￿￿ⱈ趨臨ⵀ",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 5,
+            "last_run": "2008-07-12T03:05:36.642125+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臢\u0000\u0000\u0000\u0000\u0010\u0000浀\u0000氘琈臢浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:27.314000+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舰\u0000\u0000\u0000\u0000\u0010\u0000浀\u0000氘ӑ舯浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:23.845250+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舀\u0000\u0000\u0000\u0000\u0010\u0000浀氘樐臽浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:22.751500+00:00",
+            "attributed": false
+          }
+        ],
+        "user_accounts": []
+      },
+      "rank": 2
+    },
+    {
+      "username": "Addison",
+      "username_key": "addison",
+      "account_type": "user",
+      "rankable": true,
+      "account_info": {
+        "rid": 1005,
+        "last_login": "",
+        "login_count": 0,
+        "failed_logins": 0,
+        "account_disabled": false
+      },
+      "artifact_scores": {
+        "deleted_files": {
+          "raw_count": 0,
+          "score": 0
+        },
+        "event_anomalies": {
+          "raw_count": 0,
+          "weighted_count": 0.0,
+          "score": 0.0
+        },
+        "app_activity": {
+          "attributed_count": 0,
+          "shared_pool_count": 78,
+          "effective_weighted": 0.0,
+          "score": 0.0
+        },
+        "network_activity": {
+          "raw_count": 0,
+          "external": 0,
+          "internal_suspicious": 0,
+          "weighted_count": 0.0,
+          "score": 0.0
+        },
+        "document_access": {
+          "raw_count": 0,
+          "sensitive_count": 0,
+          "score": 0
+        },
+        "browser_history": {
+          "raw_count": 0,
+          "flagged_count": 0,
+          "flagged_weight": 0.0,
+          "score": 0.0
+        },
+        "user_accounts": {
+          "raw_count": 0,
+          "score": 0
+        }
+      },
+      "raw_score": 0.0,
+      "normalized_score": 0.0,
+      "artifact_score": 0.0,
+      "timeline_bonus": 0,
+      "timeline_patterns": [],
+      "final_score": 0.0,
+      "diversity": {
+        "category_count": 0,
+        "diversity_score": 0.0,
+        "categories_hit": []
+      },
+      "risk_label": "MEDIUM",
+      "evidence": {
+        "deleted_files": [],
+        "event_anomalies": [],
+        "network_activity": [],
+        "document_access": [],
+        "browser_history": [],
+        "app_activity": [
+          {
+            "exe": "rundll32.exe\u0000舖\u0000\u0000\u0000\u0000ꓣ}㵀눡ꇢ}㰘눡ﰘ航㵀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 1,
+            "last_run": "2008-07-20T01:26:14.265625+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舚\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000ꪀ舌",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 7,
+            "last_run": "2008-07-19T23:32:24.285875+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "msiexec.exe\u0000и自\u0000\u0000\u0000\u0000幀聓嵀￿￿尘஠臣嵀",
+            "category": "execution",
+            "multiplier": 1.5,
+            "run_count": 20,
+            "last_run": "2008-07-19T23:31:34.207750+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臙\u0000\u0000\u0000\u0000帓b絀愖e簘挐臙絀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 3,
+            "last_run": "2008-07-19T23:31:16.004625+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臅\u0000\u0000\u0000\u0000힨舨�뇏�뇏�뇏眈舔�",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 1,
+            "last_run": "2008-07-18T04:37:17.718750+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臤\u0000\u0000\u0000\u0000\u0010\u0000굀ꀀ갘怠臱굀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 7,
+            "last_run": "2008-07-12T21:16:08.953125+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "regsvr32.exe\u0000舆\u0000\u0000\u0000\u0000幀聓ⵀ￿￿ⱈ趨臨ⵀ",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 5,
+            "last_run": "2008-07-12T03:05:36.642125+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臢\u0000\u0000\u0000\u0000\u0010\u0000浀\u0000氘琈臢浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:27.314000+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舰\u0000\u0000\u0000\u0000\u0010\u0000浀\u0000氘ӑ舯浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:23.845250+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舀\u0000\u0000\u0000\u0000\u0010\u0000浀氘樐臽浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:22.751500+00:00",
+            "attributed": false
+          }
+        ],
+        "user_accounts": []
+      },
+      "rank": 3
+    },
+    {
+      "username": "Administrator",
+      "username_key": "administrator",
+      "account_type": "builtin",
+      "rankable": true,
+      "account_info": {
+        "rid": 500,
+        "last_login": "2008-07-21T01:22:18.750000+00:00",
+        "login_count": 24,
+        "failed_logins": 0,
+        "account_disabled": false
+      },
+      "artifact_scores": {
+        "deleted_files": {
+          "raw_count": 0,
+          "score": 0
+        },
+        "event_anomalies": {
+          "raw_count": 0,
+          "weighted_count": 0.0,
+          "score": 0.0
+        },
+        "app_activity": {
+          "attributed_count": 0,
+          "shared_pool_count": 78,
+          "effective_weighted": 0.0,
+          "score": 0.0
+        },
+        "network_activity": {
+          "raw_count": 0,
+          "external": 0,
+          "internal_suspicious": 0,
+          "weighted_count": 0.0,
+          "score": 0.0
+        },
+        "document_access": {
+          "raw_count": 0,
+          "sensitive_count": 0,
+          "score": 0
+        },
+        "browser_history": {
+          "raw_count": 601,
+          "flagged_count": 0,
+          "flagged_weight": 0.0,
+          "score": 0.0
+        },
+        "user_accounts": {
+          "raw_count": 0,
+          "score": 0
+        }
+      },
+      "raw_score": 0.0,
+      "normalized_score": 0.0,
+      "artifact_score": 0.0,
+      "timeline_bonus": 0,
+      "timeline_patterns": [],
+      "final_score": 0.0,
+      "diversity": {
+        "category_count": 0,
+        "diversity_score": 0.0,
+        "categories_hit": []
+      },
+      "risk_label": "MEDIUM",
+      "evidence": {
+        "deleted_files": [],
+        "event_anomalies": [],
+        "network_activity": [],
+        "document_access": [],
+        "browser_history": [],
+        "app_activity": [
+          {
+            "exe": "rundll32.exe\u0000舖\u0000\u0000\u0000\u0000ꓣ}㵀눡ꇢ}㰘눡ﰘ航㵀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 1,
+            "last_run": "2008-07-20T01:26:14.265625+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舚\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000ꪀ舌",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 7,
+            "last_run": "2008-07-19T23:32:24.285875+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "msiexec.exe\u0000и自\u0000\u0000\u0000\u0000幀聓嵀￿￿尘஠臣嵀",
+            "category": "execution",
+            "multiplier": 1.5,
+            "run_count": 20,
+            "last_run": "2008-07-19T23:31:34.207750+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臙\u0000\u0000\u0000\u0000帓b絀愖e簘挐臙絀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 3,
+            "last_run": "2008-07-19T23:31:16.004625+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臅\u0000\u0000\u0000\u0000힨舨�뇏�뇏�뇏眈舔�",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 1,
+            "last_run": "2008-07-18T04:37:17.718750+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臤\u0000\u0000\u0000\u0000\u0010\u0000굀ꀀ갘怠臱굀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 7,
+            "last_run": "2008-07-12T21:16:08.953125+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "regsvr32.exe\u0000舆\u0000\u0000\u0000\u0000幀聓ⵀ￿￿ⱈ趨臨ⵀ",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 5,
+            "last_run": "2008-07-12T03:05:36.642125+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臢\u0000\u0000\u0000\u0000\u0010\u0000浀\u0000氘琈臢浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:27.314000+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舰\u0000\u0000\u0000\u0000\u0010\u0000浀\u0000氘ӑ舯浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:23.845250+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舀\u0000\u0000\u0000\u0000\u0010\u0000浀氘樐臽浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:22.751500+00:00",
+            "attributed": false
+          }
+        ],
+        "user_accounts": []
+      },
+      "rank": 4
+    },
+    {
+      "username": "Devon",
+      "username_key": "devon",
+      "account_type": "user",
+      "rankable": true,
+      "account_info": {
+        "rid": 1007,
+        "last_login": "2008-07-12T03:02:47.631381+00:00",
+        "login_count": 4,
+        "failed_logins": 0,
+        "account_disabled": false
+      },
+      "artifact_scores": {
+        "deleted_files": {
+          "raw_count": 0,
+          "score": 0
+        },
+        "event_anomalies": {
+          "raw_count": 0,
+          "weighted_count": 0.0,
+          "score": 0.0
+        },
+        "app_activity": {
+          "attributed_count": 0,
+          "shared_pool_count": 78,
+          "effective_weighted": 0.0,
+          "score": 0.0
+        },
+        "network_activity": {
+          "raw_count": 0,
+          "external": 0,
+          "internal_suspicious": 0,
+          "weighted_count": 0.0,
+          "score": 0.0
+        },
+        "document_access": {
+          "raw_count": 0,
+          "sensitive_count": 0,
+          "score": 0
+        },
+        "browser_history": {
+          "raw_count": 0,
+          "flagged_count": 0,
+          "flagged_weight": 0.0,
+          "score": 0.0
+        },
+        "user_accounts": {
+          "raw_count": 0,
+          "score": 0
+        }
+      },
+      "raw_score": 0.0,
+      "normalized_score": 0.0,
+      "artifact_score": 0.0,
+      "timeline_bonus": 0,
+      "timeline_patterns": [],
+      "final_score": 0.0,
+      "diversity": {
+        "category_count": 0,
+        "diversity_score": 0.0,
+        "categories_hit": []
+      },
+      "risk_label": "MEDIUM",
+      "evidence": {
+        "deleted_files": [],
+        "event_anomalies": [],
+        "network_activity": [],
+        "document_access": [],
+        "browser_history": [],
+        "app_activity": [
+          {
+            "exe": "rundll32.exe\u0000舖\u0000\u0000\u0000\u0000ꓣ}㵀눡ꇢ}㰘눡ﰘ航㵀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 1,
+            "last_run": "2008-07-20T01:26:14.265625+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舚\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000ꪀ舌",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 7,
+            "last_run": "2008-07-19T23:32:24.285875+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "msiexec.exe\u0000и自\u0000\u0000\u0000\u0000幀聓嵀￿￿尘஠臣嵀",
+            "category": "execution",
+            "multiplier": 1.5,
+            "run_count": 20,
+            "last_run": "2008-07-19T23:31:34.207750+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臙\u0000\u0000\u0000\u0000帓b絀愖e簘挐臙絀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 3,
+            "last_run": "2008-07-19T23:31:16.004625+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臅\u0000\u0000\u0000\u0000힨舨�뇏�뇏�뇏眈舔�",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 1,
+            "last_run": "2008-07-18T04:37:17.718750+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臤\u0000\u0000\u0000\u0000\u0010\u0000굀ꀀ갘怠臱굀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 7,
+            "last_run": "2008-07-12T21:16:08.953125+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "regsvr32.exe\u0000舆\u0000\u0000\u0000\u0000幀聓ⵀ￿￿ⱈ趨臨ⵀ",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 5,
+            "last_run": "2008-07-12T03:05:36.642125+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臢\u0000\u0000\u0000\u0000\u0010\u0000浀\u0000氘琈臢浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:27.314000+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舰\u0000\u0000\u0000\u0000\u0010\u0000浀\u0000氘ӑ舯浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:23.845250+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舀\u0000\u0000\u0000\u0000\u0010\u0000浀氘樐臽浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:22.751500+00:00",
+            "attributed": false
+          }
+        ],
+        "user_accounts": []
+      },
+      "rank": 5
+    },
+    {
+      "username": "Guest",
+      "username_key": "guest",
+      "account_type": "builtin",
+      "rankable": true,
+      "account_info": {
+        "rid": 501,
+        "last_login": "",
+        "login_count": 0,
+        "failed_logins": 0,
+        "account_disabled": false
+      },
+      "artifact_scores": {
+        "deleted_files": {
+          "raw_count": 0,
+          "score": 0
+        },
+        "event_anomalies": {
+          "raw_count": 0,
+          "weighted_count": 0.0,
+          "score": 0.0
+        },
+        "app_activity": {
+          "attributed_count": 0,
+          "shared_pool_count": 78,
+          "effective_weighted": 0.0,
+          "score": 0.0
+        },
+        "network_activity": {
+          "raw_count": 0,
+          "external": 0,
+          "internal_suspicious": 0,
+          "weighted_count": 0.0,
+          "score": 0.0
+        },
+        "document_access": {
+          "raw_count": 0,
+          "sensitive_count": 0,
+          "score": 0
+        },
+        "browser_history": {
+          "raw_count": 0,
+          "flagged_count": 0,
+          "flagged_weight": 0.0,
+          "score": 0.0
+        },
+        "user_accounts": {
+          "raw_count": 0,
+          "score": 0
+        }
+      },
+      "raw_score": 0.0,
+      "normalized_score": 0.0,
+      "artifact_score": 0.0,
+      "timeline_bonus": 0,
+      "timeline_patterns": [],
+      "final_score": 0.0,
+      "diversity": {
+        "category_count": 0,
+        "diversity_score": 0.0,
+        "categories_hit": []
+      },
+      "risk_label": "LOW",
+      "evidence": {
+        "deleted_files": [],
+        "event_anomalies": [],
+        "network_activity": [],
+        "document_access": [],
+        "browser_history": [],
+        "app_activity": [
+          {
+            "exe": "rundll32.exe\u0000舖\u0000\u0000\u0000\u0000ꓣ}㵀눡ꇢ}㰘눡ﰘ航㵀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 1,
+            "last_run": "2008-07-20T01:26:14.265625+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舚\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000ꪀ舌",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 7,
+            "last_run": "2008-07-19T23:32:24.285875+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "msiexec.exe\u0000и自\u0000\u0000\u0000\u0000幀聓嵀￿￿尘஠臣嵀",
+            "category": "execution",
+            "multiplier": 1.5,
+            "run_count": 20,
+            "last_run": "2008-07-19T23:31:34.207750+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臙\u0000\u0000\u0000\u0000帓b絀愖e簘挐臙絀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 3,
+            "last_run": "2008-07-19T23:31:16.004625+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臅\u0000\u0000\u0000\u0000힨舨�뇏�뇏�뇏眈舔�",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 1,
+            "last_run": "2008-07-18T04:37:17.718750+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臤\u0000\u0000\u0000\u0000\u0010\u0000굀ꀀ갘怠臱굀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 7,
+            "last_run": "2008-07-12T21:16:08.953125+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "regsvr32.exe\u0000舆\u0000\u0000\u0000\u0000幀聓ⵀ￿￿ⱈ趨臨ⵀ",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 5,
+            "last_run": "2008-07-12T03:05:36.642125+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臢\u0000\u0000\u0000\u0000\u0010\u0000浀\u0000氘琈臢浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:27.314000+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舰\u0000\u0000\u0000\u0000\u0010\u0000浀\u0000氘ӑ舯浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:23.845250+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舀\u0000\u0000\u0000\u0000\u0010\u0000浀氘樐臽浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:22.751500+00:00",
+            "attributed": false
+          }
+        ],
+        "user_accounts": []
+      },
+      "rank": 6
+    },
+    {
+      "username": "HelpAssistant",
+      "username_key": "helpassistant",
+      "account_type": "user",
+      "rankable": true,
+      "account_info": {
+        "rid": 1000,
+        "last_login": "",
+        "login_count": 0,
+        "failed_logins": 0,
+        "account_disabled": false
+      },
+      "artifact_scores": {
+        "deleted_files": {
+          "raw_count": 0,
+          "score": 0
+        },
+        "event_anomalies": {
+          "raw_count": 0,
+          "weighted_count": 0.0,
+          "score": 0.0
+        },
+        "app_activity": {
+          "attributed_count": 0,
+          "shared_pool_count": 78,
+          "effective_weighted": 0.0,
+          "score": 0.0
+        },
+        "network_activity": {
+          "raw_count": 0,
+          "external": 0,
+          "internal_suspicious": 0,
+          "weighted_count": 0.0,
+          "score": 0.0
+        },
+        "document_access": {
+          "raw_count": 0,
+          "sensitive_count": 0,
+          "score": 0
+        },
+        "browser_history": {
+          "raw_count": 0,
+          "flagged_count": 0,
+          "flagged_weight": 0.0,
+          "score": 0.0
+        },
+        "user_accounts": {
+          "raw_count": 0,
+          "score": 0
+        }
+      },
+      "raw_score": 0.0,
+      "normalized_score": 0.0,
+      "artifact_score": 0.0,
+      "timeline_bonus": 0,
+      "timeline_patterns": [],
+      "final_score": 0.0,
+      "diversity": {
+        "category_count": 0,
+        "diversity_score": 0.0,
+        "categories_hit": []
+      },
+      "risk_label": "LOW",
+      "evidence": {
+        "deleted_files": [],
+        "event_anomalies": [],
+        "network_activity": [],
+        "document_access": [],
+        "browser_history": [],
+        "app_activity": [
+          {
+            "exe": "rundll32.exe\u0000舖\u0000\u0000\u0000\u0000ꓣ}㵀눡ꇢ}㰘눡ﰘ航㵀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 1,
+            "last_run": "2008-07-20T01:26:14.265625+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舚\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000ꪀ舌",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 7,
+            "last_run": "2008-07-19T23:32:24.285875+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "msiexec.exe\u0000и自\u0000\u0000\u0000\u0000幀聓嵀￿￿尘஠臣嵀",
+            "category": "execution",
+            "multiplier": 1.5,
+            "run_count": 20,
+            "last_run": "2008-07-19T23:31:34.207750+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臙\u0000\u0000\u0000\u0000帓b絀愖e簘挐臙絀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 3,
+            "last_run": "2008-07-19T23:31:16.004625+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臅\u0000\u0000\u0000\u0000힨舨�뇏�뇏�뇏眈舔�",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 1,
+            "last_run": "2008-07-18T04:37:17.718750+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臤\u0000\u0000\u0000\u0000\u0010\u0000굀ꀀ갘怠臱굀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 7,
+            "last_run": "2008-07-12T21:16:08.953125+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "regsvr32.exe\u0000舆\u0000\u0000\u0000\u0000幀聓ⵀ￿￿ⱈ趨臨ⵀ",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 5,
+            "last_run": "2008-07-12T03:05:36.642125+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臢\u0000\u0000\u0000\u0000\u0010\u0000浀\u0000氘琈臢浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:27.314000+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舰\u0000\u0000\u0000\u0000\u0010\u0000浀\u0000氘ӑ舯浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:23.845250+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舀\u0000\u0000\u0000\u0000\u0010\u0000浀氘樐臽浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:22.751500+00:00",
+            "attributed": false
+          }
+        ],
+        "user_accounts": []
+      },
+      "rank": 7
+    },
+    {
+      "username": "Kim",
+      "username_key": "kim",
+      "account_type": "user",
+      "rankable": true,
+      "account_info": {
+        "rid": 1003,
+        "last_login": "",
+        "login_count": 0,
+        "failed_logins": 0,
+        "account_disabled": false
+      },
+      "artifact_scores": {
+        "deleted_files": {
+          "raw_count": 0,
+          "score": 0
+        },
+        "event_anomalies": {
+          "raw_count": 0,
+          "weighted_count": 0.0,
+          "score": 0.0
+        },
+        "app_activity": {
+          "attributed_count": 0,
+          "shared_pool_count": 78,
+          "effective_weighted": 0.0,
+          "score": 0.0
+        },
+        "network_activity": {
+          "raw_count": 0,
+          "external": 0,
+          "internal_suspicious": 0,
+          "weighted_count": 0.0,
+          "score": 0.0
+        },
+        "document_access": {
+          "raw_count": 0,
+          "sensitive_count": 0,
+          "score": 0
+        },
+        "browser_history": {
+          "raw_count": 0,
+          "flagged_count": 0,
+          "flagged_weight": 0.0,
+          "score": 0.0
+        },
+        "user_accounts": {
+          "raw_count": 0,
+          "score": 0
+        }
+      },
+      "raw_score": 0.0,
+      "normalized_score": 0.0,
+      "artifact_score": 0.0,
+      "timeline_bonus": 0,
+      "timeline_patterns": [],
+      "final_score": 0.0,
+      "diversity": {
+        "category_count": 0,
+        "diversity_score": 0.0,
+        "categories_hit": []
+      },
+      "risk_label": "LOW",
+      "evidence": {
+        "deleted_files": [],
+        "event_anomalies": [],
+        "network_activity": [],
+        "document_access": [],
+        "browser_history": [],
+        "app_activity": [
+          {
+            "exe": "rundll32.exe\u0000舖\u0000\u0000\u0000\u0000ꓣ}㵀눡ꇢ}㰘눡ﰘ航㵀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 1,
+            "last_run": "2008-07-20T01:26:14.265625+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舚\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000ꪀ舌",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 7,
+            "last_run": "2008-07-19T23:32:24.285875+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "msiexec.exe\u0000и自\u0000\u0000\u0000\u0000幀聓嵀￿￿尘஠臣嵀",
+            "category": "execution",
+            "multiplier": 1.5,
+            "run_count": 20,
+            "last_run": "2008-07-19T23:31:34.207750+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臙\u0000\u0000\u0000\u0000帓b絀愖e簘挐臙絀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 3,
+            "last_run": "2008-07-19T23:31:16.004625+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臅\u0000\u0000\u0000\u0000힨舨�뇏�뇏�뇏眈舔�",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 1,
+            "last_run": "2008-07-18T04:37:17.718750+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臤\u0000\u0000\u0000\u0000\u0010\u0000굀ꀀ갘怠臱굀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 7,
+            "last_run": "2008-07-12T21:16:08.953125+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "regsvr32.exe\u0000舆\u0000\u0000\u0000\u0000幀聓ⵀ￿￿ⱈ趨臨ⵀ",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 5,
+            "last_run": "2008-07-12T03:05:36.642125+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臢\u0000\u0000\u0000\u0000\u0010\u0000浀\u0000氘琈臢浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:27.314000+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舰\u0000\u0000\u0000\u0000\u0010\u0000浀\u0000氘ӑ舯浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:23.845250+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舀\u0000\u0000\u0000\u0000\u0010\u0000浀氘樐臽浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:22.751500+00:00",
+            "attributed": false
+          }
+        ],
+        "user_accounts": []
+      },
+      "rank": 8
+    },
+    {
+      "username": "Sacha",
+      "username_key": "sacha",
+      "account_type": "user",
+      "rankable": true,
+      "account_info": {
+        "rid": 1008,
+        "last_login": "",
+        "login_count": 0,
+        "failed_logins": 0,
+        "account_disabled": false
+      },
+      "artifact_scores": {
+        "deleted_files": {
+          "raw_count": 0,
+          "score": 0
+        },
+        "event_anomalies": {
+          "raw_count": 0,
+          "weighted_count": 0.0,
+          "score": 0.0
+        },
+        "app_activity": {
+          "attributed_count": 0,
+          "shared_pool_count": 78,
+          "effective_weighted": 0.0,
+          "score": 0.0
+        },
+        "network_activity": {
+          "raw_count": 0,
+          "external": 0,
+          "internal_suspicious": 0,
+          "weighted_count": 0.0,
+          "score": 0.0
+        },
+        "document_access": {
+          "raw_count": 0,
+          "sensitive_count": 0,
+          "score": 0
+        },
+        "browser_history": {
+          "raw_count": 0,
+          "flagged_count": 0,
+          "flagged_weight": 0.0,
+          "score": 0.0
+        },
+        "user_accounts": {
+          "raw_count": 0,
+          "score": 0
+        }
+      },
+      "raw_score": 0.0,
+      "normalized_score": 0.0,
+      "artifact_score": 0.0,
+      "timeline_bonus": 0,
+      "timeline_patterns": [],
+      "final_score": 0.0,
+      "diversity": {
+        "category_count": 0,
+        "diversity_score": 0.0,
+        "categories_hit": []
+      },
+      "risk_label": "LOW",
+      "evidence": {
+        "deleted_files": [],
+        "event_anomalies": [],
+        "network_activity": [],
+        "document_access": [],
+        "browser_history": [],
+        "app_activity": [
+          {
+            "exe": "rundll32.exe\u0000舖\u0000\u0000\u0000\u0000ꓣ}㵀눡ꇢ}㰘눡ﰘ航㵀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 1,
+            "last_run": "2008-07-20T01:26:14.265625+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舚\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000ꪀ舌",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 7,
+            "last_run": "2008-07-19T23:32:24.285875+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "msiexec.exe\u0000и自\u0000\u0000\u0000\u0000幀聓嵀￿￿尘஠臣嵀",
+            "category": "execution",
+            "multiplier": 1.5,
+            "run_count": 20,
+            "last_run": "2008-07-19T23:31:34.207750+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臙\u0000\u0000\u0000\u0000帓b絀愖e簘挐臙絀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 3,
+            "last_run": "2008-07-19T23:31:16.004625+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臅\u0000\u0000\u0000\u0000힨舨�뇏�뇏�뇏眈舔�",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 1,
+            "last_run": "2008-07-18T04:37:17.718750+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臤\u0000\u0000\u0000\u0000\u0010\u0000굀ꀀ갘怠臱굀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 7,
+            "last_run": "2008-07-12T21:16:08.953125+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "regsvr32.exe\u0000舆\u0000\u0000\u0000\u0000幀聓ⵀ￿￿ⱈ趨臨ⵀ",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 5,
+            "last_run": "2008-07-12T03:05:36.642125+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臢\u0000\u0000\u0000\u0000\u0010\u0000浀\u0000氘琈臢浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:27.314000+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舰\u0000\u0000\u0000\u0000\u0010\u0000浀\u0000氘ӑ舯浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:23.845250+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舀\u0000\u0000\u0000\u0000\u0010\u0000浀氘樐臽浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:22.751500+00:00",
+            "attributed": false
+          }
+        ],
+        "user_accounts": []
+      },
+      "rank": 9
+    },
+    {
+      "username": "SUPPORT_388945a0",
+      "username_key": "support_388945a0",
+      "account_type": "user",
+      "rankable": true,
+      "account_info": {
+        "rid": 1002,
+        "last_login": "",
+        "login_count": 0,
+        "failed_logins": 0,
+        "account_disabled": false
+      },
+      "artifact_scores": {
+        "deleted_files": {
+          "raw_count": 0,
+          "score": 0
+        },
+        "event_anomalies": {
+          "raw_count": 0,
+          "weighted_count": 0.0,
+          "score": 0.0
+        },
+        "app_activity": {
+          "attributed_count": 0,
+          "shared_pool_count": 78,
+          "effective_weighted": 0.0,
+          "score": 0.0
+        },
+        "network_activity": {
+          "raw_count": 0,
+          "external": 0,
+          "internal_suspicious": 0,
+          "weighted_count": 0.0,
+          "score": 0.0
+        },
+        "document_access": {
+          "raw_count": 0,
+          "sensitive_count": 0,
+          "score": 0
+        },
+        "browser_history": {
+          "raw_count": 0,
+          "flagged_count": 0,
+          "flagged_weight": 0.0,
+          "score": 0.0
+        },
+        "user_accounts": {
+          "raw_count": 0,
+          "score": 0
+        }
+      },
+      "raw_score": 0.0,
+      "normalized_score": 0.0,
+      "artifact_score": 0.0,
+      "timeline_bonus": 0,
+      "timeline_patterns": [],
+      "final_score": 0.0,
+      "diversity": {
+        "category_count": 0,
+        "diversity_score": 0.0,
+        "categories_hit": []
+      },
+      "risk_label": "LOW",
+      "evidence": {
+        "deleted_files": [],
+        "event_anomalies": [],
+        "network_activity": [],
+        "document_access": [],
+        "browser_history": [],
+        "app_activity": [
+          {
+            "exe": "rundll32.exe\u0000舖\u0000\u0000\u0000\u0000ꓣ}㵀눡ꇢ}㰘눡ﰘ航㵀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 1,
+            "last_run": "2008-07-20T01:26:14.265625+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舚\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000ꪀ舌",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 7,
+            "last_run": "2008-07-19T23:32:24.285875+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "msiexec.exe\u0000и自\u0000\u0000\u0000\u0000幀聓嵀￿￿尘஠臣嵀",
+            "category": "execution",
+            "multiplier": 1.5,
+            "run_count": 20,
+            "last_run": "2008-07-19T23:31:34.207750+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臙\u0000\u0000\u0000\u0000帓b絀愖e簘挐臙絀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 3,
+            "last_run": "2008-07-19T23:31:16.004625+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臅\u0000\u0000\u0000\u0000힨舨�뇏�뇏�뇏眈舔�",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 1,
+            "last_run": "2008-07-18T04:37:17.718750+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臤\u0000\u0000\u0000\u0000\u0010\u0000굀ꀀ갘怠臱굀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 7,
+            "last_run": "2008-07-12T21:16:08.953125+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "regsvr32.exe\u0000舆\u0000\u0000\u0000\u0000幀聓ⵀ￿￿ⱈ趨臨ⵀ",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 5,
+            "last_run": "2008-07-12T03:05:36.642125+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000臢\u0000\u0000\u0000\u0000\u0010\u0000浀\u0000氘琈臢浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:27.314000+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舰\u0000\u0000\u0000\u0000\u0010\u0000浀\u0000氘ӑ舯浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:23.845250+00:00",
+            "attributed": false
+          },
+          {
+            "exe": "rundll32.exe\u0000舀\u0000\u0000\u0000\u0000\u0010\u0000浀氘樐臽浀",
+            "category": "execution",
+            "multiplier": 2.0,
+            "run_count": 2,
+            "last_run": "2008-07-12T03:05:22.751500+00:00",
+            "attributed": false
+          }
+        ],
+        "user_accounts": []
+      },
+      "rank": 10
+    }
+  ],
+  "evaluation": null
+}

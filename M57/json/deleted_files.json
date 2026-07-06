@@ -1,0 +1,17 @@
+{
+  "artifact": "deleted_files",
+  "windows_version": "xp",
+  "parsed_at": "2026-07-06T10:53:56.663222+00:00Z",
+  "count": 1,
+  "records": [
+    {
+      "source": "INFO2",
+      "original_path": "C:\\Documents and Settings\\Jean\\Desktop\\tag-cloud.jpg",
+      "file_size": "1952797472",
+      "deleted_at": "",
+      "drive_number": 1836409711,
+      "sid": "",
+      "source_file": "M57/raw/recycle_bin/S-1-5-21-484763869-796845957-839522115-1004/INFO2"
+    }
+  ]
+}

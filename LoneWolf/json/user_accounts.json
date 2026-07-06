@@ -1,0 +1,146 @@
+{
+  "artifact": "user_accounts",
+  "parsed_at": "2026-07-06T10:34:53.246160+00:00Z",
+  "users": {
+    "count": 5,
+    "records": [
+      {
+        "rid": 500,
+        "rid_hex": "000001F4",
+        "source": "SAM",
+        "username": "Administrator",
+        "description": "Built-in account for administering the computer/domain",
+        "account_disabled": false,
+        "password_never_expires": true,
+        "account_locked": true,
+        "last_login": "",
+        "password_last_set": "",
+        "account_expires": "Never",
+        "failed_logins": 0,
+        "login_count": 0,
+        "last_modified": "2018-03-27T12:12:48.782590"
+      },
+      {
+        "rid": 501,
+        "rid_hex": "000001F5",
+        "source": "SAM",
+        "username": "Guest",
+        "description": "Built-in account for guest access to the computer/domain",
+        "account_disabled": false,
+        "password_never_expires": false,
+        "account_locked": false,
+        "last_login": "",
+        "password_last_set": "",
+        "account_expires": "Never",
+        "failed_logins": 0,
+        "login_count": 0,
+        "last_modified": "2018-03-27T12:12:48.782590"
+      },
+      {
+        "rid": 503,
+        "rid_hex": "000001F7",
+        "source": "SAM",
+        "username": "DefaultAccount",
+        "description": "A user account managed by the system.",
+        "account_disabled": false,
+        "password_never_expires": false,
+        "account_locked": true,
+        "last_login": "",
+        "password_last_set": "",
+        "account_expires": "Never",
+        "failed_logins": 0,
+        "login_count": 0,
+        "last_modified": "2018-03-27T12:12:48.782590"
+      },
+      {
+        "rid": 504,
+        "rid_hex": "000001F8",
+        "source": "SAM",
+        "username": "WDAGUtilityAccount",
+        "description": "A user account managed and used by the system for Windows Defender Application Guard scenarios.",
+        "account_disabled": false,
+        "password_never_expires": false,
+        "account_locked": true,
+        "last_login": "",
+        "password_last_set": "2018-03-27T12:11:45.834300+00:00",
+        "account_expires": "Never",
+        "failed_logins": 0,
+        "login_count": 0,
+        "last_modified": "2018-03-27T12:12:48.782590"
+      },
+      {
+        "rid": 1001,
+        "rid_hex": "000003E9",
+        "source": "SAM",
+        "username": "jcloudy",
+        "account_disabled": false,
+        "password_never_expires": false,
+        "account_locked": false,
+        "last_login": "2018-04-06T12:26:27.572469+00:00",
+        "password_last_set": "2018-03-27T09:18:58.259149+00:00",
+        "account_expires": "Never",
+        "failed_logins": 0,
+        "login_count": 23,
+        "last_modified": "2018-04-06T12:26:27.573469"
+      }
+    ]
+  },
+  "autorun_entries": {
+    "count": 7,
+    "records": [
+      {
+        "username": "jcloudy",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "name": "OneDrive",
+        "data": "\"C:\\Users\\jcloudy\\AppData\\Local\\Microsoft\\OneDrive\\OneDrive.exe\" /background",
+        "last_modified": "2018-03-28T00:43:22.807137"
+      },
+      {
+        "username": "jcloudy",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "name": "GoogleDriveSync",
+        "data": "\"C:\\Program Files\\Google\\Drive\\googledrivesync.exe\" /autostart",
+        "last_modified": "2018-03-28T00:43:22.807137"
+      },
+      {
+        "username": "jcloudy",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce",
+        "name": "Uninstall 18.025.0204.0009\\amd64",
+        "data": "C:\\Windows\\system32\\cmd.exe /q /c rmdir /s /q \"C:\\Users\\jcloudy\\AppData\\Local\\Microsoft\\OneDrive\\18.025.0204.0009\\amd64\"",
+        "last_modified": "2018-04-04T05:59:41.542150"
+      },
+      {
+        "username": "jcloudy",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce",
+        "name": "Uninstall 18.025.0204.0009",
+        "data": "C:\\Windows\\system32\\cmd.exe /q /c rmdir /s /q \"C:\\Users\\jcloudy\\AppData\\Local\\Microsoft\\OneDrive\\18.025.0204.0009\"",
+        "last_modified": "2018-04-04T05:59:41.542150"
+      },
+      {
+        "username": "jcloudy",
+        "key": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows",
+        "name": "Device",
+        "data": "Microsoft Print to PDF,winspool,Ne01:",
+        "last_modified": "2018-04-05T05:48:40.254080"
+      },
+      {
+        "username": "jcloudy",
+        "key": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows",
+        "name": "IsMRUEstablished",
+        "data": "1",
+        "last_modified": "2018-04-05T05:48:40.254080"
+      },
+      {
+        "username": "jcloudy",
+        "key": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows",
+        "name": "LegacyDefaultPrinterMode",
+        "data": "0",
+        "last_modified": "2018-04-05T05:48:40.254080"
+      }
+    ]
+  },
+  "typed_paths": {
+    "count": 0,
+    "records": []
+  }
+}

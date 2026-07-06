@@ -328,14 +328,22 @@ def parse_evt_file(file_path: Path) -> list[dict]:
 # Directory scanner
 # =============================================================================
 
+def _rglob_ci(directory: Path, pattern_lower: str) -> list[Path]:
+    """Case-insensitive rglob for Linux filesystems."""
+    ext = pattern_lower.lstrip("*")
+    return [p for p in directory.rglob("*")
+            if p.is_file() and p.suffix.lower() == ext]
+
+
 def parse_event_logs_dir(log_dir: Path) -> list[dict]:
     all_events: list[dict] = []
     if not log_dir.exists():
         print(f"  [!] Event logs dir not found: {log_dir}")
         return all_events
 
-    evtx_files = list(log_dir.rglob("*.evtx"))
-    evt_files  = list(log_dir.rglob("*.evt")) + list(log_dir.rglob("*.Evt"))
+    # [FIX] Case-insensitive discovery — Linux rglob("*.evt") misses SysEvent.Evt
+    evtx_files = _rglob_ci(log_dir, "*.evtx")
+    evt_files  = _rglob_ci(log_dir, "*.evt")
 
     parser_info = []
     if _HAS_FAST_EVTX:   parser_info.append("evtx (fast)")
@@ -353,6 +361,87 @@ def parse_event_logs_dir(log_dir: Path) -> list[dict]:
         all_events.extend(events)
 
     return all_events
+
+# =============================================================================
+# Windows Firewall log parser (pfirewall.log)
+# Provides network data when Event 5156 is absent
+# Format: #Fields: date time action protocol src-ip src-port dst-ip dst-port ...
+# =============================================================================
+
+def parse_firewall_log(fw_path: Path) -> list[dict]:
+    """Parse Windows Firewall pfirewall.log text format."""
+    events: list[dict] = []
+    if not fw_path.exists():
+        return events
+    try:
+        fields: list[str] = []
+        with open(fw_path, encoding="utf-8", errors="replace") as fh:
+            for line in fh:
+                line = line.rstrip()
+                if line.startswith("#Fields:"):
+                    fields = line.split()[1:]
+                    continue
+                if line.startswith("#") or not line:
+                    continue
+                parts = line.split()
+                if len(parts) < len(fields):
+                    continue
+                row = dict(zip(fields, parts))
+                action    = row.get("action", "").upper()
+                src_ip    = row.get("src-ip", "")
+                dst_ip    = row.get("dst-ip", "")
+                dst_port  = row.get("dst-port", "")
+                protocol  = row.get("protocol", "")
+                path_field= row.get("path", "")
+                date_str  = row.get("date", "")
+                time_str  = row.get("time", "")
+                ts = f"{date_str}T{time_str}" if date_str and time_str else ""
+                if action not in ("ALLOW", "DROP", "BLOCK"):
+                    continue
+                events.append({
+                    "source_format": "firewall_log",
+                    "file":          fw_path.name,
+                    "event_id":      5156 if action == "ALLOW" else 5157,
+                    "provider":      "Windows Firewall",
+                    "timestamp":     ts,
+                    "computer":      None,
+                    "level":         "Information",
+                    "channel":       "Security",
+                    "record_id":     None,
+                    "event_data": {
+                        "DestAddress":      dst_ip,
+                        "DestPort":         dst_port,
+                        "SourceAddress":    src_ip,
+                        "Protocol":         protocol,
+                        "Application":      path_field,
+                        "Direction":        "Outbound",
+                        "SubjectUserName":  "",
+                        "IpAddress":        dst_ip,
+                        "IpPort":           dst_port,
+                    },
+                })
+    except Exception as e:
+        print(f"  [!] Firewall log parse error {fw_path}: {e}")
+    print(f"  [*] Firewall log: {len(events)} connection events ← {fw_path.name}")
+    return events
+
+
+def parse_firewall_logs_dir(search_dirs: list[Path]) -> list[dict]:
+    """Search known locations for pfirewall.log."""
+    events: list[dict] = []
+    candidates = [
+        "pfirewall.log",
+        "pfirewall.log.old",
+    ]
+    for d in search_dirs:
+        if not d.exists():
+            continue
+        for name in candidates:
+            candidate = d / name
+            if candidate.is_file():
+                events.extend(parse_firewall_log(candidate))
+    return events
+
 
 # =============================================================================
 # Categorize
@@ -398,6 +487,23 @@ def main() -> None:
 
     print(f"  [*] Parsing event logs from: {log_dir}")
     all_events = parse_event_logs_dir(log_dir)
+
+    # [FIX] Augment with Windows Firewall log if Event 5156 absent
+    has_net_events = any(e.get("event_id") in NETWORK_EVENT_IDS for e in all_events)
+    if not has_net_events:
+        fw_search = [
+            log_dir,
+            log_dir.parent / "network",
+            log_dir.parent.parent / "raw" / "network",
+            Path("/Windows/System32/LogFiles/Firewall"),
+        ]
+        fw_events = parse_firewall_logs_dir(fw_search)
+        if fw_events:
+            print(f"  [✓] Added {len(fw_events)} firewall log events (no Event 5156 found)")
+            all_events.extend(fw_events)
+        else:
+            print("  [!] No network events found (Event 5156 absent, no pfirewall.log)")
+
     cats = categorize(all_events)
     srt = lambda lst: sorted(lst, key=lambda x: x.get("timestamp") or "", reverse=True)
 
