@@ -293,7 +293,8 @@ Stage 4. Renders `forensic_report.html` — fully self-contained, no external as
 | Image | OS | Source | Format | MD5 |
 |---|---|---|---|---|
 | M57-Jean (2009) | Windows XP | [Digital Corpora](https://digitalcorpora.org/corpora/scenarios/m57-jean/) | .E01 | `78a52b5bac78f4e711607707ac0e3f93` |
-| Lone Wolf Scenario | Windows 10/11 | FTK Imager acquisition (multi-segment E01) | .E01 | — |
+| Lone Wolf Scenario | Windows 10 Education | [Digital Corpora](https://digitalcorpora.org/corpora/scenarios/m57-jean/) | .E01 | `7af48fa65519e84246b1729e5b68f140` |
+| Self build Controlled VM | Windows 11 Education | FTK Imager acquisition (multi-segment E01) | .E01 | — |
 
 > Always run `ewfverify` (or check `ewfinfo`'s `Is corrupted:` field) on a new image before relying on it — see [Troubleshooting](#troubleshooting).
 

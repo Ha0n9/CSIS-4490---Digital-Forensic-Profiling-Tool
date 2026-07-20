@@ -1,6 +1,6 @@
 {
   "artifact": "correlated_results",
-  "parsed_at": "2026-07-20T15:05:53.737204+00:00Z",
+  "parsed_at": "2026-07-20T19:57:57.040617+00:00",
   "summary": {
     "total_users": 5,
     "total_events": 55638,
@@ -9,7 +9,8 @@
     "total_files": 57,
     "total_deleted": 5,
     "total_apps": 160,
-    "parsed_at": "2026-07-20T15:05:53.737184+00:00Z"
+    "unattributed_app_activity_weighted": 20.0,
+    "parsed_at": "2026-07-20T19:57:57.040617+00:00"
   },
   "user_correlations": [
     {
@@ -17,13 +18,21 @@
       "display_name": "jcloudy",
       "account_type": "user",
       "rankable": true,
-      "artifact_score": 57.67,
-      "timeline_bonus": 0,
-      "timeline_patterns": [],
-      "final_score": 57.67,
+      "artifact_score": 85.16,
+      "timeline_bonus": 6,
+      "timeline_patterns": [
+        {
+          "pattern": "activity_then_log_gap",
+          "bonus": 6,
+          "detail": "11.8h silence after burst of 5 events (last: 2018-03-27T09:57:28.844371+00:00)",
+          "timestamp": "2018-03-27T09:57:28.844371+00:00"
+        }
+      ],
+      "final_score": 91.16,
       "risk_label": "HIGH",
+      "risk_rationale": "Score 91.16 (>= 18.0) across 3 independent evidence categories, including 3 strong (user-attributed) source(s).",
       "diversity": {
-        "category_count": 4
+        "category_count": 3
       },
       "artifact_breakdown": {
         "deleted_files": {
@@ -32,12 +41,13 @@
         },
         "event_anomalies": {
           "count": 23,
-          "score": 276.0
+          "score": 60.0
         },
         "app_activity": {
-          "effective": 5.0,
+          "effective": 0.0,
           "attributed_count": 0,
-          "score": 15.0
+          "score": 0.0,
+          "shared_pool_weighted": 20.0
         },
         "network_activity": {
           "weighted": 0.0,
@@ -273,13 +283,14 @@
       "display_name": "Administrator",
       "account_type": "builtin",
       "rankable": true,
-      "artifact_score": 26.47,
+      "artifact_score": 0.0,
       "timeline_bonus": 0,
       "timeline_patterns": [],
-      "final_score": 26.47,
+      "final_score": 0.0,
       "risk_label": "LOW",
+      "risk_rationale": "No user-attributable evidence beyond shared/system activity.",
       "diversity": {
-        "category_count": 1
+        "category_count": 0
       },
       "artifact_breakdown": {
         "deleted_files": {
@@ -291,9 +302,10 @@
           "score": 0.0
         },
         "app_activity": {
-          "effective": 5.0,
+          "effective": 0.0,
           "attributed_count": 0,
-          "score": 15.0
+          "score": 0.0,
+          "shared_pool_weighted": 20.0
         },
         "network_activity": {
           "weighted": 0.0,
@@ -331,13 +343,14 @@
       "display_name": "DefaultAccount",
       "account_type": "builtin",
       "rankable": true,
-      "artifact_score": 26.47,
+      "artifact_score": 0.0,
       "timeline_bonus": 0,
       "timeline_patterns": [],
-      "final_score": 26.47,
+      "final_score": 0.0,
       "risk_label": "LOW",
+      "risk_rationale": "No user-attributable evidence beyond shared/system activity.",
       "diversity": {
-        "category_count": 1
+        "category_count": 0
       },
       "artifact_breakdown": {
         "deleted_files": {
@@ -349,9 +362,10 @@
           "score": 0.0
         },
         "app_activity": {
-          "effective": 5.0,
+          "effective": 0.0,
           "attributed_count": 0,
-          "score": 15.0
+          "score": 0.0,
+          "shared_pool_weighted": 20.0
         },
         "network_activity": {
           "weighted": 0.0,
@@ -389,13 +403,14 @@
       "display_name": "Guest",
       "account_type": "builtin",
       "rankable": true,
-      "artifact_score": 26.47,
+      "artifact_score": 0.0,
       "timeline_bonus": 0,
       "timeline_patterns": [],
-      "final_score": 26.47,
+      "final_score": 0.0,
       "risk_label": "LOW",
+      "risk_rationale": "No user-attributable evidence beyond shared/system activity.",
       "diversity": {
-        "category_count": 1
+        "category_count": 0
       },
       "artifact_breakdown": {
         "deleted_files": {
@@ -407,9 +422,10 @@
           "score": 0.0
         },
         "app_activity": {
-          "effective": 5.0,
+          "effective": 0.0,
           "attributed_count": 0,
-          "score": 15.0
+          "score": 0.0,
+          "shared_pool_weighted": 20.0
         },
         "network_activity": {
           "weighted": 0.0,
@@ -447,13 +463,14 @@
       "display_name": "defaultuser0",
       "account_type": "system",
       "rankable": false,
-      "artifact_score": 37.92,
+      "artifact_score": 59.14,
       "timeline_bonus": 0,
       "timeline_patterns": [],
-      "final_score": 37.92,
+      "final_score": 59.14,
       "risk_label": null,
+      "risk_rationale": "",
       "diversity": {
-        "category_count": 2
+        "category_count": 1
       },
       "artifact_breakdown": {
         "deleted_files": {
@@ -465,9 +482,10 @@
           "score": 24.0
         },
         "app_activity": {
-          "effective": 5.0,
+          "effective": 0.0,
           "attributed_count": 0,
-          "score": 15.0
+          "score": 0.0,
+          "shared_pool_weighted": 20.0
         },
         "network_activity": {
           "weighted": 0.0,
@@ -518,13 +536,21 @@
       "display_name": "dwm-1",
       "account_type": "system",
       "rankable": false,
-      "artifact_score": 50.93,
-      "timeline_bonus": 0,
-      "timeline_patterns": [],
-      "final_score": 50.93,
+      "artifact_score": 75.53,
+      "timeline_bonus": 6,
+      "timeline_patterns": [
+        {
+          "pattern": "activity_then_log_gap",
+          "bonus": 6,
+          "detail": "9.5h silence after burst of 4 events (last: 2018-03-27T12:13:15.626825+00:00)",
+          "timestamp": "2018-03-27T12:13:15.626825+00:00"
+        }
+      ],
+      "final_score": 81.53,
       "risk_label": null,
+      "risk_rationale": "",
       "diversity": {
-        "category_count": 2
+        "category_count": 1
       },
       "artifact_breakdown": {
         "deleted_files": {
@@ -533,12 +559,13 @@
         },
         "event_anomalies": {
           "count": 8,
-          "score": 96.0
+          "score": 60.0
         },
         "app_activity": {
-          "effective": 5.0,
+          "effective": 0.0,
           "attributed_count": 0,
-          "score": 15.0
+          "score": 0.0,
+          "shared_pool_weighted": 20.0
         },
         "network_activity": {
           "weighted": 0.0,
@@ -625,13 +652,14 @@
       "display_name": "dwm-2",
       "account_type": "system",
       "rankable": false,
-      "artifact_score": 37.92,
+      "artifact_score": 59.14,
       "timeline_bonus": 0,
       "timeline_patterns": [],
-      "final_score": 37.92,
+      "final_score": 59.14,
       "risk_label": null,
+      "risk_rationale": "",
       "diversity": {
-        "category_count": 2
+        "category_count": 1
       },
       "artifact_breakdown": {
         "deleted_files": {
@@ -643,9 +671,10 @@
           "score": 24.0
         },
         "app_activity": {
-          "effective": 5.0,
+          "effective": 0.0,
           "attributed_count": 0,
-          "score": 15.0
+          "score": 0.0,
+          "shared_pool_weighted": 20.0
         },
         "network_activity": {
           "weighted": 0.0,
@@ -696,13 +725,14 @@
       "display_name": "local service",
       "account_type": "system",
       "rankable": false,
-      "artifact_score": 43.99,
+      "artifact_score": 71.51,
       "timeline_bonus": 0,
       "timeline_patterns": [],
-      "final_score": 43.99,
+      "final_score": 71.51,
       "risk_label": null,
+      "risk_rationale": "",
       "diversity": {
-        "category_count": 2
+        "category_count": 1
       },
       "artifact_breakdown": {
         "deleted_files": {
@@ -714,9 +744,10 @@
           "score": 48.0
         },
         "app_activity": {
-          "effective": 5.0,
+          "effective": 0.0,
           "attributed_count": 0,
-          "score": 15.0
+          "score": 0.0,
+          "shared_pool_weighted": 20.0
         },
         "network_activity": {
           "weighted": 0.0,
@@ -779,13 +810,21 @@
       "display_name": "localsystem",
       "account_type": "system",
       "rankable": false,
-      "artifact_score": 57.95,
-      "timeline_bonus": 0,
-      "timeline_patterns": [],
-      "final_score": 57.95,
+      "artifact_score": 75.53,
+      "timeline_bonus": 6,
+      "timeline_patterns": [
+        {
+          "pattern": "activity_then_log_gap",
+          "bonus": 6,
+          "detail": "2.4h silence after burst of 9 events (last: 2018-03-27T09:47:19.286160+00:00)",
+          "timestamp": "2018-03-27T09:47:19.286160+00:00"
+        }
+      ],
+      "final_score": 81.53,
       "risk_label": null,
+      "risk_rationale": "",
       "diversity": {
-        "category_count": 2
+        "category_count": 1
       },
       "artifact_breakdown": {
         "deleted_files": {
@@ -794,12 +833,13 @@
         },
         "event_anomalies": {
           "count": 16,
-          "score": 192.0
+          "score": 60.0
         },
         "app_activity": {
-          "effective": 5.0,
+          "effective": 0.0,
           "attributed_count": 0,
-          "score": 15.0
+          "score": 0.0,
+          "shared_pool_weighted": 20.0
         },
         "network_activity": {
           "weighted": 0.0,
@@ -934,13 +974,14 @@
       "display_name": "network service",
       "account_type": "system",
       "rankable": false,
-      "artifact_score": 43.99,
+      "artifact_score": 71.51,
       "timeline_bonus": 0,
       "timeline_patterns": [],
-      "final_score": 43.99,
+      "final_score": 71.51,
       "risk_label": null,
+      "risk_rationale": "",
       "diversity": {
-        "category_count": 2
+        "category_count": 1
       },
       "artifact_breakdown": {
         "deleted_files": {
@@ -952,9 +993,10 @@
           "score": 48.0
         },
         "app_activity": {
-          "effective": 5.0,
+          "effective": 0.0,
           "attributed_count": 0,
-          "score": 15.0
+          "score": 0.0,
+          "shared_pool_weighted": 20.0
         },
         "network_activity": {
           "weighted": 0.0,
@@ -1017,13 +1059,39 @@
       "display_name": "system",
       "account_type": "system",
       "rankable": false,
-      "artifact_score": 90.47,
-      "timeline_bonus": 0,
-      "timeline_patterns": [],
-      "final_score": 90.47,
+      "artifact_score": 75.53,
+      "timeline_bonus": 15,
+      "timeline_patterns": [
+        {
+          "pattern": "activity_then_log_gap",
+          "bonus": 6,
+          "detail": "1.2h silence after burst of 13 events (last: 2018-03-27T10:58:34.544123+00:00)",
+          "timestamp": "2018-03-27T10:58:34.544123+00:00"
+        },
+        {
+          "pattern": "rapid_actions",
+          "bonus": 3,
+          "detail": "6 events in 60s starting 2018-03-27T09:16:00.901277+00:00",
+          "timestamp": "2018-03-27T09:16:00.901277+00:00"
+        },
+        {
+          "pattern": "rapid_actions",
+          "bonus": 3,
+          "detail": "5 events in 60s starting 2018-03-27T09:16:04.658739+00:00",
+          "timestamp": "2018-03-27T09:16:04.658739+00:00"
+        },
+        {
+          "pattern": "rapid_actions",
+          "bonus": 3,
+          "detail": "5 events in 60s starting 2018-03-27T09:16:48.283982+00:00",
+          "timestamp": "2018-03-27T09:16:48.283982+00:00"
+        }
+      ],
+      "final_score": 90.53,
       "risk_label": null,
+      "risk_rationale": "",
       "diversity": {
-        "category_count": 2
+        "category_count": 1
       },
       "artifact_breakdown": {
         "deleted_files": {
@@ -1032,12 +1100,13 @@
         },
         "event_anomalies": {
           "count": 746,
-          "score": 8952.0
+          "score": 60.0
         },
         "app_activity": {
-          "effective": 5.0,
+          "effective": 0.0,
           "attributed_count": 0,
-          "score": 15.0
+          "score": 0.0,
+          "shared_pool_weighted": 20.0
         },
         "network_activity": {
           "weighted": 0.0,
@@ -1196,13 +1265,14 @@
       "display_name": "WDAGUtilityAccount",
       "account_type": "system",
       "rankable": false,
-      "artifact_score": 26.47,
+      "artifact_score": 0.0,
       "timeline_bonus": 0,
       "timeline_patterns": [],
-      "final_score": 26.47,
+      "final_score": 0.0,
       "risk_label": null,
+      "risk_rationale": "",
       "diversity": {
-        "category_count": 1
+        "category_count": 0
       },
       "artifact_breakdown": {
         "deleted_files": {
@@ -1214,9 +1284,10 @@
           "score": 0.0
         },
         "app_activity": {
-          "effective": 5.0,
+          "effective": 0.0,
           "attributed_count": 0,
-          "score": 15.0
+          "score": 0.0,
+          "shared_pool_weighted": 20.0
         },
         "network_activity": {
           "weighted": 0.0,
@@ -1260,13 +1331,21 @@
       "display_name": "jcloudy",
       "account_type": "user",
       "rankable": true,
-      "artifact_score": 57.67,
-      "timeline_bonus": 0,
-      "timeline_patterns": [],
-      "final_score": 57.67,
+      "artifact_score": 85.16,
+      "timeline_bonus": 6,
+      "timeline_patterns": [
+        {
+          "pattern": "activity_then_log_gap",
+          "bonus": 6,
+          "detail": "11.8h silence after burst of 5 events (last: 2018-03-27T09:57:28.844371+00:00)",
+          "timestamp": "2018-03-27T09:57:28.844371+00:00"
+        }
+      ],
+      "final_score": 91.16,
       "risk_label": "HIGH",
+      "risk_rationale": "Score 91.16 (>= 18.0) across 3 independent evidence categories, including 3 strong (user-attributed) source(s).",
       "diversity": {
-        "category_count": 4
+        "category_count": 3
       },
       "artifact_breakdown": {
         "deleted_files": {
@@ -1275,12 +1354,13 @@
         },
         "event_anomalies": {
           "count": 23,
-          "score": 276.0
+          "score": 60.0
         },
         "app_activity": {
-          "effective": 5.0,
+          "effective": 0.0,
           "attributed_count": 0,
-          "score": 15.0
+          "score": 0.0,
+          "shared_pool_weighted": 20.0
         },
         "network_activity": {
           "weighted": 0.0,

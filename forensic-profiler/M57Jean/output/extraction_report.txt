@@ -1,0 +1,30 @@
+================================================================================
+  FORENSIC ARTIFACT EXTRACTION REPORT
+================================================================================
+  Date           : 2026-07-20 12:58:26
+  E01 Image      : Sample Files/M57Jean/nps-2008-jean.E01
+  Image Size     : 1.5G
+  Windows Ver    : xp
+  Mount Method   : ntfs-3g-loop
+  Output Dir     : M57Jean/output/raw
+  Total Extracted: 174 files
+  Failed/Missing : 0
+================================================================================
+
+  ARTIFACT SUMMARY:
+
+  Registry System Hives                    8 files
+  Registry User Hives                      8 files
+  Prefetch (.pf)                           126 files
+  Event Logs (.evtx/.evt)                  3 files
+  Network Artifacts                        4 files
+  IE Browser History                       23 files
+  Firefox Browser History                  8 files
+  Chrome/Edge/Brave History                0 files
+  LNK Files                                5 files
+  Jump Lists                               0 files
+  Recycle Bin                              3 files
+
+  NEXT STEPS:
+  bash extract_artifacts.sh -m /mnt/img_164041 -o M57Jean/output
+================================================================================

@@ -1,13 +1,13 @@
-2026-07-20 08:04:38 | HIVE/SAM | /mnt/img_24991/Windows/System32/config/SAM
-2026-07-20 08:04:42 | HIVE/SYSTEM | /mnt/img_24991/Windows/System32/config/SYSTEM
-2026-07-20 08:04:50 | HIVE/SOFTWARE | /mnt/img_24991/Windows/System32/config/SOFTWARE
-2026-07-20 08:04:54 | HIVE/SECURITY | /mnt/img_24991/Windows/System32/config/SECURITY
-2026-07-20 08:04:55 | HIVE/jcloudy | /mnt/img_24991/Users/jcloudy/NTUSER.DAT
-2026-07-20 08:04:55 | HIVE/jcloudy | /mnt/img_24991/Users/jcloudy/AppData/Local/Microsoft/Windows/UsrClass.dat
-2026-07-20 08:05:05 | PREFETCH | 161 files from /mnt/img_24991/Windows/Prefetch
-2026-07-20 08:05:17 | EVENT_LOGS | 146 .evtx
-2026-07-20 08:05:18 | NETWORK/hosts | /mnt/img_24991/Windows/System32/drivers/etc/hosts
-2026-07-20 08:05:18 | NETWORK/lmhosts.sam | /mnt/img_24991/Windows/System32/drivers/etc/lmhosts.sam
-2026-07-20 08:05:22 | BROWSER | IE=1 FF=0 Chrome=2
-2026-07-20 08:05:24 | LNK/JL | LNK=38 JL=19
-2026-07-20 08:05:24 | RECYCLE_BIN | 253 files from /mnt/img_24991/$Recycle.Bin
+2026-07-20 12:56:19 | HIVE/SAM | /mnt/img_160608/Windows/System32/config/SAM
+2026-07-20 12:56:31 | HIVE/SYSTEM | /mnt/img_160608/Windows/System32/config/SYSTEM
+2026-07-20 12:56:46 | HIVE/SOFTWARE | /mnt/img_160608/Windows/System32/config/SOFTWARE
+2026-07-20 12:57:00 | HIVE/SECURITY | /mnt/img_160608/Windows/System32/config/SECURITY
+2026-07-20 12:57:00 | HIVE/jcloudy | /mnt/img_160608/Users/jcloudy/NTUSER.DAT
+2026-07-20 12:57:00 | HIVE/jcloudy | /mnt/img_160608/Users/jcloudy/AppData/Local/Microsoft/Windows/UsrClass.dat
+2026-07-20 12:57:08 | PREFETCH | 161 files from /mnt/img_160608/Windows/Prefetch
+2026-07-20 12:57:22 | EVENT_LOGS | 146 .evtx
+2026-07-20 12:57:22 | NETWORK/hosts | /mnt/img_160608/Windows/System32/drivers/etc/hosts
+2026-07-20 12:57:22 | NETWORK/lmhosts.sam | /mnt/img_160608/Windows/System32/drivers/etc/lmhosts.sam
+2026-07-20 12:57:26 | BROWSER | IE=1 FF=0 Chrome=2
+2026-07-20 12:57:27 | LNK/JL | LNK=38 JL=19
+2026-07-20 12:57:27 | RECYCLE_BIN | 253 files from /mnt/img_160608/$Recycle.Bin

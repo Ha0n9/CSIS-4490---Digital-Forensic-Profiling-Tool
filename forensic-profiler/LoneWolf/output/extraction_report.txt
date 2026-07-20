@@ -1,7 +1,7 @@
 ================================================================================
   FORENSIC ARTIFACT EXTRACTION REPORT
 ================================================================================
-  Date           : 2026-07-20 08:05:24
+  Date           : 2026-07-20 12:57:27
   E01 Image      : Sample Files/LoneWolf/LoneWolf.E01
   Image Size     : 1.5G
   Windows Ver    : modern
@@ -26,5 +26,5 @@
   Recycle Bin                              253 files
 
   NEXT STEPS:
-  bash extract_artifacts.sh -m /mnt/img_24991 -o LoneWolf/output
+  bash extract_artifacts.sh -m /mnt/img_160608 -o LoneWolf/output
 ================================================================================

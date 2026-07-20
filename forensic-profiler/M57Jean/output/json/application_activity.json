@@ -1,0 +1,2484 @@
+{
+  "artifact": "application_activity",
+  "parsed_at": "2026-07-20T19:58:27.605508+00:00Z",
+  "count": 126,
+  "records": [
+    {
+      "exe_name": "WUAUCLT.EXE\u0000 臷\u0000\u0000\u0000\u0000\u0000\u0000ⵀⴈⰘ倠臰ⵀ",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "坖",
+        "WUAUCLT.EXE",
+        " 臷",
+        "ⵀⴈ"
+      ],
+      "pf_hash": "399A8E72",
+      "file_size": 22358,
+      "version": "v17 (XP)",
+      "run_count": 757,
+      "last_run": "2008-07-21T01:31:06.481875+00:00",
+      "all_run_times": [
+        "2008-07-21T01:31:06.481875+00:00"
+      ],
+      "source_file": "WUAUCLT.EXE-399A8E72.pf"
+    },
+    {
+      "exe_name": "LOGONUI.EXE\u0000础臬\u0000\u0000\u0000\u0000\u0010\u0000퀀ꯘ舫",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "岎",
+        "LOGONUI.EXE",
+        "础臬",
+        "\u0010"
+      ],
+      "pf_hash": "0AF22957",
+      "file_size": 23694,
+      "version": "v17 (XP)",
+      "run_count": 53,
+      "last_run": "2008-07-21T01:30:56.278750+00:00",
+      "all_run_times": [
+        "2008-07-21T01:30:56.278750+00:00"
+      ],
+      "source_file": "LOGONUI.EXE-0AF22957.pf"
+    },
+    {
+      "exe_name": "HELPER.EXE\u0000\u0000쒰臺\u0000\u0000\u0000\u0000\u0010\u0000赀늣退뉆谘늣ꒀ舞赀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "㩄",
+        "HELPER.EXE",
+        "쒰臺",
+        "\u0010"
+      ],
+      "pf_hash": "1D5E6592",
+      "file_size": 14916,
+      "version": "v17 (XP)",
+      "run_count": 3,
+      "last_run": "2008-07-21T01:30:43.919375+00:00",
+      "all_run_times": [
+        "2008-07-21T01:30:43.919375+00:00"
+      ],
+      "source_file": "HELPER.EXE-1D5E6592.pf"
+    },
+    {
+      "exe_name": "FIREFOX.EXE\u0000礰臘\u0000\u0000\u0000\u0000⪆聭뵀✲聭반臘뵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "�\u0001FIREFOX.EXE",
+        "礰臘",
+        "⪆聭뵀"
+      ],
+      "pf_hash": "00507E76",
+      "file_size": 122854,
+      "version": "v17 (XP)",
+      "run_count": 27,
+      "last_run": "2008-07-21T01:30:38.216250+00:00",
+      "all_run_times": [
+        "2008-07-21T01:30:38.216250+00:00"
+      ],
+      "source_file": "FIREFOX.EXE-00507E76.pf"
+    },
+    {
+      "exe_name": "AOLSOFTWARE.EXE\u0000\u0000\u0000\u0010\u0000쵀늰ꀀ늀찘늰㛸臟쵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "",
+        "AOLSOFTWARE.EXE",
+        "\u0010",
+        "쵀늰"
+      ],
+      "pf_hash": "11870E32",
+      "file_size": 59904,
+      "version": "v17 (XP)",
+      "run_count": 10,
+      "last_run": "2008-07-21T01:30:37.888125+00:00",
+      "all_run_times": [
+        "2008-07-21T01:30:37.888125+00:00"
+      ],
+      "source_file": "AOLSOFTWARE.EXE-11870E32.pf"
+    },
+    {
+      "exe_name": "AIM6.EXE\u0000聕\u0000\u0000ꀠ舓\u0000\u0000\u0000\u0000\u0010\u0000ീ닂䀀뇺ఘ닂뤐舏ീ",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "溬\u0001AIM6.EXE",
+        "聕",
+        "ꀠ舓",
+        "\u0010"
+      ],
+      "pf_hash": "34DC5725",
+      "file_size": 93868,
+      "version": "v17 (XP)",
+      "run_count": 7,
+      "last_run": "2008-07-21T01:30:35.997500+00:00",
+      "all_run_times": [
+        "2008-07-21T01:30:35.997500+00:00"
+      ],
+      "source_file": "AIM6.EXE-34DC5725.pf"
+    },
+    {
+      "exe_name": "WMIPRVSE.EXE\u0000致\u0000\u0000\u0000\u0000\u0010\u0000瀀堰致",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "韘",
+        "WMIPRVSE.EXE",
+        "致",
+        "\u0010"
+      ],
+      "pf_hash": "28F301A9",
+      "file_size": 38872,
+      "version": "v17 (XP)",
+      "run_count": 44,
+      "last_run": "2008-07-21T01:27:27.950625+00:00",
+      "all_run_times": [
+        "2008-07-21T01:27:27.950625+00:00"
+      ],
+      "source_file": "WMIPRVSE.EXE-28F301A9.pf"
+    },
+    {
+      "exe_name": "NTOSBOOT",
+      "exe_path": "䍃ཁ",
+      "section_c_paths": [
+        "䍃ཁ",
+        "฀ޖ一吀伀匀䈀伀伀吀",
+        "관෺ư",
+        "頀",
+        "︀\u0003瀀P䀀a瀀ӟ⨀ȩꀀ܈Ā"
+      ],
+      "pf_hash": "B00DFAAD",
+      "file_size": 497166,
+      "version": "v17 (XP)",
+      "run_count": 12,
+      "last_run": "2008-07-21T01:22:01.718750+00:00",
+      "all_run_times": [
+        "2008-07-21T01:22:01.718750+00:00"
+      ],
+      "source_file": "NTOSBOOT-B00DFAAD.pf"
+    },
+    {
+      "exe_name": "WSCNTFY.EXE\u0000塚臥\u0000\u0000\u0000\u0000\u0000\u0000浀팅聑氘᭐臩浀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "Ẉ",
+        "WSCNTFY.EXE",
+        "塚臥"
+      ],
+      "pf_hash": "1B24F5EB",
+      "file_size": 7816,
+      "version": "v17 (XP)",
+      "run_count": 21,
+      "last_run": "2008-07-21T01:17:56.234375+00:00",
+      "all_run_times": [
+        "2008-07-21T01:17:56.234375+00:00"
+      ],
+      "source_file": "WSCNTFY.EXE-1B24F5EB.pf"
+    },
+    {
+      "exe_name": "TASKMGR.EXE\u0000〠臋\u0000\u0000\u0000\u0000⪆聭쵀닂✲聭찘닂倠舞쵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "㴚",
+        "TASKMGR.EXE",
+        "〠臋",
+        "⪆�"
+      ],
+      "pf_hash": "20256C55",
+      "file_size": 15642,
+      "version": "v17 (XP)",
+      "run_count": 2,
+      "last_run": "2008-07-21T01:17:47.046875+00:00",
+      "all_run_times": [
+        "2008-07-21T01:17:47.046875+00:00"
+      ],
+      "source_file": "TASKMGR.EXE-20256C55.pf"
+    },
+    {
+      "exe_name": "VERCLSID.EXE\u0000臤\u0000\u0000\u0000\u0000\u0010\u0000줸舀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "㙈",
+        "VERCLSID.EXE",
+        "臤",
+        "�"
+      ],
+      "pf_hash": "3667BD89",
+      "file_size": 13896,
+      "version": "v17 (XP)",
+      "run_count": 38,
+      "last_run": "2008-07-21T01:17:42.656250+00:00",
+      "all_run_times": [
+        "2008-07-21T01:17:42.656250+00:00"
+      ],
+      "source_file": "VERCLSID.EXE-3667BD89.pf"
+    },
+    {
+      "exe_name": "OUTLOOK.EXE\u0000䥐舘\u0000\u0000\u0000\u0000\u0000\u0000﵀ﴈﰘ돨與﵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "믲",
+        "OUTLOOK.EXE",
+        "䥐舘",
+        "﵀ﴈﰘ"
+      ],
+      "pf_hash": "179DEC04",
+      "file_size": 48114,
+      "version": "v17 (XP)",
+      "run_count": 13,
+      "last_run": "2008-07-21T00:44:52.859375+00:00",
+      "all_run_times": [
+        "2008-07-21T00:44:52.859375+00:00"
+      ],
+      "source_file": "OUTLOOK.EXE-179DEC04.pf"
+    },
+    {
+      "exe_name": "DFRGNTFS.EXE\u0000舄\u0000\u0000\u0000\u0000\u0000\u0000뵀\u0000\u0000반〠臵뵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "躎",
+        "DFRGNTFS.EXE",
+        "舄",
+        "뵀�"
+      ],
+      "pf_hash": "269967DF",
+      "file_size": 36494,
+      "version": "v17 (XP)",
+      "run_count": 5,
+      "last_run": "2008-07-20T19:43:28.546875+00:00",
+      "all_run_times": [
+        "2008-07-20T19:43:28.546875+00:00"
+      ],
+      "source_file": "DFRGNTFS.EXE-269967DF.pf"
+    },
+    {
+      "exe_name": "DEFRAG.EXE\u0000舛抈舩\u0000\u0000\u0000\u0000⪆聭䵀✲聭䰘嶨與䵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "㧺",
+        "DEFRAG.EXE",
+        "舛抈舩",
+        "�"
+      ],
+      "pf_hash": "273F131E",
+      "file_size": 14842,
+      "version": "v17 (XP)",
+      "run_count": 5,
+      "last_run": "2008-07-20T19:43:27.640625+00:00",
+      "all_run_times": [
+        "2008-07-20T19:43:27.640625+00:00"
+      ],
+      "source_file": "DEFRAG.EXE-273F131E.pf"
+    },
+    {
+      "exe_name": "HELPSVC.EXE\u0000ᶠ臥\u0000\u0000\u0000\u0000⪆聭﵀✲聭ﰘⶨ舯﵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "勀\u0001HELPSVC.EXE",
+        "ᶠ臥",
+        "⪆聭﵀�"
+      ],
+      "pf_hash": "2878DDA2",
+      "file_size": 86720,
+      "version": "v17 (XP)",
+      "run_count": 11,
+      "last_run": "2008-07-20T10:54:17.390625+00:00",
+      "all_run_times": [
+        "2008-07-20T10:54:17.390625+00:00"
+      ],
+      "source_file": "HELPSVC.EXE-2878DDA2.pf"
+    },
+    {
+      "exe_name": "UPDATE.EXE\u0000臠☘舥\u0000\u0000\u0000\u0000쳼늝쵀늝䕐舧찘늝撨興쵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "ﹶ",
+        "UPDATE.EXE",
+        "臠☘舥",
+        "쳼늝쵀늝䕐舧"
+      ],
+      "pf_hash": "2C35196A",
+      "file_size": 65142,
+      "version": "v17 (XP)",
+      "run_count": 11,
+      "last_run": "2008-07-20T02:00:27.125000+00:00",
+      "all_run_times": [
+        "2008-07-20T02:00:27.125000+00:00"
+      ],
+      "source_file": "UPDATE.EXE-2C35196A.pf"
+    },
+    {
+      "exe_name": "UPDATE.EXE\u0000臠쌸臞\u0000\u0000\u0000\u0000峼嵀綠臻尘뀠臞嵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "",
+        "UPDATE.EXE",
+        "臠쌸臞",
+        "峼嵀綠臻"
+      ],
+      "pf_hash": "2DF77534",
+      "file_size": 63418,
+      "version": "v17 (XP)",
+      "run_count": 14,
+      "last_run": "2008-07-20T02:00:24.140625+00:00",
+      "all_run_times": [
+        "2008-07-20T02:00:24.140625+00:00"
+      ],
+      "source_file": "UPDATE.EXE-2DF77534.pf"
+    },
+    {
+      "exe_name": "UPDATE.EXE\u0000舠䞨臭\u0000\u0000\u0000\u0000鳼鵀ᗰ臷鰘ﮠ臬鵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "ᅎ\u0001UPDATE.EXE",
+        "舠䞨臭",
+        "鳼鵀ᗰ臷"
+      ],
+      "pf_hash": "07779187",
+      "file_size": 69966,
+      "version": "v17 (XP)",
+      "run_count": 14,
+      "last_run": "2008-07-20T02:00:19.828125+00:00",
+      "all_run_times": [
+        "2008-07-20T02:00:19.828125+00:00"
+      ],
+      "source_file": "UPDATE.EXE-07779187.pf"
+    },
+    {
+      "exe_name": "EXCEL.EXE\u0000\u0000\u0000ஈ舙\u0000\u0000\u0000\u0000\u0010\u0000赀뉄䀀뇷谘뉄藸臽赀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "眮",
+        "EXCEL.EXE",
+        "ஈ舙",
+        "\u0010"
+      ],
+      "pf_hash": "1C75F8D6",
+      "file_size": 30510,
+      "version": "v17 (XP)",
+      "run_count": 2,
+      "last_run": "2008-07-20T01:27:40.718750+00:00",
+      "all_run_times": [
+        "2008-07-20T01:27:40.718750+00:00"
+      ],
+      "source_file": "EXCEL.EXE-1C75F8D6.pf"
+    },
+    {
+      "exe_name": "RUNDLL32.EXE\u0000舖\u0000\u0000\u0000\u0000ꓣ}㵀눡ꇢ}㰘눡ﰘ航㵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "㋸",
+        "RUNDLL32.EXE",
+        "舖",
+        "ꓣ"
+      ],
+      "pf_hash": "28FE2D3B",
+      "file_size": 13048,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-20T01:26:14.265625+00:00",
+      "all_run_times": [
+        "2008-07-20T01:26:14.265625+00:00"
+      ],
+      "source_file": "RUNDLL32.EXE-28FE2D3B.pf"
+    },
+    {
+      "exe_name": "IMAPI.EXE\u0000\u0000\u0000ꯐ舫\u0000\u0000\u0000\u0000\u0010\u0000浀瀀氘舷浀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "䛀",
+        "IMAPI.EXE",
+        "ꯐ舫",
+        "\u0010"
+      ],
+      "pf_hash": "0BF740A4",
+      "file_size": 18112,
+      "version": "v17 (XP)",
+      "run_count": 5,
+      "last_run": "2008-07-20T00:00:53.234375+00:00",
+      "all_run_times": [
+        "2008-07-20T00:00:53.234375+00:00"
+      ],
+      "source_file": "IMAPI.EXE-0BF740A4.pf"
+    },
+    {
+      "exe_name": "OSA9.EXE\u0000聕\u0000\u0000돠與\u0000\u0000\u0000\u0000\u0010\u0000㵀䀀㰘牘臭㵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "の",
+        "OSA9.EXE",
+        "聕",
+        "돠與"
+      ],
+      "pf_hash": "27CD7DB8",
+      "file_size": 12398,
+      "version": "v17 (XP)",
+      "run_count": 7,
+      "last_run": "2008-07-20T00:00:44.406250+00:00",
+      "all_run_times": [
+        "2008-07-20T00:00:44.406250+00:00"
+      ],
+      "source_file": "OSA9.EXE-27CD7DB8.pf"
+    },
+    {
+      "exe_name": "MSMSGS.EXE\u0000興㋨舗\u0000\u0000\u0000\u0000\u0000\u0000굀닎괈닎갘닎諨臍굀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "綴",
+        "MSMSGS.EXE",
+        "興㋨舗",
+        "굀닎괈�"
+      ],
+      "pf_hash": "2B6052DE",
+      "file_size": 32180,
+      "version": "v17 (XP)",
+      "run_count": 3,
+      "last_run": "2008-07-20T00:00:44.046875+00:00",
+      "all_run_times": [
+        "2008-07-20T00:00:44.046875+00:00"
+      ],
+      "source_file": "MSMSGS.EXE-2B6052DE.pf"
+    },
+    {
+      "exe_name": "VMWAREUSER.EXE\u0000\u0000\u0000\u0000峼嵀⟐舄尘䣀臰嵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "ጌ\u0001VMWAREUSER.EXE",
+        "峼嵀�"
+      ],
+      "pf_hash": "1F72BBE4",
+      "file_size": 70412,
+      "version": "v17 (XP)",
+      "run_count": 11,
+      "last_run": "2008-07-20T00:00:43.906250+00:00",
+      "all_run_times": [
+        "2008-07-20T00:00:43.906250+00:00"
+      ],
+      "source_file": "VMWAREUSER.EXE-1F72BBE4.pf"
+    },
+    {
+      "exe_name": "VMWARETRAY.EXE\u0000\u0000\u0000\u0000\u0010\u0000嵀瀀尘鶨舆嵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "㟢",
+        "VMWARETRAY.EXE",
+        "\u0010"
+      ],
+      "pf_hash": "029F476F",
+      "file_size": 14306,
+      "version": "v17 (XP)",
+      "run_count": 10,
+      "last_run": "2008-07-20T00:00:43.796875+00:00",
+      "all_run_times": [
+        "2008-07-20T00:00:43.796875+00:00"
+      ],
+      "source_file": "VMWARETRAY.EXE-029F476F.pf"
+    },
+    {
+      "exe_name": "EXPLORER.EXE\u0000臢\u0000\u0000\u0000\u0000\u0010\u0000굀갘�舮굀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "ᦀ\u0001EXPLORER.EXE",
+        "臢",
+        "\u0010",
+        "굀"
+      ],
+      "pf_hash": "082F38A9",
+      "file_size": 72064,
+      "version": "v17 (XP)",
+      "run_count": 8,
+      "last_run": "2008-07-20T00:00:42.656250+00:00",
+      "all_run_times": [
+        "2008-07-20T00:00:42.656250+00:00"
+      ],
+      "source_file": "EXPLORER.EXE-082F38A9.pf"
+    },
+    {
+      "exe_name": "USERINIT.EXE\u0000臥\u0000\u0000\u0000\u0000泼浀瘘臼氘☸臥浀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "㝒",
+        "USERINIT.EXE",
+        "臥",
+        "泼浀�"
+      ],
+      "pf_hash": "30B18140",
+      "file_size": 14162,
+      "version": "v17 (XP)",
+      "run_count": 8,
+      "last_run": "2008-07-20T00:00:42.281250+00:00",
+      "all_run_times": [
+        "2008-07-20T00:00:42.281250+00:00"
+      ],
+      "source_file": "USERINIT.EXE-30B18140.pf"
+    },
+    {
+      "exe_name": "AGENTSVR.EXE\u0000臞\u0000\u0000\u0000\u0000\u0010\u0000�\u0000�涨臞�",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "㰺",
+        "AGENTSVR.EXE",
+        "臞",
+        "�"
+      ],
+      "pf_hash": "002E45AB",
+      "file_size": 15418,
+      "version": "v17 (XP)",
+      "run_count": 2,
+      "last_run": "2008-07-20T00:00:04.468750+00:00",
+      "all_run_times": [
+        "2008-07-20T00:00:04.468750+00:00"
+      ],
+      "source_file": "AGENTSVR.EXE-002E45AB.pf"
+    },
+    {
+      "exe_name": "AOLTBSERVER.EXE\u0000\u0000\u0000೼느ീ느ɐ舚ఘ느ꃰ舍ീ",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "噪",
+        "AOLTBSERVER.EXE",
+        "೼�"
+      ],
+      "pf_hash": "1584CCF8",
+      "file_size": 22122,
+      "version": "v17 (XP)",
+      "run_count": 3,
+      "last_run": "2008-07-19T23:59:25.656250+00:00",
+      "all_run_times": [
+        "2008-07-19T23:59:25.656250+00:00"
+      ],
+      "source_file": "AOLTBSERVER.EXE-1584CCF8.pf"
+    },
+    {
+      "exe_name": "IEXPLORE.EXE\u0000舞\u0000\u0000\u0000\u0000⪆聭㵀✲聭㰘쥈舩㵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "걦\u0001IEXPLORE.EXE",
+        "舞",
+        "⪆聭㵀✲聭㰘"
+      ],
+      "pf_hash": "27122324",
+      "file_size": 109670,
+      "version": "v17 (XP)",
+      "run_count": 20,
+      "last_run": "2008-07-19T23:59:22.750000+00:00",
+      "all_run_times": [
+        "2008-07-19T23:59:22.750000+00:00"
+      ],
+      "source_file": "IEXPLORE.EXE-27122324.pf"
+    },
+    {
+      "exe_name": "RUNDLL32.EXE\u0000舚\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000ꪀ舌",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "⬐",
+        "RUNDLL32.EXE",
+        "舚",
+        "�"
+      ],
+      "pf_hash": "451FC2C0",
+      "file_size": 11024,
+      "version": "v17 (XP)",
+      "run_count": 7,
+      "last_run": "2008-07-19T23:32:24.285875+00:00",
+      "all_run_times": [
+        "2008-07-19T23:32:24.285875+00:00"
+      ],
+      "source_file": "RUNDLL32.EXE-451FC2C0.pf"
+    },
+    {
+      "exe_name": "MSIEXEC.EXE\u0000и自\u0000\u0000\u0000\u0000幀聓嵀￿￿尘஠臣嵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "院",
+        "MSIEXEC.EXE",
+        "и自",
+        "幀聓嵀￿￿尘"
+      ],
+      "pf_hash": "2F8A8CAE",
+      "file_size": 38498,
+      "version": "v17 (XP)",
+      "run_count": 20,
+      "last_run": "2008-07-19T23:31:34.207750+00:00",
+      "all_run_times": [
+        "2008-07-19T23:31:34.207750+00:00"
+      ],
+      "source_file": "MSIEXEC.EXE-2F8A8CAE.pf"
+    },
+    {
+      "exe_name": "VCREDIST_X86.EXE\u0000\u0000\u0010\u0000ᵀ뉷က늾ᰘ뉷䦀臣ᵀ",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "➨",
+        "VCREDIST_X86.EXE",
+        "\u0010"
+      ],
+      "pf_hash": "28B68032",
+      "file_size": 10152,
+      "version": "v17 (XP)",
+      "run_count": 2,
+      "last_run": "2008-07-19T23:31:33.629625+00:00",
+      "all_run_times": [
+        "2008-07-19T23:31:33.629625+00:00"
+      ],
+      "source_file": "VCREDIST_X86.EXE-28B68032.pf"
+    },
+    {
+      "exe_name": "SETUP.EXE\u0000嗨Ჰ臩\u0000\u0000\u0000\u0000᳼뉷ᵀ뉷ՠ舤ᰘ뉷楀興ᵀ",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "Ⲋ",
+        "SETUP.EXE",
+        "嗨Ჰ臩",
+        "᳼뉷ᵀ�"
+      ],
+      "pf_hash": "393E66AE",
+      "file_size": 11402,
+      "version": "v17 (XP)",
+      "run_count": 2,
+      "last_run": "2008-07-19T23:31:30.410875+00:00",
+      "all_run_times": [
+        "2008-07-19T23:31:30.410875+00:00"
+      ],
+      "source_file": "SETUP.EXE-393E66AE.pf"
+    },
+    {
+      "exe_name": "RUNDLL32.EXE\u0000臙\u0000\u0000\u0000\u0000帓B絀愖E簘挐臙絀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "杢",
+        "RUNDLL32.EXE",
+        "臙",
+        "帓�"
+      ],
+      "pf_hash": "2576181F",
+      "file_size": 26466,
+      "version": "v17 (XP)",
+      "run_count": 3,
+      "last_run": "2008-07-19T23:31:16.004625+00:00",
+      "all_run_times": [
+        "2008-07-19T23:31:16.004625+00:00"
+      ],
+      "source_file": "RUNDLL32.EXE-2576181F.pf"
+    },
+    {
+      "exe_name": "VMIP.EXE\u0000聕\u0000\u0000땐舃\u0000\u0000\u0000\u0000\u0010\u0000耀⟰舃",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "ㄖ",
+        "VMIP.EXE",
+        "聕",
+        "땐舃"
+      ],
+      "pf_hash": "2BD5723A",
+      "file_size": 12566,
+      "version": "v17 (XP)",
+      "run_count": 12,
+      "last_run": "2008-07-19T05:48:46.786750+00:00",
+      "all_run_times": [
+        "2008-07-19T05:48:46.786750+00:00"
+      ],
+      "source_file": "VMIP.EXE-2BD5723A.pf"
+    },
+    {
+      "exe_name": "CMD.EXE\u0000Ѽ\u0000䊰舍怠臙\u0000\u0000\u0000\u0000糼絀舢簘푠舮絀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "⽬",
+        "CMD.EXE",
+        "Ѽ",
+        "䊰舍怠臙"
+      ],
+      "pf_hash": "087B4001",
+      "file_size": 12140,
+      "version": "v17 (XP)",
+      "run_count": 11,
+      "last_run": "2008-07-19T03:13:13.687500+00:00",
+      "all_run_times": [
+        "2008-07-19T03:13:13.687500+00:00"
+      ],
+      "source_file": "CMD.EXE-087B4001.pf"
+    },
+    {
+      "exe_name": "SPIDER.EXE\u0000胯쐠舁\u0000\u0000\u0000\u0000䀀삨絀눖\u0000\u0000簘눖�舄絀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "㥸",
+        "SPIDER.EXE",
+        "胯쐠舁",
+        "䀀삨絀"
+      ],
+      "pf_hash": "2D998CA6",
+      "file_size": 14712,
+      "version": "v17 (XP)",
+      "run_count": 10,
+      "last_run": "2008-07-18T17:48:36.531250+00:00",
+      "all_run_times": [
+        "2008-07-18T17:48:36.531250+00:00"
+      ],
+      "source_file": "SPIDER.EXE-2D998CA6.pf"
+    },
+    {
+      "exe_name": "EQQTTRANS.EXE\u0000\u0000\u0000\u0000\u0000迳聏�뇎造聏�뇎퀠與�",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "ⱀ",
+        "EQQTTRANS.EXE",
+        "�"
+      ],
+      "pf_hash": "169A138B",
+      "file_size": 11328,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-18T04:57:55.718750+00:00",
+      "all_run_times": [
+        "2008-07-18T04:57:55.718750+00:00"
+      ],
+      "source_file": "EQQTTRANS.EXE-169A138B.pf"
+    },
+    {
+      "exe_name": "QQBUBBLE.EXE\u0000臀\u0000\u0000\u0000\u0000쳼늰쵀늰�臢찘늰㞰舤쵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "鄔",
+        "QQBUBBLE.EXE",
+        "臀",
+        "�"
+      ],
+      "pf_hash": "2759C6E7",
+      "file_size": 37140,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-18T04:57:19.890625+00:00",
+      "all_run_times": [
+        "2008-07-18T04:57:19.890625+00:00"
+      ],
+      "source_file": "QQBUBBLE.EXE-2759C6E7.pf"
+    },
+    {
+      "exe_name": "RUNDLL32.EXE\u0000臅\u0000\u0000\u0000\u0000힨舨�뇏�뇏�뇏眈舔�",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "⤾",
+        "RUNDLL32.EXE",
+        "臅",
+        "�"
+      ],
+      "pf_hash": "41D9E4F3",
+      "file_size": 10558,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-18T04:37:17.718750+00:00",
+      "all_run_times": [
+        "2008-07-18T04:37:17.718750+00:00"
+      ],
+      "source_file": "RUNDLL32.EXE-41D9E4F3.pf"
+    },
+    {
+      "exe_name": "QQGAMESD.EXE\u0000臃\u0000\u0000\u0000\u0000\u0010\u0000ᵀ뀀놿ᰘ哘臉ᵀ",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "啚",
+        "QQGAMESD.EXE",
+        "臃",
+        "�"
+      ],
+      "pf_hash": "1EC8B6F9",
+      "file_size": 21850,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-18T04:32:14.796875+00:00",
+      "all_run_times": [
+        "2008-07-18T04:32:14.796875+00:00"
+      ],
+      "source_file": "QQGAMESD.EXE-1EC8B6F9.pf"
+    },
+    {
+      "exe_name": "QQGAMES.EXE\u0000�臢\u0000\u0000\u0000\u0000\u0010\u0000�䀀뇺�ﶨ臇�",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "긆",
+        "QQGAMES.EXE",
+        "�臢",
+        "\u0010"
+      ],
+      "pf_hash": "225AFE9C",
+      "file_size": 44550,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-18T04:32:13.843750+00:00",
+      "all_run_times": [
+        "2008-07-18T04:32:13.843750+00:00"
+      ],
+      "source_file": "QQGAMES.EXE-225AFE9C.pf"
+    },
+    {
+      "exe_name": "RBM.EXE\u0000ɤ\u0000↸臽⪰舊\u0000\u0000\u0000\u0000೼닂ീ닂ᜈ舁ఘ닂臋ീ",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "⭖",
+        "RBM.EXE",
+        "ɤ",
+        "↸臽⪰舊"
+      ],
+      "pf_hash": "29FA1579",
+      "file_size": 11094,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-18T04:32:08.687500+00:00",
+      "all_run_times": [
+        "2008-07-18T04:32:08.687500+00:00"
+      ],
+      "source_file": "RBM.EXE-29FA1579.pf"
+    },
+    {
+      "exe_name": "GAMELAUNCH.EXE\u0000\u0000\u0000\u0000\u0010\u0000뵀눝뀀뇇반눝㓰舔뵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "╎",
+        "GAMELAUNCH.EXE"
+      ],
+      "pf_hash": "24FBA7DB",
+      "file_size": 9550,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-18T04:32:03.484375+00:00",
+      "all_run_times": [
+        "2008-07-18T04:32:03.484375+00:00"
+      ],
+      "source_file": "GAMELAUNCH.EXE-24FBA7DB.pf"
+    },
+    {
+      "exe_name": "SETUPAIMPLUGIN.EXE\u0000航絀눜臨簘눜붨臋絀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "㾄",
+        "SETUPAIMPLUGIN.EXE",
+        "航"
+      ],
+      "pf_hash": "2350F443",
+      "file_size": 16260,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-18T04:31:42.234375+00:00",
+      "all_run_times": [
+        "2008-07-18T04:31:42.234375+00:00"
+      ],
+      "source_file": "SETUPAIMPLUGIN.EXE-2350F443.pf"
+    },
+    {
+      "exe_name": "QQSETUP65.EXE\u0000\u0000\u0000\u0000\u0000ｰŽ쵀늰\u0000\u0000찘늰鯸臊쵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "粈",
+        "QQSETUP65.EXE",
+        "ｰ�"
+      ],
+      "pf_hash": "068DAE25",
+      "file_size": 31880,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-18T04:31:06.562500+00:00",
+      "all_run_times": [
+        "2008-07-18T04:31:06.562500+00:00"
+      ],
+      "source_file": "QQSETUP65.EXE-068DAE25.pf"
+    },
+    {
+      "exe_name": "AOLDLMGR.EXE\u0000臈\u0000\u0000\u0000\u0000\u0000\u0000赀늡뤨谘늡춨臁赀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "修",
+        "AOLDLMGR.EXE",
+        "臈",
+        "赀늡뤨�"
+      ],
+      "pf_hash": "2D3BD87E",
+      "file_size": 20462,
+      "version": "v17 (XP)",
+      "run_count": 2,
+      "last_run": "2008-07-18T04:30:52.578125+00:00",
+      "all_run_times": [
+        "2008-07-18T04:30:52.578125+00:00"
+      ],
+      "source_file": "AOLDLMGR.EXE-2D3BD87E.pf"
+    },
+    {
+      "exe_name": "AIMTUNES.EXE\u0000臄\u0000\u0000\u0000\u0000\u0000\u0000쵀늰뤨찘늰臂쵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "㬼",
+        "AIMTUNES.EXE",
+        "臄",
+        "�"
+      ],
+      "pf_hash": "07EAB0C7",
+      "file_size": 15164,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-18T04:30:43.687500+00:00",
+      "all_run_times": [
+        "2008-07-18T04:30:43.687500+00:00"
+      ],
+      "source_file": "AIMTUNES.EXE-07EAB0C7.pf"
+    },
+    {
+      "exe_name": "MIGRATOR.EXE\u0000舍\u0000\u0000\u0000\u0000\u0000\u0000ീ느ഈ느ఘ느㛐臆ീ",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "ᦸ",
+        "MIGRATOR.EXE",
+        "舍"
+      ],
+      "pf_hash": "0EA977A5",
+      "file_size": 6584,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-18T04:29:31.781250+00:00",
+      "all_run_times": [
+        "2008-07-18T04:29:31.781250+00:00"
+      ],
+      "source_file": "MIGRATOR.EXE-0EA977A5.pf"
+    },
+    {
+      "exe_name": "POSTPROC.EXE\u0000臥\u0000\u0000\u0000\u0000\u0010\u0000ീ느䀀뇲ఘ느琐臣ീ",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "ㄊ",
+        "POSTPROC.EXE",
+        "臥",
+        "\u0010"
+      ],
+      "pf_hash": "33D951D5",
+      "file_size": 12554,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-18T04:29:31.656250+00:00",
+      "all_run_times": [
+        "2008-07-18T04:29:31.656250+00:00"
+      ],
+      "source_file": "POSTPROC.EXE-33D951D5.pf"
+    },
+    {
+      "exe_name": "TOOLBAR.EXE\u0000造臣\u0000\u0000\u0000\u0000\u0010\u0000㵀눠退뇔㰘눠뤐舏㵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "讒",
+        "TOOLBAR.EXE",
+        "造臣",
+        "\u0010"
+      ],
+      "pf_hash": "180D6414",
+      "file_size": 35730,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-18T04:29:28.312500+00:00",
+      "all_run_times": [
+        "2008-07-18T04:29:28.312500+00:00"
+      ],
+      "source_file": "TOOLBAR.EXE-180D6414.pf"
+    },
+    {
+      "exe_name": "NS49.TMP\u0000聕\u0000\u0000䶠臉\u0000\u0000\u0000\u0000\u0010\u0000㵀눠䀀뇪㰘눠臢㵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "ᖬ",
+        "NS49.TMP",
+        "聕",
+        "䶠臉"
+      ],
+      "pf_hash": "30B49A90",
+      "file_size": 5548,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-18T04:29:27.875000+00:00",
+      "all_run_times": [
+        "2008-07-18T04:29:27.875000+00:00"
+      ],
+      "source_file": "NS49.TMP-30B49A90.pf"
+    },
+    {
+      "exe_name": "TOOLBAR.EXE\u0000ࢰ舐\u0000\u0000\u0000\u0000\u0010\u0000㵀눠䀀뇼㰘눠㶨臋㵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "博",
+        "TOOLBAR.EXE",
+        "ࢰ舐",
+        "\u0010"
+      ],
+      "pf_hash": "083A9FCD",
+      "file_size": 21338,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-18T04:29:27.234375+00:00",
+      "all_run_times": [
+        "2008-07-18T04:29:27.234375+00:00"
+      ],
+      "source_file": "TOOLBAR.EXE-083A9FCD.pf"
+    },
+    {
+      "exe_name": "VIEWPOINTSERVICE.EXE\u0000눠倀뉎㰘눠䊘臇㵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "⼞",
+        "VIEWPOINTSERVICE.EX�"
+      ],
+      "pf_hash": "0CA24EB3",
+      "file_size": 12062,
+      "version": "v17 (XP)",
+      "run_count": 2,
+      "last_run": "2008-07-18T04:29:26.843750+00:00",
+      "all_run_times": [
+        "2008-07-18T04:29:26.843750+00:00"
+      ],
+      "source_file": "VIEWPOINTSERVICE.EXE-0CA24EB3.pf"
+    },
+    {
+      "exe_name": "MTSAXINSTALLER.EXE\u0000\u0000㵀눠ꀀ㰘눠嶨舓㵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "ꄖ",
+        "MTSAXINSTALLER.EXE",
+        "㵀눠ꀀ㰘�"
+      ],
+      "pf_hash": "27664DE4",
+      "file_size": 41238,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-18T04:29:24.531250+00:00",
+      "all_run_times": [
+        "2008-07-18T04:29:24.531250+00:00"
+      ],
+      "source_file": "MTSAXINSTALLER.EXE-27664DE4.pf"
+    },
+    {
+      "exe_name": "VWPT.EXE\u0000\u0000\u0000\u0000㫰舌\u0000\u0000\u0000\u0000幀聓㵀눠￿￿㰘눠造臣㵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "䨊",
+        "VWPT.EXE",
+        "㫰舌",
+        "幀"
+      ],
+      "pf_hash": "1ADC751C",
+      "file_size": 18954,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-18T04:29:24.109375+00:00",
+      "all_run_times": [
+        "2008-07-18T04:29:24.109375+00:00"
+      ],
+      "source_file": "VWPT.EXE-1ADC751C.pf"
+    },
+    {
+      "exe_name": "AMOS.EXE\u0000聕\u0000\u0000⥠臤\u0000\u0000\u0000\u0000\u0010\u0000쵀늰䀀뇼찘늰䪐臌쵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "栐",
+        "AMOS.EXE",
+        "聕",
+        "⥠臤"
+      ],
+      "pf_hash": "219E8DD6",
+      "file_size": 26640,
+      "version": "v17 (XP)",
+      "run_count": 2,
+      "last_run": "2008-07-18T04:29:17.375000+00:00",
+      "all_run_times": [
+        "2008-07-18T04:29:17.375000+00:00"
+      ],
+      "source_file": "AMOS.EXE-219E8DD6.pf"
+    },
+    {
+      "exe_name": "AIMLANG.EXE\u0000Ᏸ舒\u0000\u0000\u0000\u0000쳼늰쵀늰倠舐찘늰萰舐쵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "吒",
+        "AIMLANG.EXE",
+        "Ᏸ舒",
+        "쳼늰�"
+      ],
+      "pf_hash": "076D401C",
+      "file_size": 21522,
+      "version": "v17 (XP)",
+      "run_count": 2,
+      "last_run": "2008-07-18T04:29:14.859375+00:00",
+      "all_run_times": [
+        "2008-07-18T04:29:14.859375+00:00"
+      ],
+      "source_file": "AIMLANG.EXE-076D401C.pf"
+    },
+    {
+      "exe_name": "AIMINST.EXE\u0000興\u0000\u0000\u0000\u0000\u0000\u0000嵀뇏崈뇏尘뇏옠臇嵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "粘",
+        "AIMINST.EXE",
+        "興"
+      ],
+      "pf_hash": "3391E991",
+      "file_size": 31896,
+      "version": "v17 (XP)",
+      "run_count": 2,
+      "last_run": "2008-07-18T04:29:09.640625+00:00",
+      "all_run_times": [
+        "2008-07-18T04:29:09.640625+00:00"
+      ],
+      "source_file": "AIMINST.EXE-3391E991.pf"
+    },
+    {
+      "exe_name": "UNAGI3.EXE\u0000舃뙠舍\u0000\u0000\u0000\u0000㳼눠㵀눠䛨臟㰘눠₰臤㵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "㣂",
+        "UNAGI3.EXE",
+        "舃뙠舍",
+        "㳼눠"
+      ],
+      "pf_hash": "1477756A",
+      "file_size": 14530,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-18T04:29:08.828125+00:00",
+      "all_run_times": [
+        "2008-07-18T04:29:08.828125+00:00"
+      ],
+      "source_file": "UNAGI3.EXE-1477756A.pf"
+    },
+    {
+      "exe_name": "OCPINST.EXE\u0000綠臋\u0000\u0000\u0000\u0000\u0010\u0000嵀뇏퀀눭尘뇏䘠臃嵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "篐",
+        "OCPINST.EXE",
+        "綠臋",
+        "\u0010�"
+      ],
+      "pf_hash": "2F9EE492",
+      "file_size": 31696,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-18T04:28:49.281250+00:00",
+      "all_run_times": [
+        "2008-07-18T04:28:49.281250+00:00"
+      ],
+      "source_file": "OCPINST.EXE-2F9EE492.pf"
+    },
+    {
+      "exe_name": "TBSETUP.EXE\u0000ថ至\u0000\u0000\u0000\u0000峼뇏嵀뇏倠舐尘뇏뤨舀嵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "䉔",
+        "TBSETUP.EXE",
+        "ថ至",
+        "峼�"
+      ],
+      "pf_hash": "0DC80F02",
+      "file_size": 16980,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-18T04:28:48.687500+00:00",
+      "all_run_times": [
+        "2008-07-18T04:28:48.687500+00:00"
+      ],
+      "source_file": "TBSETUP.EXE-0DC80F02.pf"
+    },
+    {
+      "exe_name": "ALSETUP.EXE\u0000䘘臃\u0000\u0000\u0000\u0000￿ÿ赀늴￿ÿ谘늴綨臋赀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "⼀",
+        "ALSETUP.EXE",
+        "䘘臃",
+        "�"
+      ],
+      "pf_hash": "38283348",
+      "file_size": 12032,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-18T04:28:48.171875+00:00",
+      "all_run_times": [
+        "2008-07-18T04:28:48.171875+00:00"
+      ],
+      "source_file": "ALSETUP.EXE-38283348.pf"
+    },
+    {
+      "exe_name": "SETUP.EXE\u0000皈舎倠舐\u0000\u0000\u0000\u0000⪆聭뵀뉯✲聭반뉯꩘舐뵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "ꦎ",
+        "SETUP.EXE",
+        "皈舎倠舐",
+        "⪆聭뵀뉯✲聭반�"
+      ],
+      "pf_hash": "0B8BCC19",
+      "file_size": 43406,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-18T04:26:03.390625+00:00",
+      "all_run_times": [
+        "2008-07-18T04:26:03.390625+00:00"
+      ],
+      "source_file": "SETUP.EXE-0B8BCC19.pf"
+    },
+    {
+      "exe_name": "INSTALL_AIM[1].EXE\u0000聭㵀뉱✲聭㰘뉱臆㵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "䉊",
+        "INSTALL_AIM[1].EXE",
+        "聭�"
+      ],
+      "pf_hash": "0B3EA594",
+      "file_size": 16970,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-18T04:26:01.140625+00:00",
+      "all_run_times": [
+        "2008-07-18T04:26:01.140625+00:00"
+      ],
+      "source_file": "INSTALL_AIM[1].EXE-0B3EA594.pf"
+    },
+    {
+      "exe_name": "LOGON.SCR\u0000\u0000\u0000ච舄\u0000\u0000\u0000\u0000\u0010\u0000굀耀갘䈨舃굀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "᛾",
+        "LOGON.SCR",
+        "ච舄"
+      ],
+      "pf_hash": "151EFAEA",
+      "file_size": 5886,
+      "version": "v17 (XP)",
+      "run_count": 45,
+      "last_run": "2008-07-18T03:55:44.859375+00:00",
+      "all_run_times": [
+        "2008-07-18T03:55:44.859375+00:00"
+      ],
+      "source_file": "LOGON.SCR-151EFAEA.pf"
+    },
+    {
+      "exe_name": "RUNDLL32.EXE\u0000臤\u0000\u0000\u0000\u0000\u0010\u0000굀ꀀ갘怠臱굀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "",
+        "RUNDLL32.EXE",
+        "臤",
+        "\u0010"
+      ],
+      "pf_hash": "1831A4F3",
+      "file_size": 57594,
+      "version": "v17 (XP)",
+      "run_count": 7,
+      "last_run": "2008-07-12T21:16:08.953125+00:00",
+      "all_run_times": [
+        "2008-07-12T21:16:08.953125+00:00"
+      ],
+      "source_file": "RUNDLL32.EXE-1831A4F3.pf"
+    },
+    {
+      "exe_name": "CONTROL.EXE\u0000뀠臻\u0000\u0000\u0000\u0000\u0000\u0000굀괈갘䉰臿굀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "䡤",
+        "CONTROL.EXE",
+        "뀠臻"
+      ],
+      "pf_hash": "013DBFB5",
+      "file_size": 18532,
+      "version": "v17 (XP)",
+      "run_count": 8,
+      "last_run": "2008-07-12T21:16:08.593750+00:00",
+      "all_run_times": [
+        "2008-07-12T21:16:08.593750+00:00"
+      ],
+      "source_file": "CONTROL.EXE-013DBFB5.pf"
+    },
+    {
+      "exe_name": "WINLOGON.EXE\u0000臼\u0000\u0000\u0000\u0000⁅쌻ⵀ謶贈Ⱈ찘舃ⵀ",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "냚",
+        "WINLOGON.EXE",
+        "臼",
+        "⁅쌻ⵀ謶贈Ⱈ"
+      ],
+      "pf_hash": "32C57D49",
+      "file_size": 45274,
+      "version": "v17 (XP)",
+      "run_count": 5,
+      "last_run": "2008-07-12T21:15:51.140625+00:00",
+      "all_run_times": [
+        "2008-07-12T21:15:51.140625+00:00"
+      ],
+      "source_file": "WINLOGON.EXE-32C57D49.pf"
+    },
+    {
+      "exe_name": "CSRSS.EXE\u0000쳜䈠舃\u0000\u0000\u0000\u0000ഀ뫛쵀⩠舦찘ඨ舄쵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "핶",
+        "CSRSS.EXE",
+        "쳜䈠舃",
+        "ഀ뫛"
+      ],
+      "pf_hash": "12B63473",
+      "file_size": 54646,
+      "version": "v17 (XP)",
+      "run_count": 5,
+      "last_run": "2008-07-12T21:15:50.937500+00:00",
+      "all_run_times": [
+        "2008-07-12T21:15:50.937500+00:00"
+      ],
+      "source_file": "CSRSS.EXE-12B63473.pf"
+    },
+    {
+      "exe_name": "REGSVR32.EXE\u0000舆\u0000\u0000\u0000\u0000幀聓ⵀ￿￿Ⱈ趨臨ⵀ",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "춰",
+        "REGSVR32.EXE",
+        "舆",
+        "幀聓ⵀ"
+      ],
+      "pf_hash": "25EEFE2F",
+      "file_size": 52656,
+      "version": "v17 (XP)",
+      "run_count": 5,
+      "last_run": "2008-07-12T03:05:36.642125+00:00",
+      "all_run_times": [
+        "2008-07-12T03:05:36.642125+00:00"
+      ],
+      "source_file": "REGSVR32.EXE-25EEFE2F.pf"
+    },
+    {
+      "exe_name": "SETUP50.EXE\u0000ஈ臣\u0000\u0000\u0000\u0000\u0010\u0000ᵀ퀀ᰘǀ臣ᵀ",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "해",
+        "SETUP50.EXE",
+        "ஈ臣",
+        "\u0010"
+      ],
+      "pf_hash": "362FF7C9",
+      "file_size": 54644,
+      "version": "v17 (XP)",
+      "run_count": 6,
+      "last_run": "2008-07-12T03:05:33.329625+00:00",
+      "all_run_times": [
+        "2008-07-12T03:05:33.329625+00:00"
+      ],
+      "source_file": "SETUP50.EXE-362FF7C9.pf"
+    },
+    {
+      "exe_name": "UNREGMP2.EXE\u0000臤\u0000\u0000\u0000\u0000\u0010\u0000絀耀簘׈臥絀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "觐",
+        "UNREGMP2.EXE",
+        "臤",
+        "\u0010"
+      ],
+      "pf_hash": "07CACB61",
+      "file_size": 35280,
+      "version": "v17 (XP)",
+      "run_count": 3,
+      "last_run": "2008-07-12T03:05:29.110875+00:00",
+      "all_run_times": [
+        "2008-07-12T03:05:29.110875+00:00"
+      ],
+      "source_file": "UNREGMP2.EXE-07CACB61.pf"
+    },
+    {
+      "exe_name": "RUNDLL32.EXE\u0000臢\u0000\u0000\u0000\u0000\u0010\u0000浀\u0000氘琈臢浀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "䇢",
+        "RUNDLL32.EXE",
+        "臢",
+        "\u0010"
+      ],
+      "pf_hash": "2AF77CC9",
+      "file_size": 16866,
+      "version": "v17 (XP)",
+      "run_count": 2,
+      "last_run": "2008-07-12T03:05:27.314000+00:00",
+      "all_run_times": [
+        "2008-07-12T03:05:27.314000+00:00"
+      ],
+      "source_file": "RUNDLL32.EXE-2AF77CC9.pf"
+    },
+    {
+      "exe_name": "RUNDLL32.EXE\u0000舰\u0000\u0000\u0000\u0000\u0010\u0000浀\u0000氘Ӑ舯浀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "㰮",
+        "RUNDLL32.EXE",
+        "舰",
+        "\u0010"
+      ],
+      "pf_hash": "4499C56E",
+      "file_size": 15406,
+      "version": "v17 (XP)",
+      "run_count": 2,
+      "last_run": "2008-07-12T03:05:23.845250+00:00",
+      "all_run_times": [
+        "2008-07-12T03:05:23.845250+00:00"
+      ],
+      "source_file": "RUNDLL32.EXE-4499C56E.pf"
+    },
+    {
+      "exe_name": "RUNDLL32.EXE\u0000舀\u0000\u0000\u0000\u0000\u0010\u0000浀氘樐臽浀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "擮",
+        "RUNDLL32.EXE",
+        "舀",
+        "\u0010"
+      ],
+      "pf_hash": "2F26E69F",
+      "file_size": 25838,
+      "version": "v17 (XP)",
+      "run_count": 2,
+      "last_run": "2008-07-12T03:05:22.751500+00:00",
+      "all_run_times": [
+        "2008-07-12T03:05:22.751500+00:00"
+      ],
+      "source_file": "RUNDLL32.EXE-2F26E69F.pf"
+    },
+    {
+      "exe_name": "SHMGRATE.EXE\u0000臣\u0000\u0000\u0000\u0000\u0010\u0000ᵀᰘᤐ臣ᵀ",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "曄",
+        "SHMGRATE.EXE",
+        "臣",
+        "\u0010"
+      ],
+      "pf_hash": "1BA69E68",
+      "file_size": 26308,
+      "version": "v17 (XP)",
+      "run_count": 10,
+      "last_run": "2008-07-12T03:05:22.485875+00:00",
+      "all_run_times": [
+        "2008-07-12T03:05:22.485875+00:00"
+      ],
+      "source_file": "SHMGRATE.EXE-1BA69E68.pf"
+    },
+    {
+      "exe_name": "RUNDLL32.EXE\u0000舯\u0000\u0000\u0000\u0000\u0010\u0000浀뀀氘䤐舯浀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "㧶",
+        "RUNDLL32.EXE",
+        "舯",
+        "\u0010"
+      ],
+      "pf_hash": "470F11BD",
+      "file_size": 14838,
+      "version": "v17 (XP)",
+      "run_count": 2,
+      "last_run": "2008-07-12T03:05:14.235875+00:00",
+      "all_run_times": [
+        "2008-07-12T03:05:14.235875+00:00"
+      ],
+      "source_file": "RUNDLL32.EXE-470F11BD.pf"
+    },
+    {
+      "exe_name": "RUNDLL32.EXE\u0000臤\u0000\u0000\u0000\u0000⪆聭ᵀ✲聭ᰘᶨ臩ᵀ",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "㪤",
+        "RUNDLL32.EXE",
+        "臤",
+        "⪆�"
+      ],
+      "pf_hash": "169CA248",
+      "file_size": 15012,
+      "version": "v17 (XP)",
+      "run_count": 3,
+      "last_run": "2008-07-12T03:04:55.345250+00:00",
+      "all_run_times": [
+        "2008-07-12T03:04:55.345250+00:00"
+      ],
+      "source_file": "RUNDLL32.EXE-169CA248.pf"
+    },
+    {
+      "exe_name": "IE4UINIT.EXE\u0000臨\u0000\u0000\u0000\u0000\u0010\u0000絀簘茈臨絀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "鈦",
+        "IE4UINIT.EXE",
+        "臨",
+        "\u0010"
+      ],
+      "pf_hash": "169A5A39",
+      "file_size": 37414,
+      "version": "v17 (XP)",
+      "run_count": 3,
+      "last_run": "2008-07-12T03:02:59.053329+00:00",
+      "all_run_times": [
+        "2008-07-12T03:02:59.053329+00:00"
+      ],
+      "source_file": "IE4UINIT.EXE-169A5A39.pf"
+    },
+    {
+      "exe_name": "UPDATER.EXE\u0000䤸舮\u0000\u0000\u0000\u0000\u0000\u0000ീ뉋\u0000\u0000ఘ뉋柀舦ീ",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "",
+        "UPDATER.EXE",
+        "䤸舮",
+        "�"
+      ],
+      "pf_hash": "06D95570",
+      "file_size": 60316,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-11T05:19:51.500000+00:00",
+      "all_run_times": [
+        "2008-07-11T05:19:51.500000+00:00"
+      ],
+      "source_file": "UPDATER.EXE-06D95570.pf"
+    },
+    {
+      "exe_name": "FP_AX_CAB_INSTALLER.EXE\u0000반눢힠臷뵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "巤",
+        "FP_AX_CAB_INSTALLER.EXE",
+        "반눢"
+      ],
+      "pf_hash": "255EAA9B",
+      "file_size": 24036,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-10T20:09:02.328125+00:00",
+      "all_run_times": [
+        "2008-07-10T20:09:02.328125+00:00"
+      ],
+      "source_file": "FP_AX_CAB_INSTALLER.EXE-255EAA9B.pf"
+    },
+    {
+      "exe_name": "WIAACMGR.EXE\u0000舲\u0000\u0000\u0000\u0000\u0000\u0000㵀뉯\u0000\u0000㰘뉯㶨臝㵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "彈",
+        "WIAACMGR.EXE",
+        "舲",
+        "�"
+      ],
+      "pf_hash": "212ED878",
+      "file_size": 24392,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-10T14:57:59.312500+00:00",
+      "all_run_times": [
+        "2008-07-10T14:57:59.312500+00:00"
+      ],
+      "source_file": "WIAACMGR.EXE-212ED878.pf"
+    },
+    {
+      "exe_name": "SVCHOST.EXE\u0000댠舲\u0000\u0000\u0000\u00005Eീ늋Ȃ　ఘ늋婰臬ീ",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "剰",
+        "SVCHOST.EXE",
+        "댠舲",
+        "5Eീ늋Ȃ　"
+      ],
+      "pf_hash": "3530F672",
+      "file_size": 21104,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-10T14:57:56.546875+00:00",
+      "all_run_times": [
+        "2008-07-10T14:57:56.546875+00:00"
+      ],
+      "source_file": "SVCHOST.EXE-3530F672.pf"
+    },
+    {
+      "exe_name": "RUNONCE.EXE\u0000垘臚\u0000\u0000\u0000\u0000\u0000\u0000嵀崈尘唠臚嵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "⢚",
+        "RUNONCE.EXE",
+        "垘臚",
+        "�"
+      ],
+      "pf_hash": "2803F297",
+      "file_size": 10394,
+      "version": "v17 (XP)",
+      "run_count": 5,
+      "last_run": "2008-07-10T07:48:29.937500+00:00",
+      "all_run_times": [
+        "2008-07-10T07:48:29.937500+00:00"
+      ],
+      "source_file": "RUNONCE.EXE-2803F297.pf"
+    },
+    {
+      "exe_name": "RUNDLL32.EXE\u0000舆\u0000\u0000\u0000\u0000\u0000\u0000䵀눷팅聑䰘눷Ꟙ舆䵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "뵈",
+        "RUNDLL32.EXE",
+        "舆",
+        "䵀눷팅聑�"
+      ],
+      "pf_hash": "2EE0347C",
+      "file_size": 48456,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-10T07:48:01.250000+00:00",
+      "all_run_times": [
+        "2008-07-10T07:48:01.250000+00:00"
+      ],
+      "source_file": "RUNDLL32.EXE-2EE0347C.pf"
+    },
+    {
+      "exe_name": "RUNDLL32.EXE\u0000舧\u0000\u0000\u0000\u0000\u0000\u0000ീ눝팅聑ఘ눝궨臭ീ",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "ᴂ",
+        "RUNDLL32.EX"
+      ],
+      "pf_hash": "1AB4BC72",
+      "file_size": 7426,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-10T07:47:50.484375+00:00",
+      "all_run_times": [
+        "2008-07-10T07:47:50.484375+00:00"
+      ],
+      "source_file": "RUNDLL32.EXE-1AB4BC72.pf"
+    },
+    {
+      "exe_name": "RUNDLL32.EXE\u0000舤\u0000\u0000\u0000\u0000幀聓絀눢￿￿簘눢舧絀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "므",
+        "RUNDLL32.EXE",
+        "舤",
+        "幀聓絀눢￿￿�"
+      ],
+      "pf_hash": "2D059A17",
+      "file_size": 48064,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-10T07:47:47.218750+00:00",
+      "all_run_times": [
+        "2008-07-10T07:47:47.218750+00:00"
+      ],
+      "source_file": "RUNDLL32.EXE-2D059A17.pf"
+    },
+    {
+      "exe_name": "RUNDLL32.EXE\u0000臸\u0000\u0000\u0000\u0000幀聓絀￿￿簘쟸舆絀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "⾲",
+        "RUNDLL32.EXE",
+        "臸"
+      ],
+      "pf_hash": "16B88159",
+      "file_size": 12210,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-06T07:54:01.731875+00:00",
+      "all_run_times": [
+        "2008-07-06T07:54:01.731875+00:00"
+      ],
+      "source_file": "RUNDLL32.EXE-16B88159.pf"
+    },
+    {
+      "exe_name": "RUNDLL32.EXE\u0000臸\u0000\u0000\u0000\u0000\u0010\u0000絀瀀簘臜絀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "⾲",
+        "RUNDLL32.EXE",
+        "臸"
+      ],
+      "pf_hash": "23CB01FA",
+      "file_size": 12210,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-06T07:53:46.216250+00:00",
+      "all_run_times": [
+        "2008-07-06T07:53:46.216250+00:00"
+      ],
+      "source_file": "RUNDLL32.EXE-23CB01FA.pf"
+    },
+    {
+      "exe_name": "TOURSTART.EXE\u0000\u0000\u0000\u0000\u0000舟﵀ﳼﰘ椀舄﵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "ⴘ",
+        "TOURSTART.EXE"
+      ],
+      "pf_hash": "0D0140ED",
+      "file_size": 11544,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-06T07:37:49.575625+00:00",
+      "all_run_times": [
+        "2008-07-06T07:37:49.575625+00:00"
+      ],
+      "source_file": "TOURSTART.EXE-0D0140ED.pf"
+    },
+    {
+      "exe_name": "MSHTA.EXE\u0000\u0000\u0000래臭\u0000\u0000\u0000\u0000\u0010\u0000瀀딠臭",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "륄",
+        "MSHTA.EXE",
+        "래臭",
+        "\u0010"
+      ],
+      "pf_hash": "331DF029",
+      "file_size": 47428,
+      "version": "v17 (XP)",
+      "run_count": 3,
+      "last_run": "2008-07-06T07:36:53.747500+00:00",
+      "all_run_times": [
+        "2008-07-06T07:36:53.747500+00:00"
+      ],
+      "source_file": "MSHTA.EXE-331DF029.pf"
+    },
+    {
+      "exe_name": "RUNDLL32.EXE\u0000臨\u0000\u0000\u0000\u0000幀聓㵀￿￿㰘ꦠ舛㵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "㙦",
+        "RUNDLL32.EXE",
+        "臨",
+        "�"
+      ],
+      "pf_hash": "13CC3015",
+      "file_size": 13926,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-06T07:36:53.669375+00:00",
+      "all_run_times": [
+        "2008-07-06T07:36:53.669375+00:00"
+      ],
+      "source_file": "RUNDLL32.EXE-13CC3015.pf"
+    },
+    {
+      "exe_name": "RUNDLL32.EXE\u0000臨\u0000\u0000\u0000\u0000⪆聭㵀✲聭㰘쮈舖㵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "䔚",
+        "RUNDLL32.EXE",
+        "臨",
+        "⪆聭㵀"
+      ],
+      "pf_hash": "155CD7BB",
+      "file_size": 17690,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-06T07:36:43.513125+00:00",
+      "all_run_times": [
+        "2008-07-06T07:36:43.513125+00:00"
+      ],
+      "source_file": "RUNDLL32.EXE-155CD7BB.pf"
+    },
+    {
+      "exe_name": "RUNDLL32.EXE\u0000舧\u0000\u0000\u0000\u0000\u0010\u0000瀀ٰ舧",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "㛶",
+        "RUNDLL32.EXE",
+        "舧",
+        "�"
+      ],
+      "pf_hash": "1224CF94",
+      "file_size": 14070,
+      "version": "v17 (XP)",
+      "run_count": 2,
+      "last_run": "2008-07-06T07:35:53.622500+00:00",
+      "all_run_times": [
+        "2008-07-06T07:35:53.622500+00:00"
+      ],
+      "source_file": "RUNDLL32.EXE-1224CF94.pf"
+    },
+    {
+      "exe_name": "MSOHTMED.EXE\u0000臭\u0000\u0000\u0000\u0000\u0010\u0000䀀䚈臞",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "ᆤ",
+        "MSOHTMED.EX�"
+      ],
+      "pf_hash": "160756B3",
+      "file_size": 4516,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-06T07:21:57.841250+00:00",
+      "all_run_times": [
+        "2008-07-06T07:21:57.841250+00:00"
+      ],
+      "source_file": "MSOHTMED.EXE-160756B3.pf"
+    },
+    {
+      "exe_name": "MSOHELP.EXE\u0000臠\u0000\u0000\u0000\u0000\u0010\u0000뵀䀀반䶨臞뵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "ᱎ",
+        "MSOHELP.EXE",
+        "�"
+      ],
+      "pf_hash": "079DA48B",
+      "file_size": 7246,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-06T07:21:57.810000+00:00",
+      "all_run_times": [
+        "2008-07-06T07:21:57.810000+00:00"
+      ],
+      "source_file": "MSOHELP.EXE-079DA48B.pf"
+    },
+    {
+      "exe_name": "SPOOLSV.EXE\u0000쬨臞\u0000\u0000\u0000\u0000\u0010\u0000\u0000ఀ臟",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "⫚",
+        "SPOOLSV.EXE",
+        "쬨臞",
+        "\u0010�"
+      ],
+      "pf_hash": "282F76A7",
+      "file_size": 10970,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-06T07:21:52.903750+00:00",
+      "all_run_times": [
+        "2008-07-06T07:21:52.903750+00:00"
+      ],
+      "source_file": "SPOOLSV.EXE-282F76A7.pf"
+    },
+    {
+      "exe_name": "GRPCONV.EXE\u0000鞘臝\u0000\u0000\u0000\u0000\u0010\u0000耀ޠ臞",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "⸎",
+        "GRPCONV.EXE",
+        "鞘臝",
+        "\u0010"
+      ],
+      "pf_hash": "111CD845",
+      "file_size": 11790,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-06T07:21:52.700625+00:00",
+      "all_run_times": [
+        "2008-07-06T07:21:52.700625+00:00"
+      ],
+      "source_file": "GRPCONV.EXE-111CD845.pf"
+    },
+    {
+      "exe_name": "REGCSP.EXE\u0000\u0000螘臞\u0000\u0000\u0000\u0000\u0010\u0000耀鞠臞",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "቎",
+        "REGCSP.EXE",
+        "螘臞�"
+      ],
+      "pf_hash": "2B18F821",
+      "file_size": 4686,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-06T07:21:52.513125+00:00",
+      "all_run_times": [
+        "2008-07-06T07:21:52.513125+00:00"
+      ],
+      "source_file": "REGCSP.EXE-2B18F821.pf"
+    },
+    {
+      "exe_name": "OUTSEC.EXE\u0000舉�臞\u0000\u0000\u0000\u00000\u0000㵀\u0000\u0000㰘瀠臞㵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "㓘",
+        "OUTSEC.EXE",
+        "舉�臞",
+        "0"
+      ],
+      "pf_hash": "368F5D27",
+      "file_size": 13528,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-06T07:21:49.935000+00:00",
+      "all_run_times": [
+        "2008-07-06T07:21:49.935000+00:00"
+      ],
+      "source_file": "OUTSEC.EXE-368F5D27.pf"
+    },
+    {
+      "exe_name": "SETUP.EXE\u0000\u0000\u0000覀舚\u0000\u0000\u0000\u0000\u0010\u0000뵀瀀반ⶀ舛뵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "㻖",
+        "SETUP.EXE",
+        "覀舚",
+        "\u0010"
+      ],
+      "pf_hash": "3925C0B9",
+      "file_size": 16086,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-06T07:19:32.497500+00:00",
+      "all_run_times": [
+        "2008-07-06T07:19:32.497500+00:00"
+      ],
+      "source_file": "SETUP.EXE-3925C0B9.pf"
+    },
+    {
+      "exe_name": "RUNDLL32.EXE\u0000舜\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000舙",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "㧪",
+        "RUNDLL32.EXE",
+        "舜"
+      ],
+      "pf_hash": "1C5752B9",
+      "file_size": 14826,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-06T07:11:45.296875+00:00",
+      "all_run_times": [
+        "2008-07-06T07:11:45.296875+00:00"
+      ],
+      "source_file": "RUNDLL32.EXE-1C5752B9.pf"
+    },
+    {
+      "exe_name": "RUNDLL32.EXE\u0000臫\u0000\u0000\u0000\u0000⪆聭뵀✲聭반줈舚뵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "㏜",
+        "RUNDLL32.EXE",
+        "臫",
+        "⪆"
+      ],
+      "pf_hash": "48583034",
+      "file_size": 13276,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-06T07:11:29.828125+00:00",
+      "all_run_times": [
+        "2008-07-06T07:11:29.828125+00:00"
+      ],
+      "source_file": "RUNDLL32.EXE-48583034.pf"
+    },
+    {
+      "exe_name": "RUNDLL32.EXE\u0000舜\u0000\u0000\u0000\u0000\u0010\u0000굀耀갘눰舙굀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "⫸",
+        "RUNDLL32.EXE",
+        "舜"
+      ],
+      "pf_hash": "268BFF96",
+      "file_size": 11000,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-06T07:10:21.843750+00:00",
+      "all_run_times": [
+        "2008-07-06T07:10:21.843750+00:00"
+      ],
+      "source_file": "RUNDLL32.EXE-268BFF96.pf"
+    },
+    {
+      "exe_name": "VMACTHLP.EXE\u0000舯\u0000\u0000\u0000\u0000⳼ⵀ綠臻Ⱈⶨ臝ⵀ",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "愀",
+        "VMACTHLP.EXE",
+        "舯",
+        "�"
+      ],
+      "pf_hash": "0790714A",
+      "file_size": 24832,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-04T22:45:57.693583+00:00",
+      "all_run_times": [
+        "2008-07-04T22:45:57.693583+00:00"
+      ],
+      "source_file": "VMACTHLP.EXE-0790714A.pf"
+    },
+    {
+      "exe_name": "TPAUTOCONNSVC.EXE\u0000\u0000\u0000ᵀᴈᰘସ臣ᵀ",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "仔",
+        "TPAUTOCONNSVC.EXE",
+        "ᵀ"
+      ],
+      "pf_hash": "19F171C6",
+      "file_size": 20180,
+      "version": "v17 (XP)",
+      "run_count": 2,
+      "last_run": "2008-07-04T22:45:57.115432+00:00",
+      "all_run_times": [
+        "2008-07-04T22:45:57.115432+00:00"
+      ],
+      "source_file": "TPAUTOCONNSVC.EXE-19F171C6.pf"
+    },
+    {
+      "exe_name": "RUNDLL32.EXE\u0000臛\u0000\u0000\u0000\u0000幀聓ⵀ￿￿Ⱈ�臛ⵀ",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "",
+        "RUNDLL32.EXE",
+        "臛",
+        "幀聓ⵀ�"
+      ],
+      "pf_hash": "143F2D59",
+      "file_size": 57480,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-04T22:45:50.818275+00:00",
+      "all_run_times": [
+        "2008-07-04T22:45:50.818275+00:00"
+      ],
+      "source_file": "RUNDLL32.EXE-143F2D59.pf"
+    },
+    {
+      "exe_name": "RUNDLL32.EXE\u0000臜\u0000\u0000\u0000\u0000\u0010\u0000ꀀ૸臭",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "",
+        "RUNDLL32.EXE",
+        "臜",
+        "\u0010"
+      ],
+      "pf_hash": "4253499B",
+      "file_size": 59484,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-04T22:45:47.443124+00:00",
+      "all_run_times": [
+        "2008-07-04T22:45:47.443124+00:00"
+      ],
+      "source_file": "RUNDLL32.EXE-4253499B.pf"
+    },
+    {
+      "exe_name": "RUNDLL32.EXE\u0000舗\u0000\u0000\u0000\u0000⪆聭鵀✲聭鰘䕈臟鵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "ㆤ",
+        "RUNDLL32.EXE",
+        "舗",
+        "⪆聭"
+      ],
+      "pf_hash": "3F9E265E",
+      "file_size": 12708,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-04T22:45:47.068107+00:00",
+      "all_run_times": [
+        "2008-07-04T22:45:47.068107+00:00"
+      ],
+      "source_file": "RUNDLL32.EXE-3F9E265E.pf"
+    },
+    {
+      "exe_name": "RUNDLL32.EXE\u0000臞\u0000\u0000\u0000\u0000幀聓�￿￿�ନ臞�",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "㉞",
+        "RUNDLL32.EXE",
+        "臞",
+        "幀聓"
+      ],
+      "pf_hash": "3DC8200C",
+      "file_size": 12894,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-04T22:45:30.661122+00:00",
+      "all_run_times": [
+        "2008-07-04T22:45:30.661122+00:00"
+      ],
+      "source_file": "RUNDLL32.EXE-3DC8200C.pf"
+    },
+    {
+      "exe_name": "RUNDLL32.EXE\u0000臠\u0000\u0000\u0000\u0000幀聓鵀￿￿鰘붨臲鵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "㒮",
+        "RUNDLL32.EXE",
+        "臠",
+        "�"
+      ],
+      "pf_hash": "332B7401",
+      "file_size": 13486,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-04T22:45:27.379725+00:00",
+      "all_run_times": [
+        "2008-07-04T22:45:27.379725+00:00"
+      ],
+      "source_file": "RUNDLL32.EXE-332B7401.pf"
+    },
+    {
+      "exe_name": "TPAUTOCONNECT.EXE\u0000과굀䶠舡갘⎘臠굀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "㞌",
+        "TPAUTOCONNECT.EXE",
+        "�"
+      ],
+      "pf_hash": "3A8C30BE",
+      "file_size": 14220,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-04T22:45:26.535937+00:00",
+      "all_run_times": [
+        "2008-07-04T22:45:26.535937+00:00"
+      ],
+      "source_file": "TPAUTOCONNECT.EXE-3A8C30BE.pf"
+    },
+    {
+      "exe_name": "RUNDLL32.EXE\u0000舠\u0000\u0000\u0000\u0000⪆聭✲聭℘舠",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "㑔",
+        "RUNDLL32.EXE",
+        "舠",
+        "⪆"
+      ],
+      "pf_hash": "3A3ECA26",
+      "file_size": 13396,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-04T22:45:10.082075+00:00",
+      "all_run_times": [
+        "2008-07-04T22:45:10.082075+00:00"
+      ],
+      "source_file": "RUNDLL32.EXE-3A3ECA26.pf"
+    },
+    {
+      "exe_name": "VCREDIST_X86.EXE\u0000\u0000\u0010\u0000鵀瀀鰘趨臼鵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "䑦",
+        "VCREDIST_X86.EXE",
+        "\u0010"
+      ],
+      "pf_hash": "08768656",
+      "file_size": 17510,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-04T22:44:44.002782+00:00",
+      "all_run_times": [
+        "2008-07-04T22:44:44.002782+00:00"
+      ],
+      "source_file": "VCREDIST_X86.EXE-08768656.pf"
+    },
+    {
+      "exe_name": "SETUP.EXE\u0000\u0000\u0000Ⰸ舀\u0000\u0000\u0000\u0000\u0010\u0000絀瀀簘ﶨ臿絀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "⬾",
+        "SETUP.EXE",
+        "Ⰸ舀",
+        "\u0010"
+      ],
+      "pf_hash": "083757F4",
+      "file_size": 11070,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-04T22:44:40.283865+00:00",
+      "all_run_times": [
+        "2008-07-04T22:44:40.283865+00:00"
+      ],
+      "source_file": "SETUP.EXE-083757F4.pf"
+    },
+    {
+      "exe_name": "RUNDLL32.EXE\u0000舖\u0000\u0000\u0000\u0000\u0010\u0000絀瀀簘ꑀ舗絀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "㺎",
+        "RUNDLL32.EXE",
+        "舖",
+        "\u0010"
+      ],
+      "pf_hash": "246B112C",
+      "file_size": 16014,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-07-04T22:44:38.768172+00:00",
+      "all_run_times": [
+        "2008-07-04T22:44:38.768172+00:00"
+      ],
+      "source_file": "RUNDLL32.EXE-246B112C.pf"
+    },
+    {
+      "exe_name": "TZCHANGE.EXE\u0000舅\u0000\u0000\u0000\u0000\u0010\u0000ⵀ瀀Ⱈ휠舆ⵀ",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "ጂ",
+        "TZCHANGE.EXE",
+        "舅"
+      ],
+      "pf_hash": "18F5EEB7",
+      "file_size": 4866,
+      "version": "v17 (XP)",
+      "run_count": 11,
+      "last_run": "2008-06-07T05:11:14.780171+00:00",
+      "all_run_times": [
+        "2008-06-07T05:11:14.780171+00:00"
+      ],
+      "source_file": "TZCHANGE.EXE-18F5EEB7.pf"
+    },
+    {
+      "exe_name": "UPDATE.EXE\u0000Wꑀ舱\u0000\u0000\u0000\u0000幀聓￿￿ﱈ臽",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "蹴",
+        "UPDATE.EXE",
+        "Wꑀ舱",
+        "幀聓"
+      ],
+      "pf_hash": "0C0FF531",
+      "file_size": 36468,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-06-07T05:11:11.139756+00:00",
+      "all_run_times": [
+        "2008-06-07T05:11:11.139756+00:00"
+      ],
+      "source_file": "UPDATE.EXE-0C0FF531.pf"
+    },
+    {
+      "exe_name": "INSTALL_FP6_WU_R88.EXE\u0000갘듘臻굀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "㹄",
+        "INSTALL_FP6_WU_R88.EXE",
+        "�"
+      ],
+      "pf_hash": "112418BB",
+      "file_size": 15940,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-06-07T05:11:06.936873+00:00",
+      "all_run_times": [
+        "2008-06-07T05:11:06.936873+00:00"
+      ],
+      "source_file": "INSTALL_FP6_WU_R88.EXE-112418BB.pf"
+    },
+    {
+      "exe_name": "GENINST.EXE\u0000䶠臼\u0000\u0000\u0000\u0000\u0010\u0000굀瀀갘⚰臮굀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "ᦨ",
+        "GENINST.EXE",
+        "䶠臼",
+        "�"
+      ],
+      "pf_hash": "08D53534",
+      "file_size": 6568,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-06-07T05:11:06.718136+00:00",
+      "all_run_times": [
+        "2008-06-07T05:11:06.718136+00:00"
+      ],
+      "source_file": "GENINST.EXE-08D53534.pf"
+    },
+    {
+      "exe_name": "WINDOWSXP-KB923789-X86-ENU.EX",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "⎰",
+        "WINDOWSXP-KB923789"
+      ],
+      "pf_hash": "2E6E7F28",
+      "file_size": 9136,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-06-07T05:11:06.421278+00:00",
+      "all_run_times": [
+        "2008-06-07T05:11:06.421278+00:00"
+      ],
+      "source_file": "WINDOWSXP-KB923789-X86-ENU.EX-2E6E7F28.pf"
+    },
+    {
+      "exe_name": "WMIADAP.EXE\u0000ᮐ臣\u0000\u0000\u0000\u0000\u0000\u0000㵀㴈㰘褐臶㵀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "帰",
+        "WMIADAP.EXE",
+        "ᮐ臣",
+        "㵀�"
+      ],
+      "pf_hash": "2DF425B2",
+      "file_size": 24112,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-06-07T05:07:16.231413+00:00",
+      "all_run_times": [
+        "2008-06-07T05:07:16.231413+00:00"
+      ],
+      "source_file": "WMIADAP.EXE-2DF425B2.pf"
+    },
+    {
+      "exe_name": "REG.EXE\u0000ʈ\u0000臶͈臣\u0000\u0000\u0000\u0000泼浀⟐舄氘鬸舫浀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "Ⱒ",
+        "REG.EXE",
+        "ʈ",
+        "臶͈臣"
+      ],
+      "pf_hash": "0D2A95F7",
+      "file_size": 11298,
+      "version": "v17 (XP)",
+      "run_count": 32,
+      "last_run": "2008-06-07T05:06:50.717257+00:00",
+      "all_run_times": [
+        "2008-06-07T05:06:50.717257+00:00"
+      ],
+      "source_file": "REG.EXE-0D2A95F7.pf"
+    },
+    {
+      "exe_name": "CSCRIPT.EXE\u0000쀠臾\u0000\u0000\u0000\u0000\u0010\u0000浀氘㧸臮浀",
+      "exe_path": "䍓䅃\u000f",
+      "section_c_paths": [
+        "䍓䅃\u000f",
+        "䯄",
+        "CSCRIPT.EXE",
+        "쀠臾",
+        "\u0010�"
+      ],
+      "pf_hash": "1C26180C",
+      "file_size": 19396,
+      "version": "v17 (XP)",
+      "run_count": 1,
+      "last_run": "2008-06-07T05:06:48.904862+00:00",
+      "all_run_times": [
+        "2008-06-07T05:06:48.904862+00:00"
+      ],
+      "source_file": "CSCRIPT.EXE-1C26180C.pf"
+    }
+  ]
+}
