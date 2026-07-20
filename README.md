@@ -10,7 +10,9 @@
 
 ## Overview
 
-This is the extended, unified version of the [CSIS-4490 Digital Forensic Profiling Tool](../CSIS-4490---Digital-Forensic-Profiling-Tool): the same acquisition and parsing pipeline, plus two new stages — **correlation/scoring** and **HTML reporting** — that turn the raw parsed JSON into a single per-user risk assessment. The tool runs entirely on **Kali Linux** and requires **no EZ Tools dependency** for its core parsers — all Python parsers work standalone, with EZ Tools used as an optional supplement if available.
+Forensic Profiler is a four-stage pipeline that turns a raw Windows `.E01` disk image into a per-user suspicion report: it mounts the image, extracts and parses artifacts into structured JSON, correlates that JSON across every user account on the system, and renders a self-contained HTML report ranking each account by risk. It runs entirely on **Kali Linux** and requires **no EZ Tools dependency** for its core parsers — every Python parser works standalone, with EZ Tools used only as an optional supplement when available.
+
+`forensic-profiler/` is the current, actively developed implementation of the pipeline — everything described in this README lives there. An earlier iteration of the project — separate acquisition/parsing shell scripts and experimental scoring logic, with no single entry point and no reporting stage — is preserved under `Old structure/` at the repository root for reference; it is no longer maintained.
 
 **Research Question:** To what extent does correlating multiple Windows forensic artifact categories — including indicators of deleted or partially concealed activity — improve the accuracy of per-user activity profiling, and how does this impact the reliability of user suspicion assessment in a multi-user system?
 
@@ -32,24 +34,32 @@ This is the extended, unified version of the [CSIS-4490 Digital Forensic Profili
 
 ```
 .
-├── full_forensic_profiler.py      # Unified entry point — runs all 4 stages
-├── setup_forensic_tools.sh        # One-time environment setup (Kali Linux)
-├── mount_and_extract_hives.sh     # Stage 1 — Mount E01 + extract raw artifacts
-├── extract_artifacts.sh           # Stage 2 — Parse raw artifacts → JSON
-├── parsers/
-│   ├── parse_user_accounts.py          # SAM + NTUSER.DAT → user_accounts.json
-│   ├── parse_application_activity.py   # Prefetch (.pf) → application_activity.json
-│   ├── parse_event_logs.py             # EVT/EVTX → event_logs.json + network_activity.json
-│   ├── parse_browser_history.py        # Chrome/Firefox/IE SQLite → browser_history.json
-│   ├── parse_document_folder_access.py # LNK files + Jump Lists → document_folder_access.json
-│   └── parse_deleted_files.py          # Recycle Bin (INFO2 / $I files) → deleted_files.json
-├── correlation/
-│   ├── engine.py                  # Stage 3 — merges JSON artifacts per user, scores risk
-│   ├── rules.py                   # Detection rule definitions (not yet wired into scoring)
-│   └── weights.py                 # Standalone scoring scaffold (not yet wired into scoring)
-└── reporting/
-    ├── html_report.py             # Stage 4 — generates forensic_report.html
-    └── report_template.html
+├── README.md
+├── Old structure/                  # Archived pre-unification scripts, kept for reference only
+│   ├── parsers/                        # Earlier, standalone versions of the Stage 2 parsers
+│   ├── experimental_correlation_and_scoring_logics/   # v1-v11 iterative scoring scripts (see EXP logs)
+│   └── *.sh                            # Earlier, standalone mount/extract scripts
+└── forensic-profiler/               # The unified pipeline — run everything from here
+    ├── full_forensic_profiler.py       # Unified entry point — runs all 4 stages
+    ├── setup_forensic_tools.sh         # One-time environment setup (Kali Linux)
+    ├── requirements.txt                 # Python dependencies (pip install -r requirements.txt)
+    ├── mount_and_extract_hives.sh       # Stage 1 — Mount E01 + extract raw artifacts
+    ├── extract_artifacts.sh             # Stage 2 — Parse raw artifacts → JSON
+    ├── parsers/
+    │   ├── parse_user_accounts.py          # SAM + NTUSER.DAT → user_accounts.json
+    │   ├── parse_application_activity.py   # Prefetch (.pf) → application_activity.json
+    │   ├── parse_event_logs.py             # EVT/EVTX → event_logs.json + network_activity.json
+    │   ├── parse_browser_history.py        # Chrome/Firefox/IE SQLite → browser_history.json
+    │   ├── parse_document_folder_access.py # LNK files + Jump Lists → document_folder_access.json
+    │   └── parse_deleted_files.py          # Recycle Bin (INFO2 / $I files) → deleted_files.json
+    ├── correlation/
+    │   ├── engine.py                   # Stage 3 — merges JSON artifacts per user, scores risk
+    │   ├── rules.py                    # Detection rule definitions (not yet wired into scoring)
+    │   └── weights.py                  # Standalone scoring scaffold (not yet wired into scoring)
+    ├── reporting/
+    │   ├── html_report.py              # Stage 4 — generates forensic_report.html
+    │   └── report_template.html
+    └── <CaseName>/output/               # Per-case output — raw/, json/, reports/ (see Quick Start)
 ```
 
 ---
@@ -59,12 +69,14 @@ This is the extended, unified version of the [CSIS-4490 Digital Forensic Profili
 ### Step 1 — Install all tools (run once per machine)
 
 ```bash
+cd forensic-profiler
 chmod +x setup_forensic_tools.sh
 ./setup_forensic_tools.sh
 source ~/.zshrc
+pip install -r requirements.txt
 ```
 
-This installs: .NET SDK 9.x, PowerShell 7.5.4, EZ Tools suite, ewf-tools, sleuthkit, RegRipper, python3-evtx, python3-pylnk3.
+`setup_forensic_tools.sh` installs: .NET SDK 9.x, PowerShell 7.5.4, EZ Tools suite, ewf-tools, sleuthkit, RegRipper, python3-evtx, python3-pylnk3. `requirements.txt` covers the remaining pure-Python dependencies (`evtx`, `python-registry`, `pylnk3`, `jinja2`, `python-dateutil`, …) used by the parsers and reporter.
 
 ### Step 2 — Run the full pipeline
 
@@ -89,7 +101,7 @@ sudo python3 full_forensic_profiler.py -e image.E01 -o /cases/output --skip-extr
 
 ### Running the acquisition/parsing stages individually
 
-The original two-stage flow still works standalone, if you only need raw artifacts or JSON without scoring:
+The two acquisition/parsing stages also work standalone, if you only need raw artifacts or JSON without scoring:
 
 ```bash
 # Stage 1 — mount E01 and extract raw artifacts
@@ -121,6 +133,8 @@ Parsed JSON files land in `/cases/output/json/`. (`-m /mnt/img_<PID>` is only ne
 ---
 
 ## File-by-File Explanation
+
+*(All paths below are relative to `forensic-profiler/`.)*
 
 ### `full_forensic_profiler.py`
 
@@ -255,23 +269,27 @@ Parses the Windows Recycle Bin in both formats:
 
 ### `correlation/engine.py`
 
-Stage 3. Loads every JSON artifact produced by Stage 2 and builds one profile per OS account, weighted as:
+Stage 3. Loads every JSON artifact produced by Stage 2 and builds one risk profile per OS account.
 
-| Category | Weight |
-|---|---|
-| Deleted files | 4 |
-| Event log anomalies (failed logons, cleared logs, privilege escalation, …) | 4 |
-| Application activity (recon/remote-access/execution/deletion/credential tools) | 3 |
-| Network activity (incl. flagged domains surfaced from browser history) | 3 |
-| Sensitive document access | 2 |
-| User account flags (e.g. excessive failed logins) | 1 |
-| Flagged browser history (anonymization/exfil/paste/hacking sites) | 0.5 |
+**Scoring.** Each of seven evidence categories contributes a weighted score, independently capped so that no single high-volume category (e.g. thousands of browser-history rows) can dominate the total:
 
-The final score per account is a 70/30 blend of a log-scaled raw score and a normalized score, plus a small bonus for suspicious timing patterns (e.g. a file being accessed and then deleted in quick succession).
+| Category | Weight | Cap |
+|---|---|---|
+| Deleted files | 4 | 40 |
+| Event log anomalies (failed logons, cleared logs, privilege escalation, …) | 4 | 60 |
+| Application activity (recon/remote-access/execution/deletion/credential tools) | 3 | 30 |
+| Network activity (internal/external/suspicious-destination tiers, incl. flagged domains surfaced from browser history) | 3 | 45 |
+| Sensitive document access | 2 | 30 |
+| User account flags (e.g. excessive failed logins) | 1 | 5 |
+| Flagged browser history (anonymization/exfil/paste/hacking sites) | 0.5 | 20 |
 
-**Real-evidence gate:** Prefetch activity that can't be attributed to a specific user (no resolvable user path in the `.pf` file's Section C strings) is split evenly across every account as a "shared pool" contribution — otherwise every account, including `Guest`/`HelpAssistant`/service accounts, would score identically. Risk labels (`HIGH`/`MEDIUM`/`LOW`) are only assigned by percentile among accounts that have *real*, attributable evidence (a deletion, an event anomaly, a flagged URL, an attributed app run, etc.); an account whose only "activity" is a slice of the shared pool is always `LOW`.
+The capped category scores are summed and scaled against a **fixed** ceiling — not the highest score seen in the current run — via a logarithmic transform, so the same evidence always produces the same score regardless of who else is in the same image, and scores stay comparable across different forensic images. A bonus is then added for cross-artifact temporal patterns: a file accessed and then deleted in quick succession, an application run followed by network activity, a burst of activity followed by a long silence, rapid repeated actions, or several independent artifact types active within the same short window — each pattern independently capped.
 
-Domain/URL flagging (anonymization sites, exfil sites, paste sites, hacking tools) matches against the **hostname only**, not the full URL — matching the full URL, including query strings and tracking tokens, produces false positives from coincidental substrings unrelated to the actual domain.
+**Attribution.** A record is attributed to a user account via a resolvable path (`Users\<name>` / `Documents and Settings\<name>`) first, falling back to SID resolution — the account's RID, cross-referenced against `user_accounts.json` — when the path alone doesn't identify a user. Prefetch activity that can't be attributed at all (Prefetch carries no SID) is retained as case-wide "shared pool" evidence but is **not** split across every account: doing so would give every account, including `Guest`/`HelpAssistant`/service accounts, a non-evidentiary score floor just for existing in the same image.
+
+**Risk classification.** `HIGH`/`MEDIUM`/`LOW` labels are assigned against absolute score and evidence-diversity thresholds, not by percentile within the current run — percentile ranking guarantees someone is always "top 20%" even in an image with no real suspects. An account is only eligible for `HIGH`/`MEDIUM` if it has at least one piece of *real*, attributable evidence (a deletion, an event anomaly, a flagged URL, an attributed app run, etc.); an account whose only "activity" is a slice of the shared pool is always `LOW`. Every label carries a short `risk_rationale` string explaining why it was assigned.
+
+Domain/URL flagging (anonymization sites, exfil sites, paste sites, hacking tools) matches the hostname against a boundary-safe suffix check — `host == domain` or `host.endswith("." + domain)` — never a bare substring scan, which produces false positives from coincidental substrings unrelated to the actual domain (e.g. an ad-tracking token that happens to contain "i2p"). The same boundary check tiers network destinations into internal/external/suspicious. Suspicious-executable matching is an exact lookup of the cleaned filename against a table of known names, not a substring scan, so an unrelated binary that merely contains a keyword isn't mistaken for the real tool.
 
 `rules.py` and `weights.py` in this package define an alternate, simpler rule/weight scheme but are not currently called by `engine.py` — they're scaffolding for a future rule-based detection layer, not part of the active scoring path.
 
@@ -285,6 +303,8 @@ Stage 4. Renders `forensic_report.html` — fully self-contained, no external as
 - **Threats / Anomalies** — reserved for the rule-based detections in `correlation/rules.py` once wired in; currently always empty.
 - **User Activity Analysis** — one row per account: event/network/document/browser counts, risk score, risk label.
 - **Investigation Timelines** — one expandable block per ranked account (`HIGH`/`MEDIUM` expanded by default) containing a **score breakdown** table (count + score contribution per category) and a **chronological activity timeline** that merges every timestamped piece of evidence — deletions, event anomalies, network connections, flagged browser visits, suspicious application runs, sensitive document access — in the order it happened. This is the evidence trail behind each risk label, not just the aggregate score.
+
+The engine's `risk_rationale` and shared-pool figures are present in `correlation_results.json` but not yet surfaced in the HTML report — a known gap, not a missing computation.
 
 ---
 
@@ -304,12 +324,13 @@ Stage 4. Renders `forensic_report.html` — fully self-contained, no external as
 
 - **OS:** Kali Linux 2026.x (64-bit), kernel 6.x
 - **VM name:** `CSIS4490_g05`
-- **Python:** 3.x with `python-registry`, `python-evtx`/`evtx`, `pylnk3`, `python-dateutil`
+- **Python:** 3.x with `python-registry`, `python-evtx`/`evtx`, `pylnk3`, `python-dateutil` (see `requirements.txt`)
 - **Optional:** .NET 9 SDK + EZ Tools for supplemental output
 
 Install everything with:
 ```bash
 bash setup_forensic_tools.sh
+pip install -r requirements.txt
 ```
 
 ---
@@ -322,8 +343,8 @@ bash setup_forensic_tools.sh
 ewfinfo /path/to/image.E01   # check "Is corrupted:" and total segment size vs. reported media size
 ```
 
-**Report shows the same score for every user / everyone is HIGH**
-Check `output/reports/correlation_results.json` — if every non-primary account shares an identical score, unattributed application activity is being pooled without the real-evidence gate excluding it from risk labeling. Confirm you're running the current `correlation/engine.py` (the gate lives in `assign_risk_labels()` / `_has_real_evidence()`).
+**Report shows every non-primary account at exactly 0.0 / LOW**
+This is expected, not a bug: an account's score comes only from evidence directly attributable to it, so accounts with no attributable evidence — only shared/unattributed activity — correctly score 0.0. Check `summary.unattributed_app_activity_weighted` in `correlation_results.json` to see the pooled, case-wide amount that was deliberately excluded from every individual score. If an account you *expect* to have real evidence still shows 0.0, check that its `evidence.*` arrays in the same file are non-empty — an empty result there means attribution failed (see `_resolve_user()` and its SID fallback in `correlation/engine.py`), not that the scoring is wrong.
 
 **`sudo: a password is required` when re-running report generation only**
 Output directories are root-owned from the mount/extract stage (mounting E01 images and reading NTFS/registry hives both require root). Re-run correlation/report generation with `sudo` too, or `chown` the output directory to your user once extraction is done.
@@ -332,4 +353,6 @@ Output directories are root-owned from the mount/extract stage (mounting E01 ima
 
 ## GitHub Repository
 
-This extended version is developed locally alongside [CSIS-4490---Digital-Forensic-Profiling-Tool](../CSIS-4490---Digital-Forensic-Profiling-Tool) and has not been pushed to a separate repository yet.
+<https://github.com/Ha0n9/CSIS-4490---Digital-Forensic-Profiling-Tool>
+
+This is that repository. `forensic-profiler/` is the actively developed pipeline described throughout this README; `Old structure/` holds the earlier, pre-unification scripts kept for reference only — see the commit history for the migration between the two.
