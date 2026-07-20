@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forensic Analysis Report</title>
+<style>
+  :root {
+    --navy:#1a2744; --blue:#2563eb; --teal:#0f766e; --red:#dc2626;
+    --amber:#b45309; --green:#166534; --gray:#374151; --border:#d1d5db;
+    --bg:#f6f7f9; --card:#ffffff;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { margin:0; font-family:'Segoe UI',Arial,sans-serif; background:var(--bg);
+         color:#111827; font-size:14px; line-height:1.5; }
+  header { background:var(--navy); color:#fff; padding:24px 32px; }
+  header h1 { margin:0 0 4px; font-size:22px; }
+  header .sub { color:#9db2d9; font-size:13px; }
+  main { max-width:1100px; margin:0 auto; padding:24px 32px 64px; }
+  section { background:var(--card); border:1px solid var(--border); border-radius:8px;
+             padding:20px 24px; margin-bottom:24px; }
+  h2 { margin:0 0 12px; font-size:17px; color:var(--navy);
+        border-bottom:2px solid var(--blue); padding-bottom:6px; }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .stat-card {
+    background:#f8f9fa; padding:12px; border-radius:8px;
+    text-align:center; border-left:4px solid var(--blue);
+  }
+  .stat-value { font-size:24px; font-weight:bold; color:var(--navy); }
+  .stat-label { color:#6b7280; font-size:12px; margin-top:4px; }
+  
+  .tbl { width:100%; border-collapse:collapse; font-size:13px; }
+  .tbl th { background:var(--navy); color:#fff; padding:7px 10px; text-align:left;
+             font-weight:600; font-size:12px; }
+  .tbl td { padding:7px 10px; border-bottom:1px solid #e5e7eb; }
+  .tbl tbody tr:nth-child(even) { background:#fafbfc; }
+  .tbl tbody tr:hover { background:#f0f7ff; }
+  .r { text-align:right; }
+  .muted { color:#6b7280; font-size:12px; }
+  
+  .badge { display:inline-block; padding:2px 10px; border-radius:12px;
+            font-size:11px; font-weight:700; letter-spacing:.5px; }
+  .badge-high { background:#fee2e2; color:var(--red); border:1px solid var(--red); }
+  .badge-medium { background:#fef3c7; color:var(--amber); border:1px solid var(--amber); }
+  .badge-low { background:#f0fdf4; color:var(--green); border:1px solid #86efac; }
+  .badge-none { background:#f3f4f6; color:#6b7280; border:1px solid #d1d5db; }
+  
+  .risk-score { font-weight:bold; padding:2px 10px; border-radius:4px; }
+  .risk-high { background:#fee2e2; color:var(--red); }
+  .risk-medium { background:#fef3c7; color:var(--amber); }
+  .risk-low { background:#f0fdf4; color:var(--green); }
+  .risk-none { background:#f3f4f6; color:#6b7280; }
+  
+  .anomaly, .threat { padding:14px 16px; margin:10px 0; border-radius:6px;
+                        border-left:4px solid #d1d5db; background:#fafbfc; }
+  .severity-high { border-left-color:var(--red); background:#fef2f2; }
+  .severity-medium { border-left-color:var(--amber); background:#fef9e7; }
+  .severity-low { border-left-color:var(--green); background:#f0faf4; }
+  
+  .anomaly-header, .threat-header {
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:6px;
+  }
+  .anomaly-meta { margin-top:8px; color:#6b7280; font-size:12px; }
+  .anomaly-meta small { margin-right:16px; }
+  
+  .section-desc { color:#6b7280; margin-bottom:12px; font-size:13px; }
+
+  .user-detail { border:1px solid var(--border); border-radius:6px; margin-bottom:10px;
+                   background:#fafbfc; overflow:hidden; }
+  .user-detail summary { cursor:pointer; list-style:none; padding:10px 14px;
+                           display:flex; align-items:center; gap:10px; }
+  .user-detail summary::-webkit-details-marker { display:none; }
+  .user-detail summary::before { content:"▸"; color:#6b7280; }
+  .user-detail[open] summary::before { content:"▾"; }
+  .user-detail-body { padding:4px 16px 16px; border-top:1px solid var(--border); }
+  .user-detail-body h4 { margin:14px 0 6px; font-size:13px; color:var(--navy); }
+  .breakdown { margin-bottom:6px; }
+
+  .timeline { list-style:none; margin:0; padding:0; border-left:2px solid var(--border);
+               margin-left:6px; }
+  .tl-item { position:relative; padding:6px 0 6px 18px; font-size:13px;
+              display:flex; flex-wrap:wrap; gap:8px; align-items:baseline; }
+  .tl-item::before { content:""; position:absolute; left:-6px; top:12px;
+                       width:9px; height:9px; border-radius:50%; background:var(--blue); }
+  .tl-icon { font-size:13px; }
+  .tl-time { font-family:monospace; color:#374151; font-size:12px; white-space:nowrap; }
+  .tl-cat { font-weight:600; color:var(--navy); font-size:12px; }
+  .tl-desc { color:#111827; flex:1 1 260px; }
+
+  .footer { margin-top:40px; padding-top:20px; border-top:2px solid #e5e7eb;
+             text-align:center; color:#9ca3af; font-size:12px; }
+  
+  @media print {
+    body { background:white; padding:0; }
+    section { box-shadow:none; border:1px solid #ddd; }
+    .stat-card { border-left-color:#333; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>🔍 Forensic Analysis Report</h1>
+  <div class="sub">Generated: 2026-07-20 08:05:53</div>
+</header>
+<main>
+  <section>
+    <h2>Executive Summary</h2>
+    <div class="summary-grid">
+            <div class="stat-card">
+                <div class="stat-value">5</div>
+                <div class="stat-label">Users</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-value">55638</div>
+                <div class="stat-label">Events</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-value">9048</div>
+                <div class="stat-label">Network</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-value">2293</div>
+                <div class="stat-label">Browser History</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-value">57</div>
+                <div class="stat-label">Files</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-value">0</div>
+                <div class="stat-label">Anomalies</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-value">0</div>
+                <div class="stat-label">Threats</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-value">1</div>
+                <div class="stat-label">High Risk Users</div>
+            </div>
+            </div>
+  </section>
+
+  <section>
+    <h2>Threats Detected</h2>
+    <p class="section-desc">Potential security threats identified in the analysis.</p>
+    <p><em>No threats detected</em></p>
+  </section>
+
+  <section>
+    <h2>Anomalies</h2>
+    <p class="section-desc">Unusual patterns and anomalies detected.</p>
+    <p><em>No anomalies detected</em></p>
+  </section>
+
+  <section>
+    <h2>User Activity Analysis</h2>
+    <p class="section-desc">Risk scores and activity summary for each user.</p>
+    
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th class="r">Events</th>
+                        <th class="r">Network</th>
+                        <th class="r">Files</th>
+                        <th class="r">Browser</th>
+                        <th class="r">Risk Score</th>
+                        <th>Risk Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+            
+                <tr>
+                    <td><strong>jcloudy</strong></td>
+                    <td class="r">23</td>
+                    <td class="r">0</td>
+                    <td class="r">38</td>
+                    <td class="r">2293</td>
+                    <td class="r"><span class="risk-score risk-high">57.67</span></td>
+                    <td><span class="badge badge-high">HIGH</span></td>
+                </tr>
+                
+                <tr>
+                    <td><strong>Administrator</strong></td>
+                    <td class="r">0</td>
+                    <td class="r">0</td>
+                    <td class="r">0</td>
+                    <td class="r">0</td>
+                    <td class="r"><span class="risk-score risk-low">26.47</span></td>
+                    <td><span class="badge badge-low">LOW</span></td>
+                </tr>
+                
+                <tr>
+                    <td><strong>DefaultAccount</strong></td>
+                    <td class="r">0</td>
+                    <td class="r">0</td>
+                    <td class="r">0</td>
+                    <td class="r">0</td>
+                    <td class="r"><span class="risk-score risk-low">26.47</span></td>
+                    <td><span class="badge badge-low">LOW</span></td>
+                </tr>
+                
+                <tr>
+                    <td><strong>Guest</strong></td>
+                    <td class="r">0</td>
+                    <td class="r">0</td>
+                    <td class="r">0</td>
+                    <td class="r">0</td>
+                    <td class="r"><span class="risk-score risk-low">26.47</span></td>
+                    <td><span class="badge badge-low">LOW</span></td>
+                </tr>
+                
+                <tr>
+                    <td><strong>defaultuser0</strong></td>
+                    <td class="r">2</td>
+                    <td class="r">0</td>
+                    <td class="r">0</td>
+                    <td class="r">0</td>
+                    <td class="r"><span class="risk-score risk-none">37.92</span></td>
+                    <td><span class="badge badge-none">NONE</span></td>
+                </tr>
+                
+                <tr>
+                    <td><strong>dwm-1</strong></td>
+                    <td class="r">8</td>
+                    <td class="r">0</td>
+                    <td class="r">0</td>
+                    <td class="r">0</td>
+                    <td class="r"><span class="risk-score risk-none">50.93</span></td>
+                    <td><span class="badge badge-none">NONE</span></td>
+                </tr>
+                
+                <tr>
+                    <td><strong>dwm-2</strong></td>
+                    <td class="r">2</td>
+                    <td class="r">0</td>
+                    <td class="r">0</td>
+                    <td class="r">0</td>
+                    <td class="r"><span class="risk-score risk-none">37.92</span></td>
+                    <td><span class="badge badge-none">NONE</span></td>
+                </tr>
+                
+                <tr>
+                    <td><strong>local service</strong></td>
+                    <td class="r">4</td>
+                    <td class="r">0</td>
+                    <td class="r">0</td>
+                    <td class="r">0</td>
+                    <td class="r"><span class="risk-score risk-none">43.99</span></td>
+                    <td><span class="badge badge-none">NONE</span></td>
+                </tr>
+                
+                <tr>
+                    <td><strong>localsystem</strong></td>
+                    <td class="r">16</td>
+                    <td class="r">0</td>
+                    <td class="r">0</td>
+                    <td class="r">0</td>
+                    <td class="r"><span class="risk-score risk-none">57.95</span></td>
+                    <td><span class="badge badge-none">NONE</span></td>
+                </tr>
+                
+                <tr>
+                    <td><strong>network service</strong></td>
+                    <td class="r">4</td>
+                    <td class="r">0</td>
+                    <td class="r">0</td>
+                    <td class="r">0</td>
+                    <td class="r"><span class="risk-score risk-none">43.99</span></td>
+                    <td><span class="badge badge-none">NONE</span></td>
+                </tr>
+                
+                <tr>
+                    <td><strong>system</strong></td>
+                    <td class="r">746</td>
+                    <td class="r">0</td>
+                    <td class="r">0</td>
+                    <td class="r">0</td>
+                    <td class="r"><span class="risk-score risk-none">90.47</span></td>
+                    <td><span class="badge badge-none">NONE</span></td>
+                </tr>
+                
+                <tr>
+                    <td><strong>WDAGUtilityAccount</strong></td>
+                    <td class="r">0</td>
+                    <td class="r">0</td>
+                    <td class="r">0</td>
+                    <td class="r">0</td>
+                    <td class="r"><span class="risk-score risk-none">26.47</span></td>
+                    <td><span class="badge badge-none">NONE</span></td>
+                </tr>
+                </tbody></table>
+  </section>
+
+  <section>
+    <h2>Investigation Timelines</h2>
+    <p class="section-desc">
+      Score breakdown and chronological activity timeline per user — this is the
+      evidence trail behind each risk label. HIGH/MEDIUM users are expanded by default.
+    </p>
+    
+        <details class="user-detail" open>
+            <summary>
+                <strong>jcloudy</strong>
+                <span class="badge badge-high">HIGH</span>
+                <span class="risk-score risk-high">57.67</span>
+                <span class="muted">32 timestamped event(s)</span>
+            </summary>
+            <div class="user-detail-body">
+                <h4>Score Breakdown</h4>
+                
+        <table class="tbl breakdown">
+            <thead><tr><th>Category</th><th class="r">Count</th><th class="r">Score Contribution</th></tr></thead>
+            <tbody><tr><td>Deleted Files</td><td class="r">5</td><td class="r">20</td></tr><tr><td>Event Anomalies</td><td class="r">23</td><td class="r">276.0</td></tr><tr><td>Application Activity (attributed)</td><td class="r">0</td><td class="r">15.0</td></tr><tr><td>Network Activity</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Sensitive Document Access</td><td class="r">11</td><td class="r">22</td></tr><tr><td>Flagged Browser History</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Account Flags</td><td class="r">0</td><td class="r">0</td></tr></tbody>
+        </table>
+        
+                <h4>Activity Timeline</h4>
+                <ul class="timeline">
+            <li class="tl-item">
+                <span class="tl-icon">📄</span>
+                <span class="tl-time">2018-03-27 09:50:15</span>
+                <span class="tl-cat">Document Access</span>
+                <span class="tl-desc">Accessed sensitive file: C:\Users\jcloudy\OneDrive\Getting started with OneDrive.pdf</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚠️</span>
+                <span class="tl-time">2018-03-27 09:57:28</span>
+                <span class="tl-cat">Event Log</span>
+                <span class="tl-desc">Privilege Escalation (Event ID 4672)</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚠️</span>
+                <span class="tl-time">2018-03-27 21:45:44</span>
+                <span class="tl-cat">Event Log</span>
+                <span class="tl-desc">Privilege Escalation (Event ID 4672)</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚠️</span>
+                <span class="tl-time">2018-03-27 23:29:51</span>
+                <span class="tl-cat">Event Log</span>
+                <span class="tl-desc">Privilege Escalation (Event ID 4672)</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">📄</span>
+                <span class="tl-time">2018-03-27 23:59:20</span>
+                <span class="tl-cat">Document Access</span>
+                <span class="tl-desc">Accessed sensitive file: C:\Users\jcloudy\Downloads\rootkey.csv</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚠️</span>
+                <span class="tl-time">2018-03-30 03:27:57</span>
+                <span class="tl-cat">Event Log</span>
+                <span class="tl-desc">Privilege Escalation (Event ID 4672)</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚠️</span>
+                <span class="tl-time">2018-03-30 04:23:47</span>
+                <span class="tl-cat">Event Log</span>
+                <span class="tl-desc">Privilege Escalation (Event ID 4672)</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚠️</span>
+                <span class="tl-time">2018-03-30 21:09:22</span>
+                <span class="tl-cat">Event Log</span>
+                <span class="tl-desc">Privilege Escalation (Event ID 4672)</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚠️</span>
+                <span class="tl-time">2018-03-31 04:11:32</span>
+                <span class="tl-cat">Event Log</span>
+                <span class="tl-desc">Privilege Escalation (Event ID 4672)</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚠️</span>
+                <span class="tl-time">2018-03-31 17:41:07</span>
+                <span class="tl-cat">Event Log</span>
+                <span class="tl-desc">Privilege Escalation (Event ID 4672)</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚠️</span>
+                <span class="tl-time">2018-04-01 22:43:39</span>
+                <span class="tl-cat">Event Log</span>
+                <span class="tl-desc">Privilege Escalation (Event ID 4672)</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚠️</span>
+                <span class="tl-time">2018-04-02 00:53:03</span>
+                <span class="tl-cat">Event Log</span>
+                <span class="tl-desc">Privilege Escalation (Event ID 4672)</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">📄</span>
+                <span class="tl-time">2018-04-02 01:35:27</span>
+                <span class="tl-cat">Document Access</span>
+                <span class="tl-desc">Accessed sensitive file: C:\Users\jcloudy\Desktop\The Cloudy Manifesto.docx</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚠️</span>
+                <span class="tl-time">2018-04-03 05:58:13</span>
+                <span class="tl-cat">Event Log</span>
+                <span class="tl-desc">Privilege Escalation (Event ID 4672)</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚠️</span>
+                <span class="tl-time">2018-04-04 04:30:48</span>
+                <span class="tl-cat">Event Log</span>
+                <span class="tl-desc">Privilege Escalation (Event ID 4672)</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">📄</span>
+                <span class="tl-time">2018-04-04 04:59:32</span>
+                <span class="tl-cat">Document Access</span>
+                <span class="tl-desc">Accessed sensitive file: C:\Users\jcloudy\Desktop\AIRPORT INFORMATION.docx</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">📄</span>
+                <span class="tl-time">2018-04-04 05:11:27</span>
+                <span class="tl-cat">Document Access</span>
+                <span class="tl-desc">Accessed sensitive file: C:\Users\jcloudy\Desktop\Operation 2nd Hand Smoke.pptx</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">📄</span>
+                <span class="tl-time">2018-04-04 05:30:41</span>
+                <span class="tl-cat">Document Access</span>
+                <span class="tl-desc">Accessed sensitive file: C:\Users\jcloudy\Desktop\Planning.docx</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚠️</span>
+                <span class="tl-time">2018-04-05 01:48:36</span>
+                <span class="tl-cat">Event Log</span>
+                <span class="tl-desc">Privilege Escalation (Event ID 4672)</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">🗑️</span>
+                <span class="tl-time">2018-04-05 02:20:17</span>
+                <span class="tl-cat">File Deleted</span>
+                <span class="tl-desc">Deleted file: C:\Users\jcloudy\Desktop\Cubs&#x27; Anthony Rizzo Praises Parkland Kids, Says &#x27;It&#x27;s too Easy to Get a Gun&#x27;_files </span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">🗑️</span>
+                <span class="tl-time">2018-04-05 02:20:17</span>
+                <span class="tl-cat">File Deleted</span>
+                <span class="tl-desc">Deleted file: C:\Users\jcloudy\Desktop\Larry King_ Time to Repeal the &#x27;Poorly Written&#x27; Second Amendment_files </span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">🗑️</span>
+                <span class="tl-time">2018-04-05 02:20:17</span>
+                <span class="tl-cat">File Deleted</span>
+                <span class="tl-desc">Deleted file: C:\Users\jcloudy\Desktop\Cubs&#x27; Anthony Rizzo Praises Parkland Kids, Says &#x27;It&#x27;s too Easy to Get a Gun&#x27;.html </span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">🗑️</span>
+                <span class="tl-time">2018-04-05 02:20:17</span>
+                <span class="tl-cat">File Deleted</span>
+                <span class="tl-desc">Deleted file: C:\Users\jcloudy\Desktop\Larry King_ Time to Repeal the &#x27;Poorly Written&#x27; Second Amendment.html </span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">📄</span>
+                <span class="tl-time">2018-04-05 02:39:30</span>
+                <span class="tl-cat">Document Access</span>
+                <span class="tl-desc">Accessed sensitive file: C:\Users\jcloudy\Desktop\Cloudy thoughts (4apr).docx</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚠️</span>
+                <span class="tl-time">2018-04-05 07:01:30</span>
+                <span class="tl-cat">Event Log</span>
+                <span class="tl-desc">Privilege Escalation (Event ID 4672)</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚠️</span>
+                <span class="tl-time">2018-04-05 07:54:33</span>
+                <span class="tl-cat">Event Log</span>
+                <span class="tl-desc">Privilege Escalation (Event ID 4672)</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚠️</span>
+                <span class="tl-time">2018-04-06 03:30:58</span>
+                <span class="tl-cat">Event Log</span>
+                <span class="tl-desc">Privilege Escalation (Event ID 4672)</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚠️</span>
+                <span class="tl-time">2018-04-06 06:14:43</span>
+                <span class="tl-cat">Event Log</span>
+                <span class="tl-desc">Privilege Escalation (Event ID 4672)</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚠️</span>
+                <span class="tl-time">2018-04-06 06:56:30</span>
+                <span class="tl-cat">Event Log</span>
+                <span class="tl-desc">Privilege Escalation (Event ID 4672)</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚠️</span>
+                <span class="tl-time">2018-04-06 08:24:46</span>
+                <span class="tl-cat">Event Log</span>
+                <span class="tl-desc">Privilege Escalation (Event ID 4672)</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">🗑️</span>
+                <span class="tl-time">2018-04-06 08:29:21</span>
+                <span class="tl-cat">File Deleted</span>
+                <span class="tl-desc">Deleted file: C:\Users\jcloudy\Downloads\DemGun.jpg </span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚠️</span>
+                <span class="tl-time">2018-04-06 12:26:27</span>
+                <span class="tl-cat">Event Log</span>
+                <span class="tl-desc">Privilege Escalation (Event ID 4672)</span>
+            </li>
+            </ul>
+            </div>
+        </details>
+        
+        <details class="user-detail">
+            <summary>
+                <strong>Administrator</strong>
+                <span class="badge badge-low">LOW</span>
+                <span class="risk-score risk-low">26.47</span>
+                <span class="muted">0 timestamped event(s)</span>
+            </summary>
+            <div class="user-detail-body">
+                <h4>Score Breakdown</h4>
+                
+        <table class="tbl breakdown">
+            <thead><tr><th>Category</th><th class="r">Count</th><th class="r">Score Contribution</th></tr></thead>
+            <tbody><tr><td>Deleted Files</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Event Anomalies</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Application Activity (attributed)</td><td class="r">0</td><td class="r">15.0</td></tr><tr><td>Network Activity</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Sensitive Document Access</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Flagged Browser History</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Account Flags</td><td class="r">0</td><td class="r">0</td></tr></tbody>
+        </table>
+        
+                <h4>Activity Timeline</h4>
+                <p class="muted">No timestamped evidence available for this user.</p>
+            </div>
+        </details>
+        
+        <details class="user-detail">
+            <summary>
+                <strong>DefaultAccount</strong>
+                <span class="badge badge-low">LOW</span>
+                <span class="risk-score risk-low">26.47</span>
+                <span class="muted">0 timestamped event(s)</span>
+            </summary>
+            <div class="user-detail-body">
+                <h4>Score Breakdown</h4>
+                
+        <table class="tbl breakdown">
+            <thead><tr><th>Category</th><th class="r">Count</th><th class="r">Score Contribution</th></tr></thead>
+            <tbody><tr><td>Deleted Files</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Event Anomalies</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Application Activity (attributed)</td><td class="r">0</td><td class="r">15.0</td></tr><tr><td>Network Activity</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Sensitive Document Access</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Flagged Browser History</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Account Flags</td><td class="r">0</td><td class="r">0</td></tr></tbody>
+        </table>
+        
+                <h4>Activity Timeline</h4>
+                <p class="muted">No timestamped evidence available for this user.</p>
+            </div>
+        </details>
+        
+        <details class="user-detail">
+            <summary>
+                <strong>Guest</strong>
+                <span class="badge badge-low">LOW</span>
+                <span class="risk-score risk-low">26.47</span>
+                <span class="muted">0 timestamped event(s)</span>
+            </summary>
+            <div class="user-detail-body">
+                <h4>Score Breakdown</h4>
+                
+        <table class="tbl breakdown">
+            <thead><tr><th>Category</th><th class="r">Count</th><th class="r">Score Contribution</th></tr></thead>
+            <tbody><tr><td>Deleted Files</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Event Anomalies</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Application Activity (attributed)</td><td class="r">0</td><td class="r">15.0</td></tr><tr><td>Network Activity</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Sensitive Document Access</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Flagged Browser History</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Account Flags</td><td class="r">0</td><td class="r">0</td></tr></tbody>
+        </table>
+        
+                <h4>Activity Timeline</h4>
+                <p class="muted">No timestamped evidence available for this user.</p>
+            </div>
+        </details>
+        
+  </section>
+
+  <div class="footer">
+    Forensic Analysis Report | Generated with Forensic Profiler v1.0 | 2026-07-20 08:05:53
+  </div>
+</main>
+</body>
+</html>

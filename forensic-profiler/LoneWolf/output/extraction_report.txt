@@ -1,0 +1,30 @@
+================================================================================
+  FORENSIC ARTIFACT EXTRACTION REPORT
+================================================================================
+  Date           : 2026-07-20 08:05:24
+  E01 Image      : Sample Files/LoneWolf/LoneWolf.E01
+  Image Size     : 1.5G
+  Windows Ver    : modern
+  Mount Method   : ntfs-3g-loop
+  Output Dir     : LoneWolf/output/raw
+  Total Extracted: 628 files
+  Failed/Missing : 0
+================================================================================
+
+  ARTIFACT SUMMARY:
+
+  Registry System Hives                    12 files
+  Registry User Hives                      2 files
+  Prefetch (.pf)                           161 files
+  Event Logs (.evtx/.evt)                  146 files
+  Network Artifacts                        7 files
+  IE Browser History                       1 files
+  Firefox Browser History                  0 files
+  Chrome/Edge/Brave History                4 files
+  LNK Files                                38 files
+  Jump Lists                               19 files
+  Recycle Bin                              253 files
+
+  NEXT STEPS:
+  bash extract_artifacts.sh -m /mnt/img_24991 -o LoneWolf/output
+================================================================================

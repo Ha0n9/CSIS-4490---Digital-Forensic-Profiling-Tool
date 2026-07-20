@@ -1,4 +1,4 @@
-# Windows Forensic Profiling Tool
+# Forensic Profiler
 
 **CYBERSECURITY CAPSTONE — CAP D2 | Project 6: Digital Forensics — Windows Suspect Profiling**
 **Group 05 | Douglas College — CSIS 4490**
@@ -10,7 +10,7 @@
 
 ## Overview
 
-This project implements an automated forensic pipeline that extracts, parses, and structures Windows forensic artifacts from disk images (.E01 format) to support per-user activity profiling and suspicion scoring. The tool runs entirely on **Kali Linux** and requires **no EZ Tools dependency** for its core parsers — all Python parsers work standalone, with EZ Tools used as an optional supplement if available.
+This is the extended, unified version of the [CSIS-4490 Digital Forensic Profiling Tool](../CSIS-4490---Digital-Forensic-Profiling-Tool): the same acquisition and parsing pipeline, plus two new stages — **correlation/scoring** and **HTML reporting** — that turn the raw parsed JSON into a single per-user risk assessment. The tool runs entirely on **Kali Linux** and requires **no EZ Tools dependency** for its core parsers — all Python parsers work standalone, with EZ Tools used as an optional supplement if available.
 
 **Research Question:** To what extent does correlating multiple Windows forensic artifact categories — including indicators of deleted or partially concealed activity — improve the accuracy of per-user activity profiling, and how does this impact the reliability of user suspicion assessment in a multi-user system?
 
@@ -32,16 +32,24 @@ This project implements an automated forensic pipeline that extracts, parses, an
 
 ```
 .
+├── full_forensic_profiler.py      # Unified entry point — runs all 4 stages
 ├── setup_forensic_tools.sh        # One-time environment setup (Kali Linux)
 ├── mount_and_extract_hives.sh     # Stage 1 — Mount E01 + extract raw artifacts
 ├── extract_artifacts.sh           # Stage 2 — Parse raw artifacts → JSON
-└── parsers/
-    ├── parse_user_accounts.py          # SAM + NTUSER.DAT → user_accounts.json
-    ├── parse_application_activity.py   # Prefetch (.pf) → application_activity.json
-    ├── parse_event_logs.py             # EVT/EVTX → event_logs.json + network_activity.json
-    ├── parse_browser_history.py        # Chrome/Firefox/IE SQLite → browser_history.json
-    ├── parse_document_folder_access.py # LNK files + Jump Lists → document_folder_access.json
-    └── parse_deleted_files.py          # Recycle Bin (INFO2 / $I files) → deleted_files.json
+├── parsers/
+│   ├── parse_user_accounts.py          # SAM + NTUSER.DAT → user_accounts.json
+│   ├── parse_application_activity.py   # Prefetch (.pf) → application_activity.json
+│   ├── parse_event_logs.py             # EVT/EVTX → event_logs.json + network_activity.json
+│   ├── parse_browser_history.py        # Chrome/Firefox/IE SQLite → browser_history.json
+│   ├── parse_document_folder_access.py # LNK files + Jump Lists → document_folder_access.json
+│   └── parse_deleted_files.py          # Recycle Bin (INFO2 / $I files) → deleted_files.json
+├── correlation/
+│   ├── engine.py                  # Stage 3 — merges JSON artifacts per user, scores risk
+│   ├── rules.py                   # Detection rule definitions (not yet wired into scoring)
+│   └── weights.py                 # Standalone scoring scaffold (not yet wired into scoring)
+└── reporting/
+    ├── html_report.py             # Stage 4 — generates forensic_report.html
+    └── report_template.html
 ```
 
 ---
@@ -58,25 +66,44 @@ source ~/.zshrc
 
 This installs: .NET SDK 9.x, PowerShell 7.5.4, EZ Tools suite, ewf-tools, sleuthkit, RegRipper, python3-evtx, python3-pylnk3.
 
-### Step 2 — Mount E01 image and extract raw artifacts
+### Step 2 — Run the full pipeline
 
 ```bash
+sudo python3 full_forensic_profiler.py -e /path/to/image.E01 -o /cases/output
+```
+
+This runs all four stages back to back and produces `/cases/output/reports/forensic_report.html`. `sudo` is required end-to-end — mounting the E01 (`ewfmount`/`losetup`) and reading the NTFS filesystem/registry hives (`ntfs-3g`) both need root, so files under `output/` end up root-owned.
+
+Optional flags:
+- `-k, --keep-mounted` — keep the image mounted after extraction (useful for manual follow-up)
+- `-v, --skip-verify` — skip the `ewfverify` integrity check (faster, but skips corruption detection — see [Troubleshooting](#troubleshooting))
+- `--skip-extract` — reuse an existing `raw/` instead of remounting the image
+- `--skip-parse` — reuse an existing `json/` instead of re-parsing
+- `--skip-correlate` / `--skip-report` — stop before scoring / before generating the HTML report
+
+Re-running just the scoring and report after changing correlation logic, without remounting or re-parsing:
+
+```bash
+sudo python3 full_forensic_profiler.py -e image.E01 -o /cases/output --skip-extract --skip-parse
+```
+
+### Running the acquisition/parsing stages individually
+
+The original two-stage flow still works standalone, if you only need raw artifacts or JSON without scoring:
+
+```bash
+# Stage 1 — mount E01 and extract raw artifacts
 bash mount_and_extract_hives.sh -e /path/to/image.E01 -o /cases/output
 ```
 
-Optional flags:
-- `-k` — keep the image mounted after extraction
-- `-v` — skip ewfverify integrity check (faster)
-
-Extracted files land in `/cases/output/raw/`.
-
-### Step 3 — Parse raw artifacts into JSON
+Optional flags: `-k` (keep mounted), `-v` (skip ewfverify). Extracted files land in `/cases/output/raw/`.
 
 ```bash
-bash extract_artifacts.sh -m /mnt/img_<PID> -o /cases/output
+# Stage 2 — parse raw artifacts into JSON
+bash extract_artifacts.sh -o /cases/output
 ```
 
-Parsed JSON files land in `/cases/output/json/`.
+Parsed JSON files land in `/cases/output/json/`. (`-m /mnt/img_<PID>` is only needed as a fallback if `extraction_report.txt` is missing — normally the parser reads the Windows version straight from that report.)
 
 ---
 
@@ -95,11 +122,15 @@ Parsed JSON files land in `/cases/output/json/`.
 
 ## File-by-File Explanation
 
+### `full_forensic_profiler.py`
+
+Unified entry point. Orchestrates the other four stages in order — extraction, parsing, correlation, reporting — each as a step that can be individually skipped (`--skip-extract`, `--skip-parse`, `--skip-correlate`, `--skip-report`) so any stage can be re-run in isolation once its inputs already exist on disk. Reads `extraction_report.txt` between stages to recover the detected Windows version and mount point without re-touching the image.
+
 ### `setup_forensic_tools.sh`
 
 One-time setup script for a fresh Kali Linux VM. Runs 7 steps in sequence:
 
-1. **APT packages** — installs `ewf-tools`, `sleuthkit`, `regripper`, `python3-evtx`, `python3-pylnk3`
+1. **APT packages** — installs `ewf-tools`, `sleuthkit`, `regripper`, `python3-evtx`, `python3-pylnk3`, `ntfs-3g`
 2. **.NET SDK 9.x** — downloads and installs to `~/.dotnet` via Microsoft's official installer
 3. **PowerShell 7.5.4** — installs via `.deb` package
 4. **EZ Tools** — downloads the full Eric Zimmerman Tools suite (`PECmd`, `LECmd`, `EvtxECmd`, `RECmd`, etc.) via `Get-ZimmermanTools.ps1`
@@ -121,7 +152,10 @@ E01 file
   └─ [Step 2] Verify image integrity via ewfverify (MD5/SHA1)
   └─ [Step 3] Mount E01 with ewfmount → /mnt/ewf_<PID>/ewf1
   └─ [Step 4] Detect partition layout with mmls → find Windows NTFS partition
-  └─ [Step 5] Mount Windows partition (tries ntfs-3g → kernel ntfs → auto → loopback)
+  └─ [Step 5] Mount Windows partition — tries, in order: auto-detected offset,
+              common MBR/GPT offsets, and finally offset 0 (logical/single-volume
+              acquisitions with no partition table). Each offset tries ntfs-3g +
+              loop device first, then kernel mount, then kernel offset mount.
   └─ [Step 6] Detect Windows version:
               - Users/ present → Windows Vista/7/8/10/11 ("modern")
               - Documents and Settings/ with NTUSER.DAT → Windows XP
@@ -156,7 +190,7 @@ raw/ directory
   └─ [Step 6] parse_deleted_files.py     → json/deleted_files.json
 ```
 
-If EZ Tools is installed, each step also runs the corresponding EZ tool (PECmd, EvtxECmd, etc.) as a supplemental output. The Python parsers always run regardless.
+If EZ Tools is installed, each step also runs the corresponding EZ tool (LECmd, EvtxECmd, RBCmd, etc.) as a supplemental output. The Python parsers always run regardless.
 
 ---
 
@@ -172,9 +206,7 @@ Parses the Windows `SAM` registry hive to extract local user accounts, then each
 
 ### `parsers/parse_application_activity.py`
 
-*(Note: file is named `parse_application_activity.py` but contains the event log parser code — the application activity parser shares the same base.)*
-
-Parses Windows Prefetch `.pf` files. Prefetch records every executable that ran on the system, along with a timestamp and run count. This tells you **what programs were executed and when**, even if the program has since been deleted.
+Parses Windows Prefetch `.pf` files across every on-disk format Windows has used — v17 (XP), v23 (Vista/7), v26 (Win8), v30/v31 (Win10, MAM-compressed). Prefetch records every executable that ran on the system, along with a timestamp and run count — this tells you **what programs were executed and when**, even if the program has since been deleted. It also extracts Section C (the file-path string table) from each `.pf` file to recover the full path the executable ran from, which is what lets the correlation stage attribute a given run to a specific user account.
 
 ---
 
@@ -221,12 +253,49 @@ Parses the Windows Recycle Bin in both formats:
 
 ---
 
+### `correlation/engine.py`
+
+Stage 3. Loads every JSON artifact produced by Stage 2 and builds one profile per OS account, weighted as:
+
+| Category | Weight |
+|---|---|
+| Deleted files | 4 |
+| Event log anomalies (failed logons, cleared logs, privilege escalation, …) | 4 |
+| Application activity (recon/remote-access/execution/deletion/credential tools) | 3 |
+| Network activity (incl. flagged domains surfaced from browser history) | 3 |
+| Sensitive document access | 2 |
+| User account flags (e.g. excessive failed logins) | 1 |
+| Flagged browser history (anonymization/exfil/paste/hacking sites) | 0.5 |
+
+The final score per account is a 70/30 blend of a log-scaled raw score and a normalized score, plus a small bonus for suspicious timing patterns (e.g. a file being accessed and then deleted in quick succession).
+
+**Real-evidence gate:** Prefetch activity that can't be attributed to a specific user (no resolvable user path in the `.pf` file's Section C strings) is split evenly across every account as a "shared pool" contribution — otherwise every account, including `Guest`/`HelpAssistant`/service accounts, would score identically. Risk labels (`HIGH`/`MEDIUM`/`LOW`) are only assigned by percentile among accounts that have *real*, attributable evidence (a deletion, an event anomaly, a flagged URL, an attributed app run, etc.); an account whose only "activity" is a slice of the shared pool is always `LOW`.
+
+Domain/URL flagging (anonymization sites, exfil sites, paste sites, hacking tools) matches against the **hostname only**, not the full URL — matching the full URL, including query strings and tracking tokens, produces false positives from coincidental substrings unrelated to the actual domain.
+
+`rules.py` and `weights.py` in this package define an alternate, simpler rule/weight scheme but are not currently called by `engine.py` — they're scaffolding for a future rule-based detection layer, not part of the active scoring path.
+
+---
+
+### `reporting/html_report.py`
+
+Stage 4. Renders `forensic_report.html` — fully self-contained, no external assets. Sections:
+
+- **Executive Summary** — artifact counts across the whole case.
+- **Threats / Anomalies** — reserved for the rule-based detections in `correlation/rules.py` once wired in; currently always empty.
+- **User Activity Analysis** — one row per account: event/network/document/browser counts, risk score, risk label.
+- **Investigation Timelines** — one expandable block per ranked account (`HIGH`/`MEDIUM` expanded by default) containing a **score breakdown** table (count + score contribution per category) and a **chronological activity timeline** that merges every timestamped piece of evidence — deletions, event anomalies, network connections, flagged browser visits, suspicious application runs, sensitive document access — in the order it happened. This is the evidence trail behind each risk label, not just the aggregate score.
+
+---
+
 ## Forensic Datasets Used
 
 | Image | OS | Source | Format | MD5 |
 |---|---|---|---|---|
 | M57-Jean (2009) | Windows XP | [Digital Corpora](https://digitalcorpora.org/corpora/scenarios/m57-jean/) | .E01 | `78a52b5bac78f4e711607707ac0e3f93` |
-| Custom VM image | Windows 10/11 | Generated via FTK Imager (controlled lab VM) | .E01 | — |
+| Lone Wolf Scenario | Windows 10/11 | FTK Imager acquisition (multi-segment E01) | .E01 | — |
+
+> Always run `ewfverify` (or check `ewfinfo`'s `Is corrupted:` field) on a new image before relying on it — see [Troubleshooting](#troubleshooting).
 
 ---
 
@@ -234,7 +303,7 @@ Parses the Windows Recycle Bin in both formats:
 
 - **OS:** Kali Linux 2026.x (64-bit), kernel 6.x
 - **VM name:** `CSIS4490_g05`
-- **Python:** 3.x with `python-registry`, `python-evtx`, `pylnk3`
+- **Python:** 3.x with `python-registry`, `python-evtx`/`evtx`, `pylnk3`, `python-dateutil`
 - **Optional:** .NET 9 SDK + EZ Tools for supplemental output
 
 Install everything with:
@@ -244,6 +313,22 @@ bash setup_forensic_tools.sh
 
 ---
 
+## Troubleshooting
+
+**Mount fails / "All mount attempts failed"**
+`mount_and_extract_hives.sh` auto-detects the partition offset via `mmls`, falls back to a list of common MBR/GPT offsets, and finally tries offset `0` (for logical/single-volume acquisitions with no partition table at all) before giving up. If it still fails, read the *full* error text it prints for each attempt — a repeated `NTFS signature is missing` at every offset usually means the image itself is incomplete or corrupted, not a mounting bug. Confirm with:
+```bash
+ewfinfo /path/to/image.E01   # check "Is corrupted:" and total segment size vs. reported media size
+```
+
+**Report shows the same score for every user / everyone is HIGH**
+Check `output/reports/correlation_results.json` — if every non-primary account shares an identical score, unattributed application activity is being pooled without the real-evidence gate excluding it from risk labeling. Confirm you're running the current `correlation/engine.py` (the gate lives in `assign_risk_labels()` / `_has_real_evidence()`).
+
+**`sudo: a password is required` when re-running report generation only**
+Output directories are root-owned from the mount/extract stage (mounting E01 images and reading NTFS/registry hives both require root). Re-run correlation/report generation with `sudo` too, or `chown` the output directory to your user once extraction is done.
+
+---
+
 ## GitHub Repository
 
-[https://github.com/Ha0n9/CSIS-4490---Digital-Forensic-Profiling-Tool](https://github.com/Ha0n9/CSIS-4490---Digital-Forensic-Profiling-Tool.git)
+This extended version is developed locally alongside [CSIS-4490---Digital-Forensic-Profiling-Tool](../CSIS-4490---Digital-Forensic-Profiling-Tool) and has not been pushed to a separate repository yet.
