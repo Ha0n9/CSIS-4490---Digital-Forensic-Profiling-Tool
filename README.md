@@ -71,10 +71,11 @@ Forensic Profiler is a four-stage pipeline that turns a raw Windows `.E01` disk 
 ```bash
 cd forensic-profiler
 chmod +x setup_forensic_tools.sh
-./setup_forensic_tools.sh
+sudo ./setup_forensic_tools.sh
 source ~/.zshrc
 pip install -r requirements.txt
 ```
+PLEASE !!! - use sudo when run ./setup_forensic_tools.sh to ensure all tools are well install
 
 `setup_forensic_tools.sh` installs: .NET SDK 9.x, PowerShell 7.5.4, EZ Tools suite, ewf-tools, sleuthkit, RegRipper, python3-evtx, python3-pylnk3. `requirements.txt` covers the remaining pure-Python dependencies (`evtx`, `python-registry`, `pylnk3`, `jinja2`, `python-dateutil`, …) used by the parsers and reporter.
 
