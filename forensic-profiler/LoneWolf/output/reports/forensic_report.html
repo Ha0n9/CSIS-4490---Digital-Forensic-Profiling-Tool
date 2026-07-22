@@ -92,6 +92,17 @@
   .tl-time { font-family:monospace; color:#374151; font-size:12px; white-space:nowrap; }
   .tl-cat { font-weight:600; color:var(--navy); font-size:12px; }
   .tl-desc { color:#111827; flex:1 1 260px; }
+  .timeline-shared { border-left-style:dashed; opacity:.72; }
+
+  .narrative-chain { display:flex; flex-direction:column; gap:10px; margin:6px 0 4px; }
+  .narrative-phase { border:1px solid var(--border); border-left:4px solid var(--blue);
+                       border-radius:6px; background:#fff; padding:10px 14px; }
+  .narrative-phase-header { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+  .narrative-phase-num { color:#6b7280; font-weight:700; }
+  .narrative-row { font-size:13px; margin:3px 0; color:#111827; }
+  .narrative-label { font-weight:600; color:var(--navy); margin-right:4px; }
+  .analyst-notes { margin:4px 0 4px 18px; padding:0; font-size:13px; color:#111827; }
+  .analyst-notes li { margin:4px 0; }
 
   .footer { margin-top:40px; padding-top:20px; border-top:2px solid #e5e7eb;
              text-align:center; color:#9ca3af; font-size:12px; }
@@ -106,7 +117,7 @@
 <body>
 <header>
   <h1>🔍 Forensic Analysis Report</h1>
-  <div class="sub">Generated: 2026-07-20 12:57:57</div>
+  <div class="sub">Generated: 2026-07-22 01:11:45</div>
 </header>
 <main>
   <section>
@@ -138,7 +149,7 @@
             </div>
             
             <div class="stat-card">
-                <div class="stat-value">0</div>
+                <div class="stat-value">1</div>
                 <div class="stat-label">Anomalies</div>
             </div>
             
@@ -163,7 +174,19 @@
   <section>
     <h2>Anomalies</h2>
     <p class="section-desc">Unusual patterns and anomalies detected.</p>
-    <p><em>No anomalies detected</em></p>
+    
+                <div class="anomaly severity-medium">
+                    <div class="anomaly-header">
+                        <strong>Activity Burst Followed by Logging Gap</strong>
+                        <span class="badge badge-medium">MEDIUM</span>
+                    </div>
+                    <p>jcloudy: 11.8h silence after burst of 5 events (last: 2018-03-27T09:57:28.844371+00:00)</p>
+                    <div class="anomaly-meta">
+                        <small>Count: 1</small>
+                        <small>Time: 2018-03-27T09:57:28.844371+00:00</small>
+                    </div>
+                </div>
+                
   </section>
 
   <section>
@@ -328,7 +351,7 @@
             <tbody><tr><td>Deleted Files</td><td class="r">5</td><td class="r">20</td></tr><tr><td>Event Anomalies</td><td class="r">23</td><td class="r">60.0</td></tr><tr><td>Application Activity (attributed)</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Network Activity</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Sensitive Document Access</td><td class="r">11</td><td class="r">22</td></tr><tr><td>Flagged Browser History</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Account Flags</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Timeline Pattern Bonus</td><td class="r">—</td><td class="r">+6</td></tr></tbody>
         </table>
         
-                <h4>Activity Timeline</h4>
+                <h4>Activity Timeline (32 attributed event(s))</h4>
                 <ul class="timeline">
             <li class="tl-item">
                 <span class="tl-icon">📄</span>
@@ -554,6 +577,7 @@
                 <span class="tl-desc">Privilege Escalation (Event ID 4672)</span>
             </li>
             </ul>
+                
             </div>
         </details>
         
@@ -572,8 +596,9 @@
             <tbody><tr><td>Deleted Files</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Event Anomalies</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Application Activity (attributed)</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Network Activity</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Sensitive Document Access</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Flagged Browser History</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Account Flags</td><td class="r">0</td><td class="r">0</td></tr></tbody>
         </table>
         
-                <h4>Activity Timeline</h4>
+                <h4>Activity Timeline (0 attributed event(s))</h4>
                 <p class="muted">No timestamped evidence available for this user.</p>
+                
             </div>
         </details>
         
@@ -592,8 +617,9 @@
             <tbody><tr><td>Deleted Files</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Event Anomalies</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Application Activity (attributed)</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Network Activity</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Sensitive Document Access</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Flagged Browser History</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Account Flags</td><td class="r">0</td><td class="r">0</td></tr></tbody>
         </table>
         
-                <h4>Activity Timeline</h4>
+                <h4>Activity Timeline (0 attributed event(s))</h4>
                 <p class="muted">No timestamped evidence available for this user.</p>
+                
             </div>
         </details>
         
@@ -612,15 +638,130 @@
             <tbody><tr><td>Deleted Files</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Event Anomalies</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Application Activity (attributed)</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Network Activity</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Sensitive Document Access</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Flagged Browser History</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Account Flags</td><td class="r">0</td><td class="r">0</td></tr></tbody>
         </table>
         
-                <h4>Activity Timeline</h4>
+                <h4>Activity Timeline (0 attributed event(s))</h4>
                 <p class="muted">No timestamped evidence available for this user.</p>
+                
+            </div>
+        </details>
+        
+  </section>
+
+  <section>
+    <h2>Investigation Narrative</h2>
+    <p class="section-desc">
+      Deterministic, evidence-only summary of each user's correlated activity —
+      generated offline from the scoring/timeline output above (no external
+      services, no assumptions about intent). HIGH/MEDIUM users are expanded
+      by default.
+    </p>
+    
+        <details class="user-detail narrative-detail" open>
+            <summary>
+                <strong>jcloudy</strong>
+                <span class="badge badge-high">HIGH</span>
+                <span class="badge badge-high">HIGH CONFIDENCE</span>
+            </summary>
+            <div class="user-detail-body">
+                <h4>Investigation Summary</h4>
+                <p>The account shows a pattern of privileged activity, sensitive document access, and file deletion/cleanup activity.</p>
+                <h4>Key Evidence Chain</h4>
+                <div class="narrative-chain">
+            <div class="narrative-phase">
+                <div class="narrative-phase-header">
+                    <span class="narrative-phase-num">[1]</span>
+                    <strong>Privileged Activity</strong>
+                    <span class="badge badge-medium">MEDIUM CONFIDENCE</span>
+                </div>
+                <div class="narrative-phase-body">
+                    <div class="narrative-row"><span class="narrative-label">Time:</span> 2018-03-27 to 2018-04-06</div>
+                    <div class="narrative-row"><span class="narrative-label">Evidence:</span> 20 Event ID 4672 privilege escalation events were observed.</div>
+                    <div class="narrative-row"><span class="narrative-label">Assessment:</span> Repeated privileged logon events indicate elevated account usage. Activity occurred across 17 distinct time clusters, consistent with recurring privileged sessions rather than a single isolated event.</div>
+                </div>
+            </div>
+            
+            <div class="narrative-phase">
+                <div class="narrative-phase-header">
+                    <span class="narrative-phase-num">[2]</span>
+                    <strong>Sensitive Data Interaction</strong>
+                    <span class="badge badge-medium">MEDIUM CONFIDENCE</span>
+                </div>
+                <div class="narrative-phase-body">
+                    <div class="narrative-row"><span class="narrative-label">Time:</span> 2018-03-27 to 2018-04-05</div>
+                    <div class="narrative-row"><span class="narrative-label">Evidence:</span> 7 sensitive documents were accessed.</div>
+                    <div class="narrative-row"><span class="narrative-label">Assessment:</span> The accessed files require further review.</div>
+                </div>
+            </div>
+            
+            <div class="narrative-phase">
+                <div class="narrative-phase-header">
+                    <span class="narrative-phase-num">[3]</span>
+                    <strong>Cleanup Activity</strong>
+                    <span class="badge badge-medium">MEDIUM CONFIDENCE</span>
+                </div>
+                <div class="narrative-phase-body">
+                    <div class="narrative-row"><span class="narrative-label">Time:</span> 2018-04-05 to 2018-04-06</div>
+                    <div class="narrative-row"><span class="narrative-label">Evidence:</span> 5 deleted files were recovered.</div>
+                    <div class="narrative-row"><span class="narrative-label">Assessment:</span> Deletion activity following sensitive file access may indicate cleanup behavior; no direct access-then-deletion timing pattern was independently confirmed, so this requires further investigation to establish sequence.</div>
+                </div>
+            </div>
+            </div>
+                <h4>Analyst Notes</h4>
+                <ul class="analyst-notes"><li>Overall risk classification: HIGH (score 91.16) — Score 91.16 (&gt;= 18.0) across 3 independent evidence categories, including 3 strong (user-attributed) source(s).</li><li>A burst of activity was followed by a gap in logged events (11.8h silence after burst of 5 events (last: 2018-03-27T09:57:28.844371+00:00)), which may indicate log clearing, system downtime, or an attempt to obscure subsequent actions and warrants further review.</li></ul>
+            </div>
+        </details>
+        
+        <details class="user-detail narrative-detail">
+            <summary>
+                <strong>Administrator</strong>
+                <span class="badge badge-low">LOW</span>
+                <span class="badge badge-low">LOW CONFIDENCE</span>
+            </summary>
+            <div class="user-detail-body">
+                <h4>Investigation Summary</h4>
+                <p>No correlated evidence chain was identified for this account from the available artifacts.</p>
+                <h4>Key Evidence Chain</h4>
+                <p class="muted">No correlated evidence chain was identified for this account.</p>
+                <h4>Analyst Notes</h4>
+                <ul class="analyst-notes"><li>Overall risk classification: LOW (score 0.0) — No user-attributable evidence beyond shared/system activity.</li><li>No correlated evidence chain could be constructed from the available artifacts for this account.</li></ul>
+            </div>
+        </details>
+        
+        <details class="user-detail narrative-detail">
+            <summary>
+                <strong>DefaultAccount</strong>
+                <span class="badge badge-low">LOW</span>
+                <span class="badge badge-low">LOW CONFIDENCE</span>
+            </summary>
+            <div class="user-detail-body">
+                <h4>Investigation Summary</h4>
+                <p>No correlated evidence chain was identified for this account from the available artifacts.</p>
+                <h4>Key Evidence Chain</h4>
+                <p class="muted">No correlated evidence chain was identified for this account.</p>
+                <h4>Analyst Notes</h4>
+                <ul class="analyst-notes"><li>Overall risk classification: LOW (score 0.0) — No user-attributable evidence beyond shared/system activity.</li><li>No correlated evidence chain could be constructed from the available artifacts for this account.</li></ul>
+            </div>
+        </details>
+        
+        <details class="user-detail narrative-detail">
+            <summary>
+                <strong>Guest</strong>
+                <span class="badge badge-low">LOW</span>
+                <span class="badge badge-low">LOW CONFIDENCE</span>
+            </summary>
+            <div class="user-detail-body">
+                <h4>Investigation Summary</h4>
+                <p>No correlated evidence chain was identified for this account from the available artifacts.</p>
+                <h4>Key Evidence Chain</h4>
+                <p class="muted">No correlated evidence chain was identified for this account.</p>
+                <h4>Analyst Notes</h4>
+                <ul class="analyst-notes"><li>Overall risk classification: LOW (score 0.0) — No user-attributable evidence beyond shared/system activity.</li><li>No correlated evidence chain could be constructed from the available artifacts for this account.</li></ul>
             </div>
         </details>
         
   </section>
 
   <div class="footer">
-    Forensic Analysis Report | Generated with Forensic Profiler v1.0 | 2026-07-20 12:57:57
+    Forensic Analysis Report | Generated with Forensic Profiler v1.0 | 2026-07-22 01:11:45
   </div>
 </main>
 </body>

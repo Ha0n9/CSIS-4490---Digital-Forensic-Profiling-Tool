@@ -19,6 +19,7 @@ Usage:
 import argparse
 import json
 import logging
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -58,6 +59,45 @@ REPORTING_DIR = PROJECT_ROOT / 'reporting'
 sys.path.insert(0, str(PROJECT_ROOT))
 sys.path.insert(0, str(CORRELATION_DIR))
 sys.path.insert(0, str(REPORTING_DIR))
+
+
+def run_setup(project_root: Path) -> int:
+    """
+    Run setup_forensic_tools.sh, streaming its output directly to the
+    terminal (no capture_output) so the install's sudo password prompt and
+    multi-minute download progress behave exactly as they would running the
+    script by hand. Returns the script's exit code.
+    """
+    script_path = project_root / 'setup_forensic_tools.sh'
+    if not script_path.exists():
+        log_error(f"Setup script not found: {script_path}")
+        return 1
+    log_step("Installing / Verifying Forensic Tooling")
+    result = subprocess.run(["bash", str(script_path)])
+    return result.returncode
+
+
+def check_tool_availability() -> List[str]:
+    """
+    Cheap, read-only check for the tooling extraction/parsing depend on
+    (ewf-tools, sleuthkit, .NET 9 for the EZ Tools, and the Python parser
+    packages). Returns human-readable descriptions of what's missing —
+    never installs or modifies anything itself; that's setup_forensic_tools.sh's
+    job, run explicitly via --setup.
+    """
+    missing = []
+    if not shutil.which("ewfmount"):
+        missing.append("ewfmount (ewf-tools)")
+    if not shutil.which("mmls"):
+        missing.append("mmls (sleuthkit)")
+    if not (Path.home() / ".dotnet" / "dotnet").exists():
+        missing.append(".NET 9 SDK (~/.dotnet) — needed for EZ Tools")
+    for module, label in (("Registry", "python-registry"), ("evtx", "evtx")):
+        try:
+            __import__(module)
+        except ImportError:
+            missing.append(f"{label} (Python package)")
+    return missing
 
 
 class ForensicProfiler:
@@ -364,21 +404,29 @@ Examples:
 
   # Keep image mounted
   python3 full_forensic_profiler.py -e /cases/suspect.E01 -o ./output --keep-mounted
+
+  # Install/verify required forensic tooling (EZ Tools, ewf-tools, .NET, etc.)
+  # instead of running setup_forensic_tools.sh by hand
+  python3 full_forensic_profiler.py --setup
         """
     )
-    
+
     parser.add_argument(
         "-e", "--image",
-        required=True,
-        help="Path to E01 image file"
+        help="Path to E01 image file (not required with --setup)"
     )
-    
+
     parser.add_argument(
         "-o", "--output",
-        required=True,
-        help="Output directory for all artifacts"
+        help="Output directory for all artifacts (not required with --setup)"
     )
-    
+
+    parser.add_argument(
+        "--setup",
+        action="store_true",
+        help="Run setup_forensic_tools.sh to install/verify required tooling, then exit"
+    )
+
     parser.add_argument(
         "-k", "--keep-mounted",
         action="store_true",
@@ -416,12 +464,31 @@ Examples:
     )
     
     args = parser.parse_args()
-    
+
+    # --setup runs the tooling installer and exits; it doesn't need an image
+    # or output dir, and shouldn't be combined with a pipeline run in the
+    # same invocation (sudo apt/dpkg installs are a separate, explicit action).
+    if args.setup:
+        sys.exit(run_setup(PROJECT_ROOT))
+
+    if not args.image or not args.output:
+        parser.error("--image and --output are required (unless using --setup)")
+
     # Validate inputs
     if not args.skip_extract and not Path(args.image).exists():
         log_error(f"Image file not found: {args.image}")
         sys.exit(1)
-    
+
+    # Warn (don't block) if tooling extraction/parsing depend on looks
+    # incomplete — run with --setup first to install it.
+    if not (args.skip_extract and args.skip_parse):
+        missing = check_tool_availability()
+        if missing:
+            log_warn("Some tooling required for extraction/parsing appears to be missing:")
+            for item in missing:
+                log_warn(f"    - {item}")
+            log_warn("Run 'python3 full_forensic_profiler.py --setup' to install it, or continue if you know it's already set up elsewhere.")
+
     # Create profiler
     profiler = ForensicProfiler(
         image_path=args.image,
@@ -429,12 +496,12 @@ Examples:
         keep_mounted=args.keep_mounted,
         skip_verify=args.skip_verify
     )
-    
+
     # Run pipeline with skips
     if args.skip_extract and args.skip_parse and args.skip_correlate and args.skip_report:
         log_warn("All steps skipped! Nothing to do.")
         sys.exit(0)
-    
+
     try:
         # Step 1: Extract (unless skipped)
         if not args.skip_extract:

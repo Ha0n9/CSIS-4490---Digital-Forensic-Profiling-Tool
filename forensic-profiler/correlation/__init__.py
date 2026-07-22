@@ -4,7 +4,6 @@ Correlation Package - Connect artifacts and detect patterns
 """
 
 from .engine import CorrelationEngine
-from .rules import CorrelationRules
-from .weights import ScoreWeights
+from .narrative import build_narrative
 
-__all__ = ['CorrelationEngine', 'CorrelationRules', 'ScoreWeights']
+__all__ = ['CorrelationEngine', 'build_narrative']

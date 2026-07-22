@@ -1,6 +1,225 @@
 {
   "artifact": "correlated_results",
-  "parsed_at": "2026-07-20T19:58:28.815391+00:00",
+  "parsed_at": "2026-07-22T08:02:07.330194+00:00",
+  "shared_pool_app_activity": [
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": "2008-07-20T01:26:14.265625+00:00"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 7,
+      "last_run": "2008-07-19T23:32:24.285875+00:00"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 3,
+      "last_run": "2008-07-19T23:31:16.004625+00:00"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": "2008-07-18T04:37:17.718750+00:00"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 7,
+      "last_run": "2008-07-12T21:16:08.953125+00:00"
+    },
+    {
+      "exe": "regsvr32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 5,
+      "last_run": "2008-07-12T03:05:36.642125+00:00"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 2,
+      "last_run": "2008-07-12T03:05:27.314000+00:00"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 2,
+      "last_run": "2008-07-12T03:05:23.845250+00:00"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 2,
+      "last_run": "2008-07-12T03:05:22.751500+00:00"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 2,
+      "last_run": "2008-07-12T03:05:14.235875+00:00"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 3,
+      "last_run": "2008-07-12T03:04:55.345250+00:00"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": "2008-07-10T07:48:01.250000+00:00"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": "2008-07-10T07:47:50.484375+00:00"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": "2008-07-10T07:47:47.218750+00:00"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": "2008-07-06T07:54:01.731875+00:00"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": "2008-07-06T07:53:46.216250+00:00"
+    },
+    {
+      "exe": "mshta.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 3,
+      "last_run": "2008-07-06T07:36:53.747500+00:00"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": "2008-07-06T07:36:53.669375+00:00"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": "2008-07-06T07:36:43.513125+00:00"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 2,
+      "last_run": "2008-07-06T07:35:53.622500+00:00"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": "2008-07-06T07:11:45.296875+00:00"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": "2008-07-06T07:11:29.828125+00:00"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": "2008-07-06T07:10:21.843750+00:00"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": "2008-07-04T22:45:50.818275+00:00"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": "2008-07-04T22:45:47.443124+00:00"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": "2008-07-04T22:45:47.068107+00:00"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": "2008-07-04T22:45:30.661122+00:00"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": "2008-07-04T22:45:27.379725+00:00"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": "2008-07-04T22:45:10.082075+00:00"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": "2008-07-04T22:44:38.768172+00:00"
+    },
+    {
+      "exe": "cscript.exe",
+      "category": "execution",
+      "multiplier": 1.5,
+      "run_count": 1,
+      "last_run": "2008-06-07T05:06:48.904862+00:00"
+    }
+  ],
   "summary": {
     "total_users": 10,
     "total_events": 575,
@@ -10,7 +229,7 @@
     "total_deleted": 1,
     "total_apps": 126,
     "unattributed_app_activity_weighted": 115.5,
-    "parsed_at": "2026-07-20T19:58:28.815391+00:00"
+    "parsed_at": "2026-07-22T08:02:07.330194+00:00"
   },
   "user_correlations": [
     {

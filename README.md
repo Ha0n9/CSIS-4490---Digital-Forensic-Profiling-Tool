@@ -40,7 +40,7 @@ Forensic Profiler is a four-stage pipeline that turns a raw Windows `.E01` disk 
 │   ├── experimental_correlation_and_scoring_logics/   # v1-v11 iterative scoring scripts (see EXP logs)
 │   └── *.sh                            # Earlier, standalone mount/extract scripts
 └── forensic-profiler/               # The unified pipeline — run everything from here
-    ├── full_forensic_profiler.py       # Unified entry point — runs all 4 stages
+    ├── full_forensic_profiler.py       # Unified entry point — runs all 4 stages (+ --setup)
     ├── setup_forensic_tools.sh         # One-time environment setup (Kali Linux)
     ├── requirements.txt                 # Python dependencies (pip install -r requirements.txt)
     ├── mount_and_extract_hives.sh       # Stage 1 — Mount E01 + extract raw artifacts
@@ -54,11 +54,9 @@ Forensic Profiler is a four-stage pipeline that turns a raw Windows `.E01` disk 
     │   └── parse_deleted_files.py          # Recycle Bin (INFO2 / $I files) → deleted_files.json
     ├── correlation/
     │   ├── engine.py                   # Stage 3 — merges JSON artifacts per user, scores risk
-    │   ├── rules.py                    # Detection rule definitions (not yet wired into scoring)
-    │   └── weights.py                  # Standalone scoring scaffold (not yet wired into scoring)
+    │   └── narrative.py                # Turns one scored user record into a plain-language narrative
     ├── reporting/
-    │   ├── html_report.py              # Stage 4 — generates forensic_report.html
-    │   └── report_template.html
+    │   └── html_report.py              # Stage 4 — generates forensic_report.html
     └── <CaseName>/output/               # Per-case output — raw/, json/, reports/ (see Quick Start)
 ```
 
@@ -77,7 +75,15 @@ pip install -r requirements.txt
 ```
 PLEASE !!! - use sudo when run ./setup_forensic_tools.sh to ensure all tools are well install
 
-`setup_forensic_tools.sh` installs: .NET SDK 9.x, PowerShell 7.5.4, EZ Tools suite, ewf-tools, sleuthkit, RegRipper, python3-evtx, python3-pylnk3. `requirements.txt` covers the remaining pure-Python dependencies (`evtx`, `python-registry`, `pylnk3`, `jinja2`, `python-dateutil`, …) used by the parsers and reporter.
+`setup_forensic_tools.sh` installs: .NET SDK 9.x, PowerShell 7.5.4, EZ Tools suite, ewf-tools, sleuthkit, RegRipper. `requirements.txt` covers the pure-Python dependencies the parsers actually import: `evtx`/`python-evtx` (event log parsing) and `python-registry` (SAM/NTUSER.DAT parsing) — every other artifact (Prefetch, LNK/Jump Lists, Recycle Bin, browser history, HTML reporting) is parsed with the standard library only, no extra package needed.
+
+Instead of running `setup_forensic_tools.sh` by hand, you can also do it through the entry point:
+
+```bash
+sudo python3 full_forensic_profiler.py --setup
+```
+
+This runs the same install script and exits — it doesn't touch an image or output directory. `full_forensic_profiler.py` also does a cheap, read-only check of the required tooling (`ewfmount`, `mmls`, .NET, `python-registry`, `evtx`) before every pipeline run and warns (without blocking) if anything looks missing.
 
 ### Step 2 — Run the full pipeline
 
@@ -140,6 +146,8 @@ Parsed JSON files land in `/cases/output/json/`. (`-m /mnt/img_<PID>` is only ne
 ### `full_forensic_profiler.py`
 
 Unified entry point. Orchestrates the other four stages in order — extraction, parsing, correlation, reporting — each as a step that can be individually skipped (`--skip-extract`, `--skip-parse`, `--skip-correlate`, `--skip-report`) so any stage can be re-run in isolation once its inputs already exist on disk. Reads `extraction_report.txt` between stages to recover the detected Windows version and mount point without re-touching the image.
+
+`--setup` runs `setup_forensic_tools.sh` and exits, without needing `--image`/`--output`. On every normal pipeline run, `check_tool_availability()` does a cheap, read-only check for `ewfmount`, `mmls`, the .NET SDK, and the `python-registry`/`evtx` Python packages, and prints a warning (not a hard failure) if any are missing, pointing at `--setup`.
 
 ### `setup_forensic_tools.sh`
 
@@ -254,7 +262,7 @@ All browser databases are copied to a temp file before reading to avoid WAL lock
 
 Parses two artifact types that reveal what files and folders a user accessed:
 
-- **LNK files** (Windows Shortcut files from the `Recent` folder): contain the target file path, timestamps (created/modified/accessed), file size, volume label, and drive type. Parsed with `pylnk3` if available, otherwise falls back to raw struct parsing.
+- **LNK files** (Windows Shortcut files from the `Recent` folder): contain the target file path, timestamps (created/modified/accessed), file size, volume label, and drive type. Parsed with a hand-rolled `struct`-based parser rather than `pylnk3` — `pylnk3` has known failures on Windows 10 LNK files ("This is not a valid drive"), so this parser never depends on it.
 - **Jump Lists** (`.automaticDestinations` / `.customDestinations` files): OLE compound files that record recently/frequently accessed items per application. The parser counts embedded LNK entries and extracts what it can without needing external OLE libraries.
 
 ---
@@ -292,7 +300,13 @@ The capped category scores are summed and scaled against a **fixed** ceiling —
 
 Domain/URL flagging (anonymization sites, exfil sites, paste sites, hacking tools) matches the hostname against a boundary-safe suffix check — `host == domain` or `host.endswith("." + domain)` — never a bare substring scan, which produces false positives from coincidental substrings unrelated to the actual domain (e.g. an ad-tracking token that happens to contain "i2p"). The same boundary check tiers network destinations into internal/external/suspicious. Suspicious-executable matching is an exact lookup of the cleaned filename against a table of known names, not a substring scan, so an unrelated binary that merely contains a keyword isn't mistaken for the real tool.
 
-`rules.py` and `weights.py` in this package define an alternate, simpler rule/weight scheme but are not currently called by `engine.py` — they're scaffolding for a future rule-based detection layer, not part of the active scoring path.
+**Threats & anomalies.** Two additional read-only passes run over the scored results, feeding the HTML report's "Threats Detected" and "Anomalies" sections: `build_threats()` aggregates each rankable user's evidence into indicator-based threats (known-suspicious executable execution, contact with a flagged network/browser destination, anti-forensics/persistence events like log clearing or service installs), and `build_anomalies()` aggregates the timeline patterns and account-flag evidence already computed above. Neither pass touches scoring — they only re-describe evidence that's already been scored.
+
+---
+
+### `correlation/narrative.py`
+
+Takes one already-scored user record (one entry of `user_correlations`) and turns it into an investigator-oriented narrative: a phased evidence chain with a time range and confidence rating per phase, a plain-language summary, and analyst notes on what to verify manually next. Deliberately offline and deterministic — it only reads fields already attached to the record by `engine.py` (never re-reads raw artifact JSON, never re-scores, no network calls, no LLM), so the narrative is reproducible and never disagrees with the score or risk label that produced it. Rendered in the report's "Investigation Narrative" section.
 
 ---
 
@@ -301,11 +315,12 @@ Domain/URL flagging (anonymization sites, exfil sites, paste sites, hacking tool
 Stage 4. Renders `forensic_report.html` — fully self-contained, no external assets. Sections:
 
 - **Executive Summary** — artifact counts across the whole case.
-- **Threats / Anomalies** — reserved for the rule-based detections in `correlation/rules.py` once wired in; currently always empty.
+- **Threats / Anomalies** — populated from `correlation/engine.py`'s `build_threats()`/`build_anomalies()` passes described above; not empty once there's scored evidence to describe.
 - **User Activity Analysis** — one row per account: event/network/document/browser counts, risk score, risk label.
-- **Investigation Timelines** — one expandable block per ranked account (`HIGH`/`MEDIUM` expanded by default) containing a **score breakdown** table (count + score contribution per category) and a **chronological activity timeline** that merges every timestamped piece of evidence — deletions, event anomalies, network connections, flagged browser visits, suspicious application runs, sensitive document access — in the order it happened. This is the evidence trail behind each risk label, not just the aggregate score.
+- **Investigation Timelines** — one expandable block per ranked account (`HIGH`/`MEDIUM` expanded by default) containing a **score breakdown** table (count + score contribution per category), a **chronological activity timeline** merging every timestamped piece of evidence attributed to that account (deletions, event anomalies, network connections, flagged browser visits, suspicious application runs, sensitive document access) in the order it happened, and — if the case has any — a separate **"System-Wide Activity (unattributed)"** block listing the shared-pool Prefetch executions that couldn't be tied to any specific account. The unattributed block is shown for investigator context only; it's identical across every account's card and is never counted toward that account's score.
+- **Investigation Narrative** — one expandable block per ranked account rendering `correlation/narrative.py`'s phased evidence chain, summary, and analyst notes.
 
-The engine's `risk_rationale` and shared-pool figures are present in `correlation_results.json` but not yet surfaced in the HTML report — a known gap, not a missing computation.
+The engine's per-account `risk_rationale` string (the plain-language justification for `HIGH`/`MEDIUM`/`LOW`) is present in `correlation_results.json` but not yet surfaced anywhere in the HTML report — a known gap, not a missing computation.
 
 ---
 
@@ -325,7 +340,7 @@ The engine's `risk_rationale` and shared-pool figures are present in `correlatio
 
 - **OS:** Kali Linux 2026.x (64-bit), kernel 6.x
 - **VM name:** `CSIS4490_g05`
-- **Python:** 3.x with `python-registry`, `python-evtx`/`evtx`, `pylnk3`, `python-dateutil` (see `requirements.txt`)
+- **Python:** 3.x with `python-registry`, `python-evtx`/`evtx` (see `requirements.txt`) — everything else is standard library
 - **Optional:** .NET 9 SDK + EZ Tools for supplemental output
 
 Install everything with:

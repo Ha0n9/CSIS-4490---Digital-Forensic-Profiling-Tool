@@ -1,7 +1,7 @@
 ================================================================================
   FORENSIC ARTIFACT EXTRACTION REPORT
 ================================================================================
-  Date           : 2026-07-20 12:58:26
+  Date           : 2026-07-22 01:02:05
   E01 Image      : Sample Files/M57Jean/nps-2008-jean.E01
   Image Size     : 1.5G
   Windows Ver    : xp
@@ -26,5 +26,5 @@
   Recycle Bin                              3 files
 
   NEXT STEPS:
-  bash extract_artifacts.sh -m /mnt/img_164041 -o M57Jean/output
+  bash extract_artifacts.sh -m /mnt/img_34099 -o M57Jean/output
 ================================================================================

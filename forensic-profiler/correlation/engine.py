@@ -13,10 +13,6 @@ from datetime import datetime, timezone
 from collections import defaultdict
 from urllib.parse import urlparse
 
-from .rules import CorrelationRules
-from .weights import ScoreWeights
-
-
 # ── Constants (v11) ───────────────────────────────────────────────────────────
 WEIGHTS = {
     "deleted_files":    4,
@@ -142,6 +138,48 @@ ANOMALY_EVENT_IDS: dict[int, tuple[str, int]] = {
     7045:("service_install",3), 4697:("service_install",3),
     4672:("privilege_escalation",3), 576:("privilege_escalation",3),
     4688:("process_creation",1), 592:("process_creation",1),
+}
+
+# ── Threat / Anomaly classification (report-only) ──────────────────────────
+# Severity used to populate the HTML report's "Threats Detected" and
+# "Anomalies" sections from evidence the scoring above has already gathered.
+# Purely a labeling/aggregation layer over existing per-user evidence — it
+# does not feed back into artifact_score/final_score/risk_label at all.
+_SEV_RANK = {"LOW": 0, "MEDIUM": 1, "HIGH": 2}
+
+# "Threats" are indicator-based findings: a specific known-malicious tool,
+# destination, or anti-forensics/persistence technique was observed. Keyed
+# off the same category vocabulary SUSPICIOUS_EXES/SUSPICIOUS_DOMAINS/
+# ANOMALY_EVENT_IDS already assign to each piece of evidence.
+THREAT_EXE_SEVERITY = {
+    "credential": "HIGH", "remote_access": "MEDIUM", "execution": "MEDIUM",
+    "deletion": "MEDIUM", "recon": "LOW",
+}
+THREAT_DOMAIN_SEVERITY = {
+    "anonymization": "HIGH", "exfil_site": "HIGH", "hacking": "HIGH",
+    "paste_site": "MEDIUM",
+}
+THREAT_EVENT_SEVERITY = {
+    "log_cleared": "HIGH", "account_lockout": "MEDIUM", "service_install": "MEDIUM",
+}
+
+# "Anomalies" are behavioral/timing irregularities: the cross-artifact
+# temporal patterns calculate_timeline_bonuses() already detects, plus
+# account-flag evidence from score_accounts(). Distinct from threats above —
+# an anomaly says "this timing is unusual", not "this is a known-bad tool".
+ANOMALY_PATTERN_SEVERITY = {
+    "file_access_then_deletion": "HIGH",
+    "app_exec_then_network": "HIGH",
+    "multi_source_consistency": "HIGH",
+    "activity_then_log_gap": "MEDIUM",
+    "rapid_actions": "MEDIUM",
+}
+ANOMALY_PATTERN_LABEL = {
+    "file_access_then_deletion": "File Access Followed by Deletion",
+    "app_exec_then_network": "Application Execution Followed by Network Activity",
+    "multi_source_consistency": "Multi-Source Activity Correlation",
+    "activity_then_log_gap": "Activity Burst Followed by Logging Gap",
+    "rapid_actions": "Rapid Sequential Actions",
 }
 
 _INTERNAL_IP = [
@@ -999,6 +1037,111 @@ class CorrelationEngine:
                     "insufficient for elevation above LOW."
                 )
     
+    def build_threats(self, results: List[Dict]) -> List[Dict]:
+        """
+        Indicator-based threats, aggregated per (user, threat type) from
+        evidence already attached to each rankable user's result — known-
+        suspicious executable execution, contact with a known-suspicious
+        network/browser destination, and anti-forensics/persistence event
+        types (log clearing, service install, account lockout). Read-only
+        over `results`; does not touch scoring.
+        """
+        buckets: Dict[tuple, Dict[str, Any]] = {}
+
+        def add(user: str, ttype: str, severity: str, detail: str, ts: str = "") -> None:
+            key = (user, ttype)
+            b = buckets.setdefault(key, {"count": 0, "severity": severity, "sample": detail, "times": []})
+            b["count"] += 1
+            if ts:
+                b["times"].append(ts)
+            if _SEV_RANK[severity] > _SEV_RANK[b["severity"]]:
+                b["severity"] = severity
+
+        for r in results:
+            if not r.get("rankable"):
+                continue
+            user = r.get("display_name") or r.get("username", "")
+            evidence = r.get("evidence", {})
+
+            for e in evidence.get("app_activity", []):
+                sev = THREAT_EXE_SEVERITY.get(e.get("category"))
+                if sev:
+                    add(user, f"Suspicious Tool Execution: {e.get('category','').replace('_',' ').title()}",
+                        sev, str(e.get("exe", "?")), str(e.get("last_run", "")))
+
+            for e in evidence.get("network_activity", []):
+                if e.get("tier") == "suspicious":
+                    add(user, "Suspicious Network Destination", "HIGH",
+                        str(e.get("dest_ip", "?")), str(e.get("timestamp", "")))
+
+            for e in evidence.get("browser_history", []):
+                cat = e.get("category")
+                label = f"Suspicious Domain Visit: {cat.replace('_',' ').title()}" if cat else "Suspicious Domain Visit"
+                add(user, label, THREAT_DOMAIN_SEVERITY.get(cat, "MEDIUM"),
+                    str(e.get("url", "?")), str(e.get("visited", "")))
+
+            for e in evidence.get("event_anomalies", []):
+                sev = THREAT_EVENT_SEVERITY.get(e.get("label"))
+                if sev:
+                    add(user, str(e.get("label", "")).replace("_", " ").title(), sev,
+                        f"Event ID {e.get('event_id')}", str(e.get("timestamp", "")))
+
+        threats = []
+        for (user, ttype), b in buckets.items():
+            times = sorted(t for t in b["times"] if t)
+            when = f"{times[0]} to {times[-1]}" if len(times) > 1 else (times[0] if times else "")
+            desc = f"{user}: {b['count']} occurrence(s), e.g. {b['sample']}"
+            if when:
+                desc += f" ({when})"
+            threats.append({
+                "type": ttype, "severity": b["severity"], "description": desc, "count": b["count"],
+            })
+
+        threats.sort(key=lambda t: (-_SEV_RANK[t["severity"]], -t["count"]))
+        return threats
+
+    def build_anomalies(self, results: List[Dict]) -> List[Dict]:
+        """
+        Behavioral/timing anomalies, aggregated per (user, pattern type)
+        from timeline_patterns calculate_timeline_bonuses() already computed
+        for each rankable user, plus account-flag evidence from
+        score_accounts(). Read-only over `results`; does not touch scoring.
+        """
+        anomalies = []
+        for r in results:
+            if not r.get("rankable"):
+                continue
+            user = r.get("display_name") or r.get("username", "")
+
+            pattern_counts: Dict[str, Dict[str, Any]] = {}
+            for p in r.get("timeline_patterns", []) or []:
+                key = p.get("pattern")
+                pc = pattern_counts.setdefault(key, {"count": 0, "detail": p.get("detail", ""), "time": p.get("timestamp", "")})
+                pc["count"] += 1
+
+            for key, pc in pattern_counts.items():
+                anomalies.append({
+                    "type": ANOMALY_PATTERN_LABEL.get(key, str(key).replace("_", " ").title()),
+                    "severity": ANOMALY_PATTERN_SEVERITY.get(key, "LOW"),
+                    "description": f"{user}: {pc['detail']}",
+                    "count": pc["count"],
+                    "time": pc["time"] or "N/A",
+                })
+
+            for e in r.get("evidence", {}).get("user_accounts", []):
+                if e.get("flag") == "high_failed_logins":
+                    anomalies.append({
+                        "type": "Excessive Failed Logins",
+                        "severity": "MEDIUM",
+                        "description": f"{user}: {e.get('failed_logins')} failed login attempts recorded, "
+                                        "exceeding the normal threshold.",
+                        "count": e.get("failed_logins", 0),
+                        "time": "N/A",
+                    })
+
+        anomalies.sort(key=lambda a: (-_SEV_RANK.get(a["severity"], 0), -a["count"]))
+        return anomalies
+
     def run(self) -> Dict[str, Any]:
         """Run the complete correlation engine"""
         print("[*] Loading artifacts...")
@@ -1040,7 +1183,11 @@ class CorrelationEngine:
         for r in sys_accts:
             r["rank"] = None
         all_results = ranked + sys_accts
-        
+
+        print("[*] Building threats and anomalies...")
+        threats = self.build_threats(all_results)
+        anomalies = self.build_anomalies(all_results)
+
         # Generate summary
         now_iso = datetime.now(timezone.utc).isoformat()  # already "...+00:00"; do not also append "Z"
         summary = {
@@ -1058,15 +1205,22 @@ class CorrelationEngine:
             'parsed_at': now_iso,
         }
 
+        # Individual shared-pool records (case-wide context only — never
+        # attributed to any one account, never fed into scoring). Exposed
+        # here purely so the report can show what ran on the system even
+        # when it can't be tied to a specific user; see calculate_aggregate().
+        shared_pool_app_activity = app_s.get("__apps__", {}).get("evidence", [])
+
         output = {
             'artifact': 'correlated_results',
             'parsed_at': now_iso,
+            'shared_pool_app_activity': shared_pool_app_activity,
             'summary': summary,
             'user_correlations': all_results,
-            'anomalies': [],
-            'threats': [],
-            'total_anomalies': 0,
-            'total_threats': 0,
+            'anomalies': anomalies,
+            'threats': threats,
+            'total_anomalies': len(anomalies),
+            'total_threats': len(threats),
             'high_risk_users': [u for u in all_results if u.get('risk_label') == 'HIGH']
         }
         
@@ -1076,5 +1230,6 @@ class CorrelationEngine:
         
         print(f"[✓] Correlation complete → {output_file}")
         print(f"[✓] {len(ranked)} users analyzed")
-        
+        print(f"[✓] {len(threats)} threats, {len(anomalies)} anomalies identified")
+
         return output

@@ -9,6 +9,8 @@ from pathlib import Path
 from datetime import datetime
 from typing import Dict, Any, Optional, List
 
+from correlation.narrative import build_narrative
+
 
 # Maps each evidence category to: the field holding its timestamp, a display
 # icon/label, and a formatter for a one-line human-readable description.
@@ -127,6 +129,51 @@ class HTMLReporter:
             '''
         return f'<ul class="timeline">{rows}</ul>'
 
+    def _build_shared_pool_timeline(self, shared_evidence: List[Dict]) -> List[Dict]:
+        """
+        Format the case-wide, unattributed application-execution pool using
+        the same TIMELINE_SPECS formatter as attributed app_activity — these
+        are Prefetch records the correlator could not tie to a user path
+        (see calculate_aggregate() / score_app() in correlation/engine.py),
+        shown for investigator context only, never as this user's own activity.
+        """
+        spec = TIMELINE_SPECS["app_activity"]
+        events: List[Dict] = []
+        for item in shared_evidence:
+            ts = item.get(spec["ts"], "")
+            if not ts:
+                continue
+            try:
+                desc = spec["fmt"](item)
+            except Exception:
+                desc = str(item)
+            events.append({"ts": ts, "icon": spec["icon"], "label": spec["label"], "desc": desc})
+        events.sort(key=lambda e: e["ts"])
+        return events
+
+    def _render_shared_pool_html(self, shared_evidence: List[Dict]) -> str:
+        """Render the shared/unattributed app-activity pool as its own section."""
+        events = self._build_shared_pool_timeline(shared_evidence)
+        if not events:
+            return ""
+        rows = ""
+        for e in events:
+            rows += f'''
+            <li class="tl-item">
+                <span class="tl-icon">{e["icon"]}</span>
+                <span class="tl-time">{self._esc(self._fmt_ts(e["ts"]))}</span>
+                <span class="tl-cat">{self._esc(e["label"])}</span>
+                <span class="tl-desc">{self._esc(e["desc"])}</span>
+            </li>
+            '''
+        return f'''
+        <h4>System-Wide Activity (unattributed — {len(events)} event(s))</h4>
+        <p class="muted">These application executions were recovered from Prefetch but carry no
+        user path, so they cannot be attributed to this or any other specific account. They are
+        shown for context only and are identical for every account.</p>
+        <ul class="timeline timeline-shared">{rows}</ul>
+        '''
+
     def _render_breakdown_html(self, user: Dict) -> str:
         b = user.get("artifact_breakdown", {})
         rows = [
@@ -152,7 +199,7 @@ class HTMLReporter:
         </table>
         '''
 
-    def _render_user_detail(self, user: Dict) -> str:
+    def _render_user_detail(self, user: Dict, shared_pool_html: str = "") -> str:
         username = self._esc(user.get("display_name") or user.get("username", "Unknown"))
         risk_level = user.get("risk_label") or "NONE"
         risk_class = risk_level.lower()
@@ -171,8 +218,63 @@ class HTMLReporter:
             <div class="user-detail-body">
                 <h4>Score Breakdown</h4>
                 {self._render_breakdown_html(user)}
-                <h4>Activity Timeline</h4>
+                <h4>Activity Timeline ({len(events)} attributed event(s))</h4>
                 {self._render_timeline_html(events)}
+                {shared_pool_html}
+            </div>
+        </details>
+        '''
+
+    def _render_evidence_chain_html(self, evidence_chain: List[Dict]) -> str:
+        if not evidence_chain:
+            return '<p class="muted">No correlated evidence chain was identified for this account.</p>'
+        items = ""
+        for i, phase in enumerate(evidence_chain, 1):
+            conf = (phase.get("confidence") or "LOW").lower()
+            items += f'''
+            <div class="narrative-phase">
+                <div class="narrative-phase-header">
+                    <span class="narrative-phase-num">[{i}]</span>
+                    <strong>{self._esc(phase.get("phase", ""))}</strong>
+                    <span class="badge badge-{conf}">{self._esc(phase.get("confidence", "LOW"))} CONFIDENCE</span>
+                </div>
+                <div class="narrative-phase-body">
+                    <div class="narrative-row"><span class="narrative-label">Time:</span> {self._esc(phase.get("time_range", ""))}</div>
+                    <div class="narrative-row"><span class="narrative-label">Evidence:</span> {self._esc(phase.get("description", ""))}</div>
+                    <div class="narrative-row"><span class="narrative-label">Assessment:</span> {self._esc(phase.get("assessment", ""))}</div>
+                </div>
+            </div>
+            '''
+        return f'<div class="narrative-chain">{items}</div>'
+
+    def _render_analyst_notes_html(self, notes: List[str]) -> str:
+        if not notes:
+            return '<p class="muted">No analyst notes.</p>'
+        lis = "".join(f"<li>{self._esc(n)}</li>" for n in notes)
+        return f'<ul class="analyst-notes">{lis}</ul>'
+
+    def _render_user_narrative_html(self, user: Dict) -> str:
+        narrative = build_narrative(user)
+        risk_level = narrative.get("risk_level") or "NONE"
+        risk_class = risk_level.lower()
+        confidence = narrative.get("confidence") or "LOW"
+        conf_class = confidence.lower()
+        open_attr = " open" if risk_level in ("HIGH", "MEDIUM") else ""
+
+        return f'''
+        <details class="user-detail narrative-detail"{open_attr}>
+            <summary>
+                <strong>{self._esc(narrative.get("user", "Unknown"))}</strong>
+                <span class="badge badge-{risk_class}">{self._esc(risk_level)}</span>
+                <span class="badge badge-{conf_class}">{self._esc(confidence)} CONFIDENCE</span>
+            </summary>
+            <div class="user-detail-body">
+                <h4>Investigation Summary</h4>
+                <p>{self._esc(narrative.get("summary", ""))}</p>
+                <h4>Key Evidence Chain</h4>
+                {self._render_evidence_chain_html(narrative.get("evidence_chain", []))}
+                <h4>Analyst Notes</h4>
+                {self._render_analyst_notes_html(narrative.get("analyst_notes", []))}
             </div>
         </details>
         '''
@@ -213,6 +315,7 @@ class HTMLReporter:
         total_anomalies = data.get('total_anomalies', 0)
         total_threats = data.get('total_threats', 0)
         high_risk_users = data.get('high_risk_users', [])
+        shared_pool_evidence = data.get('shared_pool_app_activity', [])
         
         gen_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         
@@ -334,9 +437,18 @@ class HTMLReporter:
             u.get("rank") or 999,
         ))
         if rankable_users:
-            timelines_html = "".join(self._render_user_detail(u) for u in rankable_users)
+            shared_pool_html = self._render_shared_pool_html(shared_pool_evidence)
+            timelines_html = "".join(
+                self._render_user_detail(u, shared_pool_html) for u in rankable_users
+            )
         else:
             timelines_html = "<p><em>No rankable user data available</em></p>"
+
+        # ── Per-user investigation narratives ────────────────────────────────
+        if rankable_users:
+            narratives_html = "".join(self._render_user_narrative_html(u) for u in rankable_users)
+        else:
+            narratives_html = "<p><em>No rankable user data available</em></p>"
 
         # ── Full HTML document ────────────────────────────────────────────────
         html = f'''<!DOCTYPE html>
@@ -433,6 +545,17 @@ class HTMLReporter:
   .tl-time {{ font-family:monospace; color:#374151; font-size:12px; white-space:nowrap; }}
   .tl-cat {{ font-weight:600; color:var(--navy); font-size:12px; }}
   .tl-desc {{ color:#111827; flex:1 1 260px; }}
+  .timeline-shared {{ border-left-style:dashed; opacity:.72; }}
+
+  .narrative-chain {{ display:flex; flex-direction:column; gap:10px; margin:6px 0 4px; }}
+  .narrative-phase {{ border:1px solid var(--border); border-left:4px solid var(--blue);
+                       border-radius:6px; background:#fff; padding:10px 14px; }}
+  .narrative-phase-header {{ display:flex; align-items:center; gap:8px; margin-bottom:6px; }}
+  .narrative-phase-num {{ color:#6b7280; font-weight:700; }}
+  .narrative-row {{ font-size:13px; margin:3px 0; color:#111827; }}
+  .narrative-label {{ font-weight:600; color:var(--navy); margin-right:4px; }}
+  .analyst-notes {{ margin:4px 0 4px 18px; padding:0; font-size:13px; color:#111827; }}
+  .analyst-notes li {{ margin:4px 0; }}
 
   .footer {{ margin-top:40px; padding-top:20px; border-top:2px solid #e5e7eb;
              text-align:center; color:#9ca3af; font-size:12px; }}
@@ -480,6 +603,17 @@ class HTMLReporter:
       evidence trail behind each risk label. HIGH/MEDIUM users are expanded by default.
     </p>
     {timelines_html}
+  </section>
+
+  <section>
+    <h2>Investigation Narrative</h2>
+    <p class="section-desc">
+      Deterministic, evidence-only summary of each user's correlated activity —
+      generated offline from the scoring/timeline output above (no external
+      services, no assumptions about intent). HIGH/MEDIUM users are expanded
+      by default.
+    </p>
+    {narratives_html}
   </section>
 
   <div class="footer">

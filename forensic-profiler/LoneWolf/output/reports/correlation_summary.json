@@ -1,6 +1,78 @@
 {
   "artifact": "correlated_results",
-  "parsed_at": "2026-07-20T19:57:57.040617+00:00",
+  "parsed_at": "2026-07-22T08:11:45.185838+00:00",
+  "shared_pool_app_activity": [
+    {
+      "exe": "regsvr32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": ""
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": ""
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": ""
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": ""
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": ""
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": ""
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": ""
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": ""
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": ""
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": ""
+    }
+  ],
   "summary": {
     "total_users": 5,
     "total_events": 55638,
@@ -10,7 +82,7 @@
     "total_deleted": 5,
     "total_apps": 160,
     "unattributed_app_activity_weighted": 20.0,
-    "parsed_at": "2026-07-20T19:57:57.040617+00:00"
+    "parsed_at": "2026-07-22T08:11:45.185838+00:00"
   },
   "user_correlations": [
     {
@@ -1321,9 +1393,17 @@
       "rank": null
     }
   ],
-  "anomalies": [],
+  "anomalies": [
+    {
+      "type": "Activity Burst Followed by Logging Gap",
+      "severity": "MEDIUM",
+      "description": "jcloudy: 11.8h silence after burst of 5 events (last: 2018-03-27T09:57:28.844371+00:00)",
+      "count": 1,
+      "time": "2018-03-27T09:57:28.844371+00:00"
+    }
+  ],
   "threats": [],
-  "total_anomalies": 0,
+  "total_anomalies": 1,
   "total_threats": 0,
   "high_risk_users": [
     {

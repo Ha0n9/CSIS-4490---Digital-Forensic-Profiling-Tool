@@ -92,6 +92,17 @@
   .tl-time { font-family:monospace; color:#374151; font-size:12px; white-space:nowrap; }
   .tl-cat { font-weight:600; color:var(--navy); font-size:12px; }
   .tl-desc { color:#111827; flex:1 1 260px; }
+  .timeline-shared { border-left-style:dashed; opacity:.72; }
+
+  .narrative-chain { display:flex; flex-direction:column; gap:10px; margin:6px 0 4px; }
+  .narrative-phase { border:1px solid var(--border); border-left:4px solid var(--blue);
+                       border-radius:6px; background:#fff; padding:10px 14px; }
+  .narrative-phase-header { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+  .narrative-phase-num { color:#6b7280; font-weight:700; }
+  .narrative-row { font-size:13px; margin:3px 0; color:#111827; }
+  .narrative-label { font-weight:600; color:var(--navy); margin-right:4px; }
+  .analyst-notes { margin:4px 0 4px 18px; padding:0; font-size:13px; color:#111827; }
+  .analyst-notes li { margin:4px 0; }
 
   .footer { margin-top:40px; padding-top:20px; border-top:2px solid #e5e7eb;
              text-align:center; color:#9ca3af; font-size:12px; }
@@ -106,7 +117,7 @@
 <body>
 <header>
   <h1>🔍 Forensic Analysis Report</h1>
-  <div class="sub">Generated: 2026-07-20 12:58:28</div>
+  <div class="sub">Generated: 2026-07-22 01:02:07</div>
 </header>
 <main>
   <section>
@@ -308,7 +319,7 @@
             <tbody><tr><td>Deleted Files</td><td class="r">1</td><td class="r">4</td></tr><tr><td>Event Anomalies</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Application Activity (attributed)</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Network Activity</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Sensitive Document Access</td><td class="r">1</td><td class="r">2</td></tr><tr><td>Flagged Browser History</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Account Flags</td><td class="r">0</td><td class="r">0</td></tr></tbody>
         </table>
         
-                <h4>Activity Timeline</h4>
+                <h4>Activity Timeline (1 attributed event(s))</h4>
                 <ul class="timeline">
             <li class="tl-item">
                 <span class="tl-icon">📄</span>
@@ -317,6 +328,230 @@
                 <span class="tl-desc">Accessed sensitive file: C:\Documents and Settings\Jean\Desktop\m57biz.xls</span>
             </li>
             </ul>
+                
+        <h4>System-Wide Activity (unattributed — 31 event(s))</h4>
+        <p class="muted">These application executions were recovered from Prefetch but carry no
+        user path, so they cannot be attributed to this or any other specific account. They are
+        shown for context only and are identical for every account.</p>
+        <ul class="timeline timeline-shared">
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-06-07 05:06:48</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran cscript.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:44:38</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:10</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:27</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:30</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:50</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:10:21</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:11:29</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:11:45</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:35:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:43</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran mshta.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:53:46</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:54:01</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:47:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:47:50</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:48:01</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:04:55</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:14</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:22</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:23</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:27</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:36</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran regsvr32.exe (execution) × 5 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 21:16:08</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 7 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-18 04:37:17</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-19 23:31:16</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-19 23:32:24</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 7 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-20 01:26:14</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            </ul>
+        
             </div>
         </details>
         
@@ -335,8 +570,232 @@
             <tbody><tr><td>Deleted Files</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Event Anomalies</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Application Activity (attributed)</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Network Activity</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Sensitive Document Access</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Flagged Browser History</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Account Flags</td><td class="r">0</td><td class="r">0</td></tr></tbody>
         </table>
         
-                <h4>Activity Timeline</h4>
+                <h4>Activity Timeline (0 attributed event(s))</h4>
                 <p class="muted">No timestamped evidence available for this user.</p>
+                
+        <h4>System-Wide Activity (unattributed — 31 event(s))</h4>
+        <p class="muted">These application executions were recovered from Prefetch but carry no
+        user path, so they cannot be attributed to this or any other specific account. They are
+        shown for context only and are identical for every account.</p>
+        <ul class="timeline timeline-shared">
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-06-07 05:06:48</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran cscript.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:44:38</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:10</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:27</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:30</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:50</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:10:21</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:11:29</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:11:45</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:35:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:43</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran mshta.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:53:46</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:54:01</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:47:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:47:50</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:48:01</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:04:55</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:14</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:22</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:23</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:27</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:36</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran regsvr32.exe (execution) × 5 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 21:16:08</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 7 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-18 04:37:17</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-19 23:31:16</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-19 23:32:24</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 7 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-20 01:26:14</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            </ul>
+        
             </div>
         </details>
         
@@ -355,8 +814,232 @@
             <tbody><tr><td>Deleted Files</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Event Anomalies</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Application Activity (attributed)</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Network Activity</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Sensitive Document Access</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Flagged Browser History</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Account Flags</td><td class="r">0</td><td class="r">0</td></tr></tbody>
         </table>
         
-                <h4>Activity Timeline</h4>
+                <h4>Activity Timeline (0 attributed event(s))</h4>
                 <p class="muted">No timestamped evidence available for this user.</p>
+                
+        <h4>System-Wide Activity (unattributed — 31 event(s))</h4>
+        <p class="muted">These application executions were recovered from Prefetch but carry no
+        user path, so they cannot be attributed to this or any other specific account. They are
+        shown for context only and are identical for every account.</p>
+        <ul class="timeline timeline-shared">
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-06-07 05:06:48</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran cscript.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:44:38</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:10</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:27</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:30</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:50</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:10:21</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:11:29</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:11:45</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:35:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:43</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran mshta.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:53:46</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:54:01</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:47:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:47:50</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:48:01</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:04:55</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:14</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:22</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:23</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:27</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:36</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran regsvr32.exe (execution) × 5 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 21:16:08</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 7 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-18 04:37:17</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-19 23:31:16</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-19 23:32:24</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 7 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-20 01:26:14</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            </ul>
+        
             </div>
         </details>
         
@@ -375,8 +1058,232 @@
             <tbody><tr><td>Deleted Files</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Event Anomalies</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Application Activity (attributed)</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Network Activity</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Sensitive Document Access</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Flagged Browser History</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Account Flags</td><td class="r">0</td><td class="r">0</td></tr></tbody>
         </table>
         
-                <h4>Activity Timeline</h4>
+                <h4>Activity Timeline (0 attributed event(s))</h4>
                 <p class="muted">No timestamped evidence available for this user.</p>
+                
+        <h4>System-Wide Activity (unattributed — 31 event(s))</h4>
+        <p class="muted">These application executions were recovered from Prefetch but carry no
+        user path, so they cannot be attributed to this or any other specific account. They are
+        shown for context only and are identical for every account.</p>
+        <ul class="timeline timeline-shared">
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-06-07 05:06:48</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran cscript.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:44:38</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:10</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:27</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:30</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:50</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:10:21</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:11:29</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:11:45</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:35:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:43</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran mshta.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:53:46</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:54:01</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:47:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:47:50</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:48:01</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:04:55</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:14</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:22</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:23</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:27</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:36</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran regsvr32.exe (execution) × 5 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 21:16:08</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 7 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-18 04:37:17</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-19 23:31:16</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-19 23:32:24</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 7 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-20 01:26:14</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            </ul>
+        
             </div>
         </details>
         
@@ -395,8 +1302,232 @@
             <tbody><tr><td>Deleted Files</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Event Anomalies</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Application Activity (attributed)</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Network Activity</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Sensitive Document Access</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Flagged Browser History</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Account Flags</td><td class="r">0</td><td class="r">0</td></tr></tbody>
         </table>
         
-                <h4>Activity Timeline</h4>
+                <h4>Activity Timeline (0 attributed event(s))</h4>
                 <p class="muted">No timestamped evidence available for this user.</p>
+                
+        <h4>System-Wide Activity (unattributed — 31 event(s))</h4>
+        <p class="muted">These application executions were recovered from Prefetch but carry no
+        user path, so they cannot be attributed to this or any other specific account. They are
+        shown for context only and are identical for every account.</p>
+        <ul class="timeline timeline-shared">
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-06-07 05:06:48</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran cscript.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:44:38</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:10</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:27</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:30</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:50</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:10:21</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:11:29</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:11:45</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:35:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:43</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran mshta.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:53:46</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:54:01</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:47:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:47:50</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:48:01</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:04:55</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:14</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:22</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:23</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:27</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:36</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran regsvr32.exe (execution) × 5 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 21:16:08</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 7 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-18 04:37:17</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-19 23:31:16</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-19 23:32:24</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 7 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-20 01:26:14</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            </ul>
+        
             </div>
         </details>
         
@@ -415,8 +1546,232 @@
             <tbody><tr><td>Deleted Files</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Event Anomalies</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Application Activity (attributed)</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Network Activity</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Sensitive Document Access</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Flagged Browser History</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Account Flags</td><td class="r">0</td><td class="r">0</td></tr></tbody>
         </table>
         
-                <h4>Activity Timeline</h4>
+                <h4>Activity Timeline (0 attributed event(s))</h4>
                 <p class="muted">No timestamped evidence available for this user.</p>
+                
+        <h4>System-Wide Activity (unattributed — 31 event(s))</h4>
+        <p class="muted">These application executions were recovered from Prefetch but carry no
+        user path, so they cannot be attributed to this or any other specific account. They are
+        shown for context only and are identical for every account.</p>
+        <ul class="timeline timeline-shared">
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-06-07 05:06:48</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran cscript.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:44:38</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:10</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:27</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:30</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:50</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:10:21</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:11:29</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:11:45</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:35:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:43</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran mshta.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:53:46</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:54:01</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:47:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:47:50</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:48:01</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:04:55</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:14</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:22</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:23</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:27</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:36</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran regsvr32.exe (execution) × 5 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 21:16:08</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 7 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-18 04:37:17</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-19 23:31:16</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-19 23:32:24</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 7 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-20 01:26:14</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            </ul>
+        
             </div>
         </details>
         
@@ -435,8 +1790,232 @@
             <tbody><tr><td>Deleted Files</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Event Anomalies</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Application Activity (attributed)</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Network Activity</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Sensitive Document Access</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Flagged Browser History</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Account Flags</td><td class="r">0</td><td class="r">0</td></tr></tbody>
         </table>
         
-                <h4>Activity Timeline</h4>
+                <h4>Activity Timeline (0 attributed event(s))</h4>
                 <p class="muted">No timestamped evidence available for this user.</p>
+                
+        <h4>System-Wide Activity (unattributed — 31 event(s))</h4>
+        <p class="muted">These application executions were recovered from Prefetch but carry no
+        user path, so they cannot be attributed to this or any other specific account. They are
+        shown for context only and are identical for every account.</p>
+        <ul class="timeline timeline-shared">
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-06-07 05:06:48</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran cscript.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:44:38</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:10</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:27</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:30</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:50</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:10:21</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:11:29</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:11:45</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:35:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:43</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran mshta.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:53:46</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:54:01</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:47:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:47:50</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:48:01</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:04:55</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:14</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:22</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:23</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:27</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:36</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran regsvr32.exe (execution) × 5 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 21:16:08</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 7 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-18 04:37:17</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-19 23:31:16</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-19 23:32:24</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 7 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-20 01:26:14</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            </ul>
+        
             </div>
         </details>
         
@@ -455,8 +2034,232 @@
             <tbody><tr><td>Deleted Files</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Event Anomalies</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Application Activity (attributed)</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Network Activity</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Sensitive Document Access</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Flagged Browser History</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Account Flags</td><td class="r">0</td><td class="r">0</td></tr></tbody>
         </table>
         
-                <h4>Activity Timeline</h4>
+                <h4>Activity Timeline (0 attributed event(s))</h4>
                 <p class="muted">No timestamped evidence available for this user.</p>
+                
+        <h4>System-Wide Activity (unattributed — 31 event(s))</h4>
+        <p class="muted">These application executions were recovered from Prefetch but carry no
+        user path, so they cannot be attributed to this or any other specific account. They are
+        shown for context only and are identical for every account.</p>
+        <ul class="timeline timeline-shared">
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-06-07 05:06:48</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran cscript.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:44:38</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:10</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:27</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:30</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:50</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:10:21</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:11:29</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:11:45</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:35:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:43</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran mshta.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:53:46</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:54:01</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:47:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:47:50</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:48:01</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:04:55</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:14</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:22</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:23</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:27</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:36</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran regsvr32.exe (execution) × 5 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 21:16:08</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 7 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-18 04:37:17</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-19 23:31:16</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-19 23:32:24</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 7 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-20 01:26:14</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            </ul>
+        
             </div>
         </details>
         
@@ -475,8 +2278,232 @@
             <tbody><tr><td>Deleted Files</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Event Anomalies</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Application Activity (attributed)</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Network Activity</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Sensitive Document Access</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Flagged Browser History</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Account Flags</td><td class="r">0</td><td class="r">0</td></tr></tbody>
         </table>
         
-                <h4>Activity Timeline</h4>
+                <h4>Activity Timeline (0 attributed event(s))</h4>
                 <p class="muted">No timestamped evidence available for this user.</p>
+                
+        <h4>System-Wide Activity (unattributed — 31 event(s))</h4>
+        <p class="muted">These application executions were recovered from Prefetch but carry no
+        user path, so they cannot be attributed to this or any other specific account. They are
+        shown for context only and are identical for every account.</p>
+        <ul class="timeline timeline-shared">
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-06-07 05:06:48</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran cscript.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:44:38</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:10</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:27</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:30</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:50</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:10:21</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:11:29</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:11:45</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:35:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:43</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran mshta.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:53:46</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:54:01</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:47:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:47:50</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:48:01</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:04:55</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:14</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:22</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:23</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:27</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:36</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran regsvr32.exe (execution) × 5 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 21:16:08</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 7 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-18 04:37:17</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-19 23:31:16</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-19 23:32:24</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 7 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-20 01:26:14</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            </ul>
+        
             </div>
         </details>
         
@@ -495,15 +2522,423 @@
             <tbody><tr><td>Deleted Files</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Event Anomalies</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Application Activity (attributed)</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Network Activity</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Sensitive Document Access</td><td class="r">0</td><td class="r">0</td></tr><tr><td>Flagged Browser History</td><td class="r">0</td><td class="r">0.0</td></tr><tr><td>Account Flags</td><td class="r">0</td><td class="r">0</td></tr></tbody>
         </table>
         
-                <h4>Activity Timeline</h4>
+                <h4>Activity Timeline (0 attributed event(s))</h4>
                 <p class="muted">No timestamped evidence available for this user.</p>
+                
+        <h4>System-Wide Activity (unattributed — 31 event(s))</h4>
+        <p class="muted">These application executions were recovered from Prefetch but carry no
+        user path, so they cannot be attributed to this or any other specific account. They are
+        shown for context only and are identical for every account.</p>
+        <ul class="timeline timeline-shared">
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-06-07 05:06:48</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran cscript.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:44:38</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:10</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:27</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:30</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-04 22:45:50</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:10:21</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:11:29</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:11:45</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:35:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:43</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:36:53</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran mshta.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:53:46</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-06 07:54:01</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:47:47</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:47:50</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-10 07:48:01</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:04:55</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:14</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:22</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:23</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:27</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 2 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 03:05:36</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran regsvr32.exe (execution) × 5 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-12 21:16:08</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 7 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-18 04:37:17</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-19 23:31:16</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 3 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-19 23:32:24</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 7 times</span>
+            </li>
+            
+            <li class="tl-item">
+                <span class="tl-icon">⚙️</span>
+                <span class="tl-time">2008-07-20 01:26:14</span>
+                <span class="tl-cat">Application Run</span>
+                <span class="tl-desc">Ran rundll32.exe (execution) × 1 times</span>
+            </li>
+            </ul>
+        
+            </div>
+        </details>
+        
+  </section>
+
+  <section>
+    <h2>Investigation Narrative</h2>
+    <p class="section-desc">
+      Deterministic, evidence-only summary of each user's correlated activity —
+      generated offline from the scoring/timeline output above (no external
+      services, no assumptions about intent). HIGH/MEDIUM users are expanded
+      by default.
+    </p>
+    
+        <details class="user-detail narrative-detail" open>
+            <summary>
+                <strong>Jean</strong>
+                <span class="badge badge-high">HIGH</span>
+                <span class="badge badge-medium">MEDIUM CONFIDENCE</span>
+            </summary>
+            <div class="user-detail-body">
+                <h4>Investigation Summary</h4>
+                <p>The account shows evidence of sensitive document access.</p>
+                <h4>Key Evidence Chain</h4>
+                <div class="narrative-chain">
+            <div class="narrative-phase">
+                <div class="narrative-phase-header">
+                    <span class="narrative-phase-num">[1]</span>
+                    <strong>Sensitive Data Interaction</strong>
+                    <span class="badge badge-low">LOW CONFIDENCE</span>
+                </div>
+                <div class="narrative-phase-body">
+                    <div class="narrative-row"><span class="narrative-label">Time:</span> 2008-07-20 01:28</div>
+                    <div class="narrative-row"><span class="narrative-label">Evidence:</span> 1 sensitive document were accessed.</div>
+                    <div class="narrative-row"><span class="narrative-label">Assessment:</span> The accessed files require further review.</div>
+                </div>
+            </div>
+            </div>
+                <h4>Analyst Notes</h4>
+                <ul class="analyst-notes"><li>Overall risk classification: HIGH (score 35.75) — Score 35.75 (&gt;= 18.0) across 2 independent evidence categories, including 2 strong (user-attributed) source(s).</li></ul>
+            </div>
+        </details>
+        
+        <details class="user-detail narrative-detail">
+            <summary>
+                <strong>Abijah</strong>
+                <span class="badge badge-low">LOW</span>
+                <span class="badge badge-low">LOW CONFIDENCE</span>
+            </summary>
+            <div class="user-detail-body">
+                <h4>Investigation Summary</h4>
+                <p>No correlated evidence chain was identified for this account from the available artifacts.</p>
+                <h4>Key Evidence Chain</h4>
+                <p class="muted">No correlated evidence chain was identified for this account.</p>
+                <h4>Analyst Notes</h4>
+                <ul class="analyst-notes"><li>Overall risk classification: LOW (score 0.0) — No user-attributable evidence beyond shared/system activity.</li><li>No correlated evidence chain could be constructed from the available artifacts for this account.</li></ul>
+            </div>
+        </details>
+        
+        <details class="user-detail narrative-detail">
+            <summary>
+                <strong>Addison</strong>
+                <span class="badge badge-low">LOW</span>
+                <span class="badge badge-low">LOW CONFIDENCE</span>
+            </summary>
+            <div class="user-detail-body">
+                <h4>Investigation Summary</h4>
+                <p>No correlated evidence chain was identified for this account from the available artifacts.</p>
+                <h4>Key Evidence Chain</h4>
+                <p class="muted">No correlated evidence chain was identified for this account.</p>
+                <h4>Analyst Notes</h4>
+                <ul class="analyst-notes"><li>Overall risk classification: LOW (score 0.0) — No user-attributable evidence beyond shared/system activity.</li><li>No correlated evidence chain could be constructed from the available artifacts for this account.</li></ul>
+            </div>
+        </details>
+        
+        <details class="user-detail narrative-detail">
+            <summary>
+                <strong>Administrator</strong>
+                <span class="badge badge-low">LOW</span>
+                <span class="badge badge-low">LOW CONFIDENCE</span>
+            </summary>
+            <div class="user-detail-body">
+                <h4>Investigation Summary</h4>
+                <p>No correlated evidence chain was identified for this account from the available artifacts.</p>
+                <h4>Key Evidence Chain</h4>
+                <p class="muted">No correlated evidence chain was identified for this account.</p>
+                <h4>Analyst Notes</h4>
+                <ul class="analyst-notes"><li>Overall risk classification: LOW (score 0.0) — No user-attributable evidence beyond shared/system activity.</li><li>No correlated evidence chain could be constructed from the available artifacts for this account.</li></ul>
+            </div>
+        </details>
+        
+        <details class="user-detail narrative-detail">
+            <summary>
+                <strong>Devon</strong>
+                <span class="badge badge-low">LOW</span>
+                <span class="badge badge-low">LOW CONFIDENCE</span>
+            </summary>
+            <div class="user-detail-body">
+                <h4>Investigation Summary</h4>
+                <p>No correlated evidence chain was identified for this account from the available artifacts.</p>
+                <h4>Key Evidence Chain</h4>
+                <p class="muted">No correlated evidence chain was identified for this account.</p>
+                <h4>Analyst Notes</h4>
+                <ul class="analyst-notes"><li>Overall risk classification: LOW (score 0.0) — No user-attributable evidence beyond shared/system activity.</li><li>No correlated evidence chain could be constructed from the available artifacts for this account.</li></ul>
+            </div>
+        </details>
+        
+        <details class="user-detail narrative-detail">
+            <summary>
+                <strong>Guest</strong>
+                <span class="badge badge-low">LOW</span>
+                <span class="badge badge-low">LOW CONFIDENCE</span>
+            </summary>
+            <div class="user-detail-body">
+                <h4>Investigation Summary</h4>
+                <p>No correlated evidence chain was identified for this account from the available artifacts.</p>
+                <h4>Key Evidence Chain</h4>
+                <p class="muted">No correlated evidence chain was identified for this account.</p>
+                <h4>Analyst Notes</h4>
+                <ul class="analyst-notes"><li>Overall risk classification: LOW (score 0.0) — No user-attributable evidence beyond shared/system activity.</li><li>No correlated evidence chain could be constructed from the available artifacts for this account.</li></ul>
+            </div>
+        </details>
+        
+        <details class="user-detail narrative-detail">
+            <summary>
+                <strong>HelpAssistant</strong>
+                <span class="badge badge-low">LOW</span>
+                <span class="badge badge-low">LOW CONFIDENCE</span>
+            </summary>
+            <div class="user-detail-body">
+                <h4>Investigation Summary</h4>
+                <p>No correlated evidence chain was identified for this account from the available artifacts.</p>
+                <h4>Key Evidence Chain</h4>
+                <p class="muted">No correlated evidence chain was identified for this account.</p>
+                <h4>Analyst Notes</h4>
+                <ul class="analyst-notes"><li>Overall risk classification: LOW (score 0.0) — No user-attributable evidence beyond shared/system activity.</li><li>No correlated evidence chain could be constructed from the available artifacts for this account.</li></ul>
+            </div>
+        </details>
+        
+        <details class="user-detail narrative-detail">
+            <summary>
+                <strong>Kim</strong>
+                <span class="badge badge-low">LOW</span>
+                <span class="badge badge-low">LOW CONFIDENCE</span>
+            </summary>
+            <div class="user-detail-body">
+                <h4>Investigation Summary</h4>
+                <p>No correlated evidence chain was identified for this account from the available artifacts.</p>
+                <h4>Key Evidence Chain</h4>
+                <p class="muted">No correlated evidence chain was identified for this account.</p>
+                <h4>Analyst Notes</h4>
+                <ul class="analyst-notes"><li>Overall risk classification: LOW (score 0.0) — No user-attributable evidence beyond shared/system activity.</li><li>No correlated evidence chain could be constructed from the available artifacts for this account.</li></ul>
+            </div>
+        </details>
+        
+        <details class="user-detail narrative-detail">
+            <summary>
+                <strong>Sacha</strong>
+                <span class="badge badge-low">LOW</span>
+                <span class="badge badge-low">LOW CONFIDENCE</span>
+            </summary>
+            <div class="user-detail-body">
+                <h4>Investigation Summary</h4>
+                <p>No correlated evidence chain was identified for this account from the available artifacts.</p>
+                <h4>Key Evidence Chain</h4>
+                <p class="muted">No correlated evidence chain was identified for this account.</p>
+                <h4>Analyst Notes</h4>
+                <ul class="analyst-notes"><li>Overall risk classification: LOW (score 0.0) — No user-attributable evidence beyond shared/system activity.</li><li>No correlated evidence chain could be constructed from the available artifacts for this account.</li></ul>
+            </div>
+        </details>
+        
+        <details class="user-detail narrative-detail">
+            <summary>
+                <strong>SUPPORT_388945a0</strong>
+                <span class="badge badge-low">LOW</span>
+                <span class="badge badge-low">LOW CONFIDENCE</span>
+            </summary>
+            <div class="user-detail-body">
+                <h4>Investigation Summary</h4>
+                <p>No correlated evidence chain was identified for this account from the available artifacts.</p>
+                <h4>Key Evidence Chain</h4>
+                <p class="muted">No correlated evidence chain was identified for this account.</p>
+                <h4>Analyst Notes</h4>
+                <ul class="analyst-notes"><li>Overall risk classification: LOW (score 0.0) — No user-attributable evidence beyond shared/system activity.</li><li>No correlated evidence chain could be constructed from the available artifacts for this account.</li></ul>
             </div>
         </details>
         
   </section>
 
   <div class="footer">
-    Forensic Analysis Report | Generated with Forensic Profiler v1.0 | 2026-07-20 12:58:28
+    Forensic Analysis Report | Generated with Forensic Profiler v1.0 | 2026-07-22 01:02:07
   </div>
 </main>
 </body>
