@@ -1,0 +1,695 @@
+{
+  "artifact": "correlated_results",
+  "parsed_at": "2026-07-29T02:35:01.426143+00:00",
+  "shared_pool_app_activity": [
+    {
+      "exe": "powershell.exe",
+      "category": "execution",
+      "multiplier": 1.5,
+      "run_count": 1,
+      "last_run": "",
+      "attribution_method": "unattributed"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": "",
+      "attribution_method": "unattributed"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": "",
+      "attribution_method": "unattributed"
+    },
+    {
+      "exe": "rundll32.exe",
+      "category": "execution",
+      "multiplier": 2.0,
+      "run_count": 1,
+      "last_run": "",
+      "attribution_method": "unattributed"
+    },
+    {
+      "exe": "whoami.exe",
+      "category": "recon",
+      "multiplier": 1.0,
+      "run_count": 1,
+      "last_run": "",
+      "attribution_method": "unattributed"
+    }
+  ],
+  "summary": {
+    "total_users": 7,
+    "total_events": 27912,
+    "total_network": 2716,
+    "total_browser": 19,
+    "total_files": 44,
+    "total_deleted": 0,
+    "total_apps": 239,
+    "unattributed_app_activity_weighted": 8.5,
+    "security_log_coverage": {
+      "security_events_observed": 2100,
+      "status": "OBSERVED",
+      "note": "2100 Security-channel event(s) observed."
+    },
+    "parsed_at": "2026-07-29T02:35:01.426143+00:00"
+  },
+  "user_correlations": [
+    {
+      "username": "adam sed",
+      "display_name": "Adam Sed",
+      "account_type": "user",
+      "rankable": true,
+      "artifact_score": 40.37,
+      "timeline_bonus": 0,
+      "timeline_patterns": [],
+      "final_score": 40.37,
+      "risk_label": "MEDIUM",
+      "risk_rationale": "Score 40.37 / 1 categories \u2014 suspicious but incomplete evidence relative to the HIGH threshold (18.0).",
+      "diversity": {
+        "category_count": 1
+      },
+      "artifact_breakdown": {
+        "deleted_files": {
+          "count": 0,
+          "score": 0
+        },
+        "event_anomalies": {
+          "count": 0,
+          "score": 0.0
+        },
+        "app_activity": {
+          "effective": 0.0,
+          "attributed_count": 0,
+          "score": 0.0,
+          "shared_pool_weighted": 8.5
+        },
+        "network_activity": {
+          "weighted": 0.0,
+          "raw_count": 0,
+          "score": 0.0
+        },
+        "document_access": {
+          "count": 18,
+          "sensitive": 4,
+          "score": 8
+        },
+        "browser_history": {
+          "count": 19,
+          "flagged": 0,
+          "score": 0.0
+        },
+        "user_accounts": {
+          "count": 0,
+          "score": 0
+        }
+      },
+      "evidence": {
+        "deleted_files": [],
+        "event_anomalies": [],
+        "network_activity": [],
+        "browser_history": [],
+        "app_activity": [],
+        "user_accounts": [],
+        "document_access": [
+          {
+            "target": "C:\\Users\\Adam Sed\\Documents\\Client_Project\\analysis_draft.txt",
+            "extension": ".txt",
+            "accessed_at": "2026-07-27T23:04:52.109310+00:00"
+          },
+          {
+            "target": "C:\\Users\\Adam Sed\\Documents\\Client_Project\\client_list.txt",
+            "extension": ".txt",
+            "accessed_at": "2026-07-27T23:00:03.907640+00:00"
+          },
+          {
+            "target": "C:\\Users\\Adam Sed\\Documents\\Work\\monthly_report.txt",
+            "extension": ".txt",
+            "accessed_at": "2026-07-27T23:23:02.515289+00:00"
+          },
+          {
+            "target": "C:\\GroundTruth_Adam\\timeline.csv",
+            "extension": ".csv",
+            "accessed_at": "2026-07-27T23:37:22.988600+00:00"
+          }
+        ]
+      },
+      "rank": 1
+    },
+    {
+      "username": "bob milton",
+      "display_name": "Bob Milton",
+      "account_type": "user",
+      "rankable": true,
+      "artifact_score": 0.0,
+      "timeline_bonus": 6,
+      "timeline_patterns": [
+        {
+          "pattern": "activity_then_log_gap",
+          "bonus": 6,
+          "detail": "17.9h silence after burst of 9 events (last: 2026-07-27T23:45:18.448721+00:00)",
+          "timestamp": "2026-07-27T23:45:18.448721+00:00"
+        }
+      ],
+      "final_score": 6.0,
+      "risk_label": "LOW",
+      "risk_rationale": "No user-attributable evidence beyond shared/system activity.",
+      "diversity": {
+        "category_count": 0
+      },
+      "artifact_breakdown": {
+        "deleted_files": {
+          "count": 0,
+          "score": 0
+        },
+        "event_anomalies": {
+          "count": 0,
+          "score": 0.0
+        },
+        "app_activity": {
+          "effective": 0.0,
+          "attributed_count": 0,
+          "score": 0.0,
+          "shared_pool_weighted": 8.5
+        },
+        "network_activity": {
+          "weighted": 0.0,
+          "raw_count": 0,
+          "score": 0.0
+        },
+        "document_access": {
+          "count": 5,
+          "sensitive": 0,
+          "score": 0
+        },
+        "browser_history": {
+          "count": 0,
+          "flagged": 0,
+          "score": 0.0
+        },
+        "user_accounts": {
+          "count": 0,
+          "score": 0
+        }
+      },
+      "evidence": {
+        "deleted_files": [],
+        "event_anomalies": [],
+        "network_activity": [],
+        "browser_history": [],
+        "app_activity": [],
+        "user_accounts": [],
+        "document_access": []
+      },
+      "rank": 2
+    },
+    {
+      "username": "administrator",
+      "display_name": "Administrator",
+      "account_type": "builtin",
+      "rankable": true,
+      "artifact_score": 0.0,
+      "timeline_bonus": 0,
+      "timeline_patterns": [],
+      "final_score": 0.0,
+      "risk_label": "LOW",
+      "risk_rationale": "No user-attributable evidence beyond shared/system activity.",
+      "diversity": {
+        "category_count": 0
+      },
+      "artifact_breakdown": {
+        "deleted_files": {
+          "count": 0,
+          "score": 0
+        },
+        "event_anomalies": {
+          "count": 0,
+          "score": 0.0
+        },
+        "app_activity": {
+          "effective": 0.0,
+          "attributed_count": 0,
+          "score": 0.0,
+          "shared_pool_weighted": 8.5
+        },
+        "network_activity": {
+          "weighted": 0.0,
+          "raw_count": 0,
+          "score": 0.0
+        },
+        "document_access": {
+          "count": 0,
+          "sensitive": 0,
+          "score": 0
+        },
+        "browser_history": {
+          "count": 0,
+          "flagged": 0,
+          "score": 0.0
+        },
+        "user_accounts": {
+          "count": 0,
+          "score": 0
+        }
+      },
+      "evidence": {
+        "deleted_files": [],
+        "event_anomalies": [],
+        "network_activity": [],
+        "browser_history": [],
+        "app_activity": [],
+        "user_accounts": [],
+        "document_access": []
+      },
+      "rank": 3
+    },
+    {
+      "username": "defaultaccount",
+      "display_name": "DefaultAccount",
+      "account_type": "builtin",
+      "rankable": true,
+      "artifact_score": 0.0,
+      "timeline_bonus": 0,
+      "timeline_patterns": [],
+      "final_score": 0.0,
+      "risk_label": "LOW",
+      "risk_rationale": "No user-attributable evidence beyond shared/system activity.",
+      "diversity": {
+        "category_count": 0
+      },
+      "artifact_breakdown": {
+        "deleted_files": {
+          "count": 0,
+          "score": 0
+        },
+        "event_anomalies": {
+          "count": 0,
+          "score": 0.0
+        },
+        "app_activity": {
+          "effective": 0.0,
+          "attributed_count": 0,
+          "score": 0.0,
+          "shared_pool_weighted": 8.5
+        },
+        "network_activity": {
+          "weighted": 0.0,
+          "raw_count": 0,
+          "score": 0.0
+        },
+        "document_access": {
+          "count": 0,
+          "sensitive": 0,
+          "score": 0
+        },
+        "browser_history": {
+          "count": 0,
+          "flagged": 0,
+          "score": 0.0
+        },
+        "user_accounts": {
+          "count": 0,
+          "score": 0
+        }
+      },
+      "evidence": {
+        "deleted_files": [],
+        "event_anomalies": [],
+        "network_activity": [],
+        "browser_history": [],
+        "app_activity": [],
+        "user_accounts": [],
+        "document_access": []
+      },
+      "rank": 4
+    },
+    {
+      "username": "guest",
+      "display_name": "Guest",
+      "account_type": "builtin",
+      "rankable": true,
+      "artifact_score": 0.0,
+      "timeline_bonus": 0,
+      "timeline_patterns": [],
+      "final_score": 0.0,
+      "risk_label": "LOW",
+      "risk_rationale": "No user-attributable evidence beyond shared/system activity.",
+      "diversity": {
+        "category_count": 0
+      },
+      "artifact_breakdown": {
+        "deleted_files": {
+          "count": 0,
+          "score": 0
+        },
+        "event_anomalies": {
+          "count": 0,
+          "score": 0.0
+        },
+        "app_activity": {
+          "effective": 0.0,
+          "attributed_count": 0,
+          "score": 0.0,
+          "shared_pool_weighted": 8.5
+        },
+        "network_activity": {
+          "weighted": 0.0,
+          "raw_count": 0,
+          "score": 0.0
+        },
+        "document_access": {
+          "count": 0,
+          "sensitive": 0,
+          "score": 0
+        },
+        "browser_history": {
+          "count": 0,
+          "flagged": 0,
+          "score": 0.0
+        },
+        "user_accounts": {
+          "count": 0,
+          "score": 0
+        }
+      },
+      "evidence": {
+        "deleted_files": [],
+        "event_anomalies": [],
+        "network_activity": [],
+        "browser_history": [],
+        "app_activity": [],
+        "user_accounts": [],
+        "document_access": []
+      },
+      "rank": 5
+    },
+    {
+      "username": "harry princeton",
+      "display_name": "Harry Princeton",
+      "account_type": "user",
+      "rankable": true,
+      "artifact_score": 0.0,
+      "timeline_bonus": 0,
+      "timeline_patterns": [],
+      "final_score": 0.0,
+      "risk_label": "LOW",
+      "risk_rationale": "No user-attributable evidence beyond shared/system activity.",
+      "diversity": {
+        "category_count": 0
+      },
+      "artifact_breakdown": {
+        "deleted_files": {
+          "count": 0,
+          "score": 0
+        },
+        "event_anomalies": {
+          "count": 0,
+          "score": 0.0
+        },
+        "app_activity": {
+          "effective": 0.0,
+          "attributed_count": 0,
+          "score": 0.0,
+          "shared_pool_weighted": 8.5
+        },
+        "network_activity": {
+          "weighted": 0.0,
+          "raw_count": 0,
+          "score": 0.0
+        },
+        "document_access": {
+          "count": 0,
+          "sensitive": 0,
+          "score": 0
+        },
+        "browser_history": {
+          "count": 0,
+          "flagged": 0,
+          "score": 0.0
+        },
+        "user_accounts": {
+          "count": 0,
+          "score": 0
+        }
+      },
+      "evidence": {
+        "deleted_files": [],
+        "event_anomalies": [],
+        "network_activity": [],
+        "browser_history": [],
+        "app_activity": [],
+        "user_accounts": [],
+        "document_access": []
+      },
+      "rank": 6
+    },
+    {
+      "username": "localsystem",
+      "display_name": "localsystem",
+      "account_type": "system",
+      "rankable": false,
+      "artifact_score": 71.51,
+      "timeline_bonus": 0,
+      "timeline_patterns": [],
+      "final_score": 71.51,
+      "risk_label": null,
+      "risk_rationale": "",
+      "diversity": {
+        "category_count": 1
+      },
+      "artifact_breakdown": {
+        "deleted_files": {
+          "count": 0,
+          "score": 0
+        },
+        "event_anomalies": {
+          "count": 4,
+          "score": 48.0
+        },
+        "app_activity": {
+          "effective": 0.0,
+          "attributed_count": 0,
+          "score": 0.0,
+          "shared_pool_weighted": 8.5
+        },
+        "network_activity": {
+          "weighted": 0.0,
+          "raw_count": 0,
+          "score": 0.0
+        },
+        "document_access": {
+          "count": 0,
+          "sensitive": 0,
+          "score": 0
+        },
+        "browser_history": {
+          "count": 0,
+          "flagged": 0,
+          "score": 0.0
+        },
+        "user_accounts": {
+          "count": 0,
+          "score": 0
+        }
+      },
+      "evidence": {
+        "deleted_files": [],
+        "event_anomalies": [
+          {
+            "event_id": 7045,
+            "label": "service_install",
+            "weight": 3,
+            "timestamp": "2026-07-28T17:52:54.433731+00:00"
+          },
+          {
+            "event_id": 7045,
+            "label": "service_install",
+            "weight": 3,
+            "timestamp": "2026-07-27T23:42:33.440260+00:00"
+          },
+          {
+            "event_id": 7045,
+            "label": "service_install",
+            "weight": 3,
+            "timestamp": "2026-07-27T22:36:08.956088+00:00"
+          },
+          {
+            "event_id": 7045,
+            "label": "service_install",
+            "weight": 3,
+            "timestamp": "2026-07-27T22:34:11.314156+00:00"
+          }
+        ],
+        "network_activity": [],
+        "browser_history": [],
+        "app_activity": [],
+        "user_accounts": [],
+        "document_access": []
+      },
+      "rank": null
+    },
+    {
+      "username": "wdagutilityaccount",
+      "display_name": "WDAGUtilityAccount",
+      "account_type": "system",
+      "rankable": false,
+      "artifact_score": 0.0,
+      "timeline_bonus": 0,
+      "timeline_patterns": [],
+      "final_score": 0.0,
+      "risk_label": null,
+      "risk_rationale": "",
+      "diversity": {
+        "category_count": 0
+      },
+      "artifact_breakdown": {
+        "deleted_files": {
+          "count": 0,
+          "score": 0
+        },
+        "event_anomalies": {
+          "count": 0,
+          "score": 0.0
+        },
+        "app_activity": {
+          "effective": 0.0,
+          "attributed_count": 0,
+          "score": 0.0,
+          "shared_pool_weighted": 8.5
+        },
+        "network_activity": {
+          "weighted": 0.0,
+          "raw_count": 0,
+          "score": 0.0
+        },
+        "document_access": {
+          "count": 0,
+          "sensitive": 0,
+          "score": 0
+        },
+        "browser_history": {
+          "count": 0,
+          "flagged": 0,
+          "score": 0.0
+        },
+        "user_accounts": {
+          "count": 0,
+          "score": 0
+        }
+      },
+      "evidence": {
+        "deleted_files": [],
+        "event_anomalies": [],
+        "network_activity": [],
+        "browser_history": [],
+        "app_activity": [],
+        "user_accounts": [],
+        "document_access": []
+      },
+      "rank": null
+    },
+    {
+      "username": "win-in9oduh5hlf$",
+      "display_name": "win-in9oduh5hlf$",
+      "account_type": "system",
+      "rankable": false,
+      "artifact_score": 64.25,
+      "timeline_bonus": 0,
+      "timeline_patterns": [],
+      "final_score": 64.25,
+      "risk_label": null,
+      "risk_rationale": "",
+      "diversity": {
+        "category_count": 1
+      },
+      "artifact_breakdown": {
+        "deleted_files": {
+          "count": 0,
+          "score": 0
+        },
+        "event_anomalies": {
+          "count": 4,
+          "score": 32.0
+        },
+        "app_activity": {
+          "effective": 0.0,
+          "attributed_count": 0,
+          "score": 0.0,
+          "shared_pool_weighted": 8.5
+        },
+        "network_activity": {
+          "weighted": 0.0,
+          "raw_count": 0,
+          "score": 0.0
+        },
+        "document_access": {
+          "count": 0,
+          "sensitive": 0,
+          "score": 0
+        },
+        "browser_history": {
+          "count": 0,
+          "flagged": 0,
+          "score": 0.0
+        },
+        "user_accounts": {
+          "count": 0,
+          "score": 0
+        }
+      },
+      "evidence": {
+        "deleted_files": [],
+        "event_anomalies": [
+          {
+            "event_id": 4625,
+            "label": "logon_failure",
+            "weight": 2,
+            "timestamp": "2026-07-27T23:36:14.099681+00:00"
+          },
+          {
+            "event_id": 4625,
+            "label": "logon_failure",
+            "weight": 2,
+            "timestamp": "2026-07-27T23:23:34.946638+00:00"
+          },
+          {
+            "event_id": 4625,
+            "label": "logon_failure",
+            "weight": 2,
+            "timestamp": "2026-07-27T22:58:46.484869+00:00"
+          },
+          {
+            "event_id": 4625,
+            "label": "logon_failure",
+            "weight": 2,
+            "timestamp": "2026-07-27T22:53:47.486068+00:00"
+          }
+        ],
+        "network_activity": [],
+        "browser_history": [],
+        "app_activity": [],
+        "user_accounts": [],
+        "document_access": []
+      },
+      "rank": null
+    }
+  ],
+  "anomalies": [
+    {
+      "type": "Activity Burst Followed by Logging Gap",
+      "severity": "MEDIUM",
+      "description": "Bob Milton: 17.9h silence after burst of 9 events (last: 2026-07-27T23:45:18.448721+00:00)",
+      "count": 1,
+      "time": "2026-07-27T23:45:18.448721+00:00"
+    }
+  ],
+  "threats": [],
+  "total_anomalies": 1,
+  "total_threats": 0,
+  "high_risk_users": []
+}

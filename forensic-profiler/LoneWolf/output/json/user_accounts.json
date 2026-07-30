@@ -1,6 +1,6 @@
 {
   "artifact": "user_accounts",
-  "parsed_at": "2026-07-22T08:11:24.618136+00:00Z",
+  "parsed_at": "2026-07-29T02:40:13.396470+00:00Z",
   "users": {
     "count": 5,
     "records": [
@@ -10,12 +10,12 @@
         "source": "SAM",
         "username": "Administrator",
         "description": "Built-in account for administering the computer/domain",
-        "account_disabled": false,
-        "password_never_expires": true,
-        "account_locked": true,
         "last_login": "",
         "password_last_set": "",
         "account_expires": "Never",
+        "account_disabled": true,
+        "password_never_expires": true,
+        "account_locked": false,
         "failed_logins": 0,
         "login_count": 0,
         "last_modified": "2018-03-27T12:12:48.782590"
@@ -26,12 +26,12 @@
         "source": "SAM",
         "username": "Guest",
         "description": "Built-in account for guest access to the computer/domain",
-        "account_disabled": false,
-        "password_never_expires": false,
-        "account_locked": false,
         "last_login": "",
         "password_last_set": "",
         "account_expires": "Never",
+        "account_disabled": true,
+        "password_never_expires": true,
+        "account_locked": false,
         "failed_logins": 0,
         "login_count": 0,
         "last_modified": "2018-03-27T12:12:48.782590"
@@ -42,12 +42,12 @@
         "source": "SAM",
         "username": "DefaultAccount",
         "description": "A user account managed by the system.",
-        "account_disabled": false,
-        "password_never_expires": false,
-        "account_locked": true,
         "last_login": "",
         "password_last_set": "",
         "account_expires": "Never",
+        "account_disabled": true,
+        "password_never_expires": true,
+        "account_locked": false,
         "failed_logins": 0,
         "login_count": 0,
         "last_modified": "2018-03-27T12:12:48.782590"
@@ -58,12 +58,12 @@
         "source": "SAM",
         "username": "WDAGUtilityAccount",
         "description": "A user account managed and used by the system for Windows Defender Application Guard scenarios.",
-        "account_disabled": false,
-        "password_never_expires": false,
-        "account_locked": true,
         "last_login": "",
         "password_last_set": "2018-03-27T12:11:45.834300+00:00",
         "account_expires": "Never",
+        "account_disabled": true,
+        "password_never_expires": false,
+        "account_locked": false,
         "failed_logins": 0,
         "login_count": 0,
         "last_modified": "2018-03-27T12:12:48.782590"
@@ -73,12 +73,12 @@
         "rid_hex": "000003E9",
         "source": "SAM",
         "username": "jcloudy",
-        "account_disabled": false,
-        "password_never_expires": false,
-        "account_locked": false,
         "last_login": "2018-04-06T12:26:27.572469+00:00",
         "password_last_set": "2018-03-27T09:18:58.259149+00:00",
         "account_expires": "Never",
+        "account_disabled": false,
+        "password_never_expires": true,
+        "account_locked": false,
         "failed_logins": 0,
         "login_count": 23,
         "last_modified": "2018-04-06T12:26:27.573469"
@@ -142,5 +142,562 @@
   "typed_paths": {
     "count": 0,
     "records": []
+  },
+  "userassist": {
+    "count": 69,
+    "records": [
+      {
+        "username": "jcloudy",
+        "program": "Microsoft.Getstarted_8wekyb3d8bbwe!App",
+        "run_count": 14,
+        "last_run": "2018-03-27T09:18:14.900101+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "Microsoft.WindowsFeedbackHub_8wekyb3d8bbwe!App",
+        "run_count": 13,
+        "last_run": "2018-03-27T09:18:14.900101+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "Microsoft.WindowsMaps_8wekyb3d8bbwe!App",
+        "run_count": 12,
+        "last_run": "2018-03-27T09:18:14.900101+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "Microsoft.People_8wekyb3d8bbwe!x4c7a3b7dy2188y46d4ya362y19ac5a5805e5x",
+        "run_count": 11,
+        "last_run": "2018-03-27T09:18:14.900101+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "Microsoft.MicrosoftStickyNotes_8wekyb3d8bbwe!App",
+        "run_count": 10,
+        "last_run": "2018-03-27T09:18:14.900101+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\\SnippingTool.exe",
+        "run_count": 9,
+        "last_run": "2018-03-27T09:18:14.900101+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "Microsoft.WindowsCalculator_8wekyb3d8bbwe!App",
+        "run_count": 9,
+        "last_run": "2018-03-31T19:50:05.898000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\\mspaint.exe",
+        "run_count": 7,
+        "last_run": "2018-03-27T09:18:14.900101+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\\notepad.exe",
+        "run_count": 7,
+        "last_run": "2018-03-27T09:23:14.909000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "Microsoft.Windows.ShellExperienceHost_cw5n1h2txyewy!App",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{6D809377-6AF0-444B-8957-A3773F02200E}\\DellTPad\\Apoint.exe",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "Microsoft.Windows.Explorer",
+        "run_count": 26,
+        "last_run": "2018-04-06T12:39:44.933000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{D65231B0-B2F1-4857-A4CE-A8E7C6EA7D27}\\cmd.exe",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "D:\\AKMonitor\\AKMonitor.exe",
+        "run_count": 3,
+        "last_run": "2018-03-27T09:33:20.839000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "windows.immersivecontrolpanel_cw5n1h2txyewy!microsoft.windows.immersivecontrolpanel",
+        "run_count": 3,
+        "last_run": "2018-04-06T08:30:50.890000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "Microsoft.Windows.Cortana_cw5n1h2txyewy!CortanaUI",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "Microsoft.MicrosoftEdge_8wekyb3d8bbwe!MicrosoftEdge",
+        "run_count": 1,
+        "last_run": "2018-03-27T09:28:51.267000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "Microsoft.MicrosoftEdge_8wekyb3d8bbwe!ContentProcess",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "C:\\Users\\jcloudy\\AppData\\Local\\Packages\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\TempState\\Downloads\\ChromeSetup.exe",
+        "run_count": 1,
+        "last_run": "2018-03-27T09:29:26.939000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{7C5A40EF-A0FB-4BFC-874A-C0F2E0B9FA8E}\\GUMFC2E.tmp\\GoogleUpdate.exe",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{7C5A40EF-A0FB-4BFC-874A-C0F2E0B9FA8E}\\Google\\Update\\GoogleUpdate.exe",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "Microsoft.Windows.Computer",
+        "run_count": 1,
+        "last_run": "2018-03-27T09:32:20.037000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "Microsoft.Windows.ControlPanel",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "Chrome",
+        "run_count": 1,
+        "last_run": "2018-03-27T09:58:23.547000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "C:\\Users\\jcloudy\\AppData\\Local\\Packages\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\TempState\\Downloads\\Setup.X86.en-us_O365ProPlusRetail_02c0210c-b841-4cc2-b779-b3a35ae78121_TX_PR_b_64_.exe",
+        "run_count": 1,
+        "last_run": "2018-03-27T09:35:29.736000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{6D809377-6AF0-444B-8957-A3773F02200E}\\Common Files\\microsoft shared\\ClickToRun\\OfficeClickToRun.exe",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{6D809377-6AF0-444B-8957-A3773F02200E}\\Common Files\\microsoft shared\\ClickToRun\\OfficeC2RClient.exe",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "Microsoft.Office.OneNote_8wekyb3d8bbwe!microsoft.onenoteim",
+        "run_count": 3,
+        "last_run": "2018-04-06T08:26:06.575000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\\cmd.exe",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "Microsoft.SkyDrive.Desktop",
+        "run_count": 1,
+        "last_run": "2018-03-27T09:51:00.838000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\\OpenWith.exe",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{7C5A40EF-A0FB-4BFC-874A-C0F2E0B9FA8E}\\Google\\Chrome\\Application\\chrome.exe",
+        "run_count": 1,
+        "last_run": "2018-03-27T09:51:18.870000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "Microsoft.WindowsStore_8wekyb3d8bbwe!App",
+        "run_count": 6,
+        "last_run": "2018-04-05T01:52:32.551000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "microsoft.microsoftskydrive_8wekyb3d8bbwe!App",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "Microsoft.LockApp_cw5n1h2txyewy!WindowsDefaultLockScreen",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "C:\\Users\\jcloudy\\Downloads\\installbackupandsync.exe",
+        "run_count": 1,
+        "last_run": "2018-03-27T23:40:32.809000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{6D809377-6AF0-444B-8957-A3773F02200E}\\S3 Browser\\s3browser-win32.exe",
+        "run_count": 4,
+        "last_run": "2018-04-05T06:06:42.527000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "C:\\Users\\jcloudy\\AppData\\Local\\Temp\\GUMC3F.tmp\\DropboxUpdate.exe",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{7C5A40EF-A0FB-4BFC-874A-C0F2E0B9FA8E}\\Dropbox\\Update\\DropboxUpdate.exe",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "Dropbox.Desktop.Client",
+        "run_count": 2,
+        "last_run": "2018-04-02T01:43:38.615000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "C:\\Users\\jcloudy\\Downloads\\BoxSyncSetup.exe",
+        "run_count": 1,
+        "last_run": "2018-03-28T00:44:00.312000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "C:\\Users\\jcloudy\\AppData\\Local\\Temp\\{9F3FD110-97F4-40D1-9270-5588913DB144}\\.cr\\BoxSyncSetup.exe",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{6D809377-6AF0-444B-8957-A3773F02200E}\\Box\\Box Sync\\BoxSync.exe",
+        "run_count": 2,
+        "last_run": "2018-04-05T02:05:01.605000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "Microsoft.AutoGenerated.{923DD477-5846-686B-A659-0FCCD73851A8}",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "Microsoft.Office.WINWORD.EXE.15",
+        "run_count": 2,
+        "last_run": "2018-04-05T02:32:31.069000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "Microsoft.AutoGenerated.{4F320C6D-566B-A328-A366-1EC51BD74B62}",
+        "run_count": 3,
+        "last_run": "2018-03-31T20:09:21.582000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "Microsoft.Windows.Photos_8wekyb3d8bbwe!App",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "Microsoft.Office.POWERPNT.EXE.15",
+        "run_count": 2,
+        "last_run": "2018-04-04T05:00:26.548000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{6D809377-6AF0-444B-8957-A3773F02200E}\\Google\\Drive\\googledrivesync.exe",
+        "run_count": 3,
+        "last_run": "2018-04-05T01:54:25.809000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{7C5A40EF-A0FB-4BFC-874A-C0F2E0B9FA8E}\\Microsoft Office\\Root\\Office16\\WINWORD.EXE",
+        "run_count": 1,
+        "last_run": "2018-04-05T07:02:25.964000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{7C5A40EF-A0FB-4BFC-874A-C0F2E0B9FA8E}\\Microsoft Office\\Root\\Office16\\EXCEL.EXE",
+        "run_count": 1,
+        "last_run": "2018-04-06T12:27:04.783000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "Microsoft.Office.EXCEL.EXE.15",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "F:\\CFRS 780 Lone Wolf Scenario\\FTK_Imager_4_2_0\\FTK Imager\\FTK Imager.exe",
+        "run_count": 1,
+        "last_run": "2018-04-06T12:40:38.776000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "F:\\Programs\\Imager_Lite_3.1.1\\FTK Imager.exe",
+        "run_count": 1,
+        "last_run": "2018-04-06T12:41:20.764000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{0139D44E-6AFE-49F2-8690-3DAFCAE6FFB8}\\Accessories\\Snipping Tool.lnk",
+        "run_count": 9,
+        "last_run": "2018-03-27T09:18:14.900101+00:00",
+        "guid": "F4E57C4B-2036-45F0-A9AB-443BCFE33D9F",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{0139D44E-6AFE-49F2-8690-3DAFCAE6FFB8}\\Accessories\\Paint.lnk",
+        "run_count": 7,
+        "last_run": "2018-03-27T09:18:14.900101+00:00",
+        "guid": "F4E57C4B-2036-45F0-A9AB-443BCFE33D9F",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{A77F5D77-2E2B-44C3-A6A2-ABA601054A51}\\Accessories\\Notepad.lnk",
+        "run_count": 6,
+        "last_run": "2018-03-27T09:18:14.900101+00:00",
+        "guid": "F4E57C4B-2036-45F0-A9AB-443BCFE33D9F",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{9E3995AB-1F9C-4F13-B827-48B24B6C7174}\\TaskBar\\File Explorer.lnk",
+        "run_count": 26,
+        "last_run": "2018-04-06T12:39:44.933000+00:00",
+        "guid": "F4E57C4B-2036-45F0-A9AB-443BCFE33D9F",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{A77F5D77-2E2B-44C3-A6A2-ABA601054A51}\\OneDrive.lnk",
+        "run_count": 1,
+        "last_run": "2018-03-27T09:51:00.838000+00:00",
+        "guid": "F4E57C4B-2036-45F0-A9AB-443BCFE33D9F",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "C:\\Users\\Public\\Desktop\\Google Chrome.lnk",
+        "run_count": 1,
+        "last_run": "2018-03-27T09:58:23.547000+00:00",
+        "guid": "F4E57C4B-2036-45F0-A9AB-443BCFE33D9F",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{0139D44E-6AFE-49F2-8690-3DAFCAE6FFB8}\\Box Sync\\Box Sync.lnk",
+        "run_count": 2,
+        "last_run": "2018-04-05T02:05:01.607000+00:00",
+        "guid": "F4E57C4B-2036-45F0-A9AB-443BCFE33D9F",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{9E3995AB-1F9C-4F13-B827-48B24B6C7174}\\TaskBar\\Word 2016.lnk",
+        "run_count": 2,
+        "last_run": "2018-04-05T02:32:31.069000+00:00",
+        "guid": "F4E57C4B-2036-45F0-A9AB-443BCFE33D9F",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "C:\\Users\\Public\\Desktop\\Google Docs.lnk",
+        "run_count": 3,
+        "last_run": "2018-03-31T20:09:21.582000+00:00",
+        "guid": "F4E57C4B-2036-45F0-A9AB-443BCFE33D9F",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "C:\\Users\\Public\\Desktop\\S3 Browser.lnk",
+        "run_count": 3,
+        "last_run": "2018-04-05T02:23:51.443000+00:00",
+        "guid": "F4E57C4B-2036-45F0-A9AB-443BCFE33D9F",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "C:\\Users\\jcloudy\\Desktop\\Dropbox.lnk",
+        "run_count": 1,
+        "last_run": "2018-04-02T01:43:26.042000+00:00",
+        "guid": "F4E57C4B-2036-45F0-A9AB-443BCFE33D9F",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{0139D44E-6AFE-49F2-8690-3DAFCAE6FFB8}\\Dropbox\\Dropbox.lnk",
+        "run_count": 1,
+        "last_run": "2018-04-02T01:43:38.615000+00:00",
+        "guid": "F4E57C4B-2036-45F0-A9AB-443BCFE33D9F",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{9E3995AB-1F9C-4F13-B827-48B24B6C7174}\\TaskBar\\PowerPoint 2016.lnk",
+        "run_count": 2,
+        "last_run": "2018-04-04T05:00:26.548000+00:00",
+        "guid": "F4E57C4B-2036-45F0-A9AB-443BCFE33D9F",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{0139D44E-6AFE-49F2-8690-3DAFCAE6FFB8}\\Backup and Sync from Google\\Backup and Sync from Google.lnk",
+        "run_count": 3,
+        "last_run": "2018-04-05T01:54:25.809000+00:00",
+        "guid": "F4E57C4B-2036-45F0-A9AB-443BCFE33D9F",
+        "layout": "vista+"
+      },
+      {
+        "username": "jcloudy",
+        "program": "{0139D44E-6AFE-49F2-8690-3DAFCAE6FFB8}\\S3 Browser\\S3 Browser.lnk",
+        "run_count": 1,
+        "last_run": "2018-04-05T06:06:42.527000+00:00",
+        "guid": "F4E57C4B-2036-45F0-A9AB-443BCFE33D9F",
+        "layout": "vista+"
+      }
+    ]
   }
 }

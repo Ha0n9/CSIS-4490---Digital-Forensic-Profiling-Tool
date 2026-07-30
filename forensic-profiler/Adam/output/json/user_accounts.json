@@ -1,0 +1,514 @@
+{
+  "artifact": "user_accounts",
+  "parsed_at": "2026-07-29T02:34:45.083412+00:00Z",
+  "users": {
+    "count": 7,
+    "records": [
+      {
+        "rid": 500,
+        "rid_hex": "000001F4",
+        "source": "SAM",
+        "username": "Administrator",
+        "description": "Built-in account for administering the computer/domain",
+        "last_login": "",
+        "password_last_set": "",
+        "account_expires": "Never",
+        "account_disabled": true,
+        "password_never_expires": true,
+        "account_locked": false,
+        "failed_logins": 0,
+        "login_count": 0,
+        "last_modified": "2026-07-27T22:36:23.437443"
+      },
+      {
+        "rid": 501,
+        "rid_hex": "000001F5",
+        "source": "SAM",
+        "username": "Guest",
+        "description": "Built-in account for guest access to the computer/domain",
+        "last_login": "",
+        "password_last_set": "",
+        "account_expires": "Never",
+        "account_disabled": true,
+        "password_never_expires": true,
+        "account_locked": false,
+        "failed_logins": 0,
+        "login_count": 0,
+        "last_modified": "2026-07-27T22:36:23.292988"
+      },
+      {
+        "rid": 503,
+        "rid_hex": "000001F7",
+        "source": "SAM",
+        "username": "DefaultAccount",
+        "description": "A user account managed by the system.",
+        "last_login": "",
+        "password_last_set": "",
+        "account_expires": "Never",
+        "account_disabled": true,
+        "password_never_expires": true,
+        "account_locked": false,
+        "failed_logins": 0,
+        "login_count": 0,
+        "last_modified": "2026-07-27T22:36:23.292988"
+      },
+      {
+        "rid": 504,
+        "rid_hex": "000001F8",
+        "source": "SAM",
+        "username": "WDAGUtilityAccount",
+        "description": "A user account managed and used by the system for Windows Defender Application Guard scenarios.",
+        "last_login": "",
+        "password_last_set": "2026-07-27T22:33:52.305478+00:00",
+        "account_expires": "Never",
+        "account_disabled": true,
+        "password_never_expires": false,
+        "account_locked": false,
+        "failed_logins": 0,
+        "login_count": 0,
+        "last_modified": "2026-07-27T22:36:23.292988"
+      },
+      {
+        "rid": 1001,
+        "rid_hex": "000003E9",
+        "source": "SAM",
+        "username": "Bob Milton",
+        "last_login": "2026-07-28T17:40:26.052092+00:00",
+        "password_last_set": "2026-07-27T22:42:21.283124+00:00",
+        "account_expires": "Never",
+        "account_disabled": false,
+        "password_never_expires": true,
+        "account_locked": false,
+        "failed_logins": 0,
+        "login_count": 11,
+        "last_modified": "2026-07-28T17:40:26.052093"
+      },
+      {
+        "rid": 1002,
+        "rid_hex": "000003EA",
+        "source": "SAM",
+        "username": "Adam Sed",
+        "last_login": "2026-07-28T17:40:03.453669+00:00",
+        "password_last_set": "2026-07-27T22:46:54.381905+00:00",
+        "account_expires": "Never",
+        "account_disabled": false,
+        "password_never_expires": true,
+        "account_locked": false,
+        "failed_logins": 0,
+        "login_count": 6,
+        "last_modified": "2026-07-28T17:40:03.453670"
+      },
+      {
+        "rid": 1003,
+        "rid_hex": "000003EB",
+        "source": "SAM",
+        "username": "Harry Princeton",
+        "last_login": "",
+        "password_last_set": "2026-07-27T22:49:18.763462+00:00",
+        "account_expires": "Never",
+        "account_disabled": false,
+        "password_never_expires": true,
+        "account_locked": false,
+        "failed_logins": 0,
+        "login_count": 0,
+        "last_modified": "2026-07-27T22:49:18.772932"
+      }
+    ]
+  },
+  "autorun_entries": {
+    "count": 10,
+    "records": [
+      {
+        "username": "Adam Sed",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "name": "OneDrive",
+        "data": "\"C:\\Users\\Adam Sed\\AppData\\Local\\Microsoft\\OneDrive\\OneDrive.exe\" /background",
+        "last_modified": "2026-07-28T17:42:51.881046"
+      },
+      {
+        "username": "Adam Sed",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "name": "MicrosoftEdgeAutoLaunch_D94F356A944AFA0D3A3305E242475126",
+        "data": "\"C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe\" --no-startup-window --win-session-start",
+        "last_modified": "2026-07-28T17:42:51.881046"
+      },
+      {
+        "username": "Adam Sed",
+        "key": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows",
+        "name": "Device",
+        "data": "",
+        "last_modified": "2026-07-27T22:51:05.620341"
+      },
+      {
+        "username": "Adam Sed",
+        "key": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows",
+        "name": "IsMRUEstablished",
+        "data": "4294967295",
+        "last_modified": "2026-07-27T22:51:05.620341"
+      },
+      {
+        "username": "Adam Sed",
+        "key": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows",
+        "name": "LegacyDefaultPrinterMode",
+        "data": "4294967295",
+        "last_modified": "2026-07-27T22:51:05.620341"
+      },
+      {
+        "username": "Bob Milton",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "name": "OneDrive",
+        "data": "\"C:\\Users\\Bob Milton\\AppData\\Local\\Microsoft\\OneDrive\\OneDrive.exe\" /background",
+        "last_modified": "2026-07-28T17:43:05.464972"
+      },
+      {
+        "username": "Bob Milton",
+        "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "name": "MicrosoftEdgeAutoLaunch_E5C5B66D625691CF47E4FBBCF136D37F",
+        "data": "\"C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe\" --no-startup-window --win-session-start",
+        "last_modified": "2026-07-28T17:43:05.464972"
+      },
+      {
+        "username": "Bob Milton",
+        "key": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows",
+        "name": "Device",
+        "data": "",
+        "last_modified": "2026-07-27T22:42:27.340022"
+      },
+      {
+        "username": "Bob Milton",
+        "key": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows",
+        "name": "IsMRUEstablished",
+        "data": "4294967295",
+        "last_modified": "2026-07-27T22:42:27.340022"
+      },
+      {
+        "username": "Bob Milton",
+        "key": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows",
+        "name": "LegacyDefaultPrinterMode",
+        "data": "4294967295",
+        "last_modified": "2026-07-27T22:42:27.340022"
+      }
+    ]
+  },
+  "typed_paths": {
+    "count": 0,
+    "records": []
+  },
+  "userassist": {
+    "count": 39,
+    "records": [
+      {
+        "username": "Adam Sed",
+        "program": "Microsoft.WindowsFeedbackHub_8wekyb3d8bbwe!App",
+        "run_count": 14,
+        "last_run": "2026-07-27T22:49:28.587257+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Adam Sed",
+        "program": "Microsoft.MicrosoftStickyNotes_8wekyb3d8bbwe!App",
+        "run_count": 11,
+        "last_run": "2026-07-27T22:49:28.587257+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Adam Sed",
+        "program": "Microsoft.WindowsCalculator_8wekyb3d8bbwe!App",
+        "run_count": 8,
+        "last_run": "2026-07-27T22:49:28.587257+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Adam Sed",
+        "program": "Microsoft.Paint_8wekyb3d8bbwe!App",
+        "run_count": 5,
+        "last_run": "2026-07-27T22:49:28.587257+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Adam Sed",
+        "program": "Microsoft.WindowsNotepad_8wekyb3d8bbwe!App",
+        "run_count": 22,
+        "last_run": "2026-07-27T23:38:46.607000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Adam Sed",
+        "program": "Microsoft.Windows.CloudExperienceHost_cw5n1h2txyewy!App",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Adam Sed",
+        "program": "MicrosoftWindows.Client.CBS_cw5n1h2txyewy!CortanaUI",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Adam Sed",
+        "program": "Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy!FullTrustApp",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Adam Sed",
+        "program": "Microsoft.Windows.Explorer",
+        "run_count": 10,
+        "last_run": "2026-07-27T23:48:43.766000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Adam Sed",
+        "program": "{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "run_count": 8,
+        "last_run": "2026-07-27T23:39:44.909000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Adam Sed",
+        "program": "Microsoft.WindowsTerminal_8wekyb3d8bbwe!App",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Adam Sed",
+        "program": "MSEdge",
+        "run_count": 2,
+        "last_run": "2026-07-27T23:02:45.468000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Adam Sed",
+        "program": "Microsoft.Windows.ShellExperienceHost_cw5n1h2txyewy!App",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Adam Sed",
+        "program": "D:\\VBoxWindowsAdditions.exe",
+        "run_count": 1,
+        "last_run": "2026-07-27T23:40:14.576000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Adam Sed",
+        "program": "D:\\VBoxWindowsAdditions-amd64.exe",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Adam Sed",
+        "program": "{9E3995AB-1F9C-4F13-B827-48B24B6C7174}\\TaskBar\\File Explorer.lnk",
+        "run_count": 10,
+        "last_run": "2026-07-27T23:48:43.766000+00:00",
+        "guid": "F4E57C4B-2036-45F0-A9AB-443BCFE33D9F",
+        "layout": "vista+"
+      },
+      {
+        "username": "Adam Sed",
+        "program": "{A77F5D77-2E2B-44C3-A6A2-ABA601054A51}\\Windows PowerShell\\Windows PowerShell.lnk",
+        "run_count": 8,
+        "last_run": "2026-07-27T23:39:44.909000+00:00",
+        "guid": "F4E57C4B-2036-45F0-A9AB-443BCFE33D9F",
+        "layout": "vista+"
+      },
+      {
+        "username": "Adam Sed",
+        "program": "{9E3995AB-1F9C-4F13-B827-48B24B6C7174}\\TaskBar\\Microsoft Edge.lnk",
+        "run_count": 2,
+        "last_run": "2026-07-27T23:02:45.468000+00:00",
+        "guid": "F4E57C4B-2036-45F0-A9AB-443BCFE33D9F",
+        "layout": "vista+"
+      },
+      {
+        "username": "Bob Milton",
+        "program": "Microsoft.WindowsFeedbackHub_8wekyb3d8bbwe!App",
+        "run_count": 14,
+        "last_run": "2026-07-27T22:40:48.202173+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Bob Milton",
+        "program": "Microsoft.MicrosoftStickyNotes_8wekyb3d8bbwe!App",
+        "run_count": 11,
+        "last_run": "2026-07-27T22:40:48.202173+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Bob Milton",
+        "program": "Microsoft.WindowsCalculator_8wekyb3d8bbwe!App",
+        "run_count": 8,
+        "last_run": "2026-07-27T22:40:48.202173+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Bob Milton",
+        "program": "Microsoft.Paint_8wekyb3d8bbwe!App",
+        "run_count": 5,
+        "last_run": "2026-07-27T22:40:48.202173+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Bob Milton",
+        "program": "Microsoft.WindowsNotepad_8wekyb3d8bbwe!App",
+        "run_count": 14,
+        "last_run": "2026-07-27T23:22:08.518000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Bob Milton",
+        "program": "Microsoft.Windows.CloudExperienceHost_cw5n1h2txyewy!App",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Bob Milton",
+        "program": "MicrosoftWindows.Client.CBS_cw5n1h2txyewy!CortanaUI",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Bob Milton",
+        "program": "windows.immersivecontrolpanel_cw5n1h2txyewy!microsoft.windows.immersivecontrolpanel",
+        "run_count": 1,
+        "last_run": "2026-07-27T22:43:51.839000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Bob Milton",
+        "program": "Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy!FullTrustApp",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Bob Milton",
+        "program": "Microsoft.Windows.Explorer",
+        "run_count": 13,
+        "last_run": "2026-07-28T17:41:48.832000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Bob Milton",
+        "program": "Microsoft.WindowsTerminal_8wekyb3d8bbwe!App",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Bob Milton",
+        "program": "{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "run_count": 3,
+        "last_run": "2026-07-28T17:47:52.038000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Bob Milton",
+        "program": "D:\\VBoxWindowsAdditions.exe",
+        "run_count": 1,
+        "last_run": "2026-07-27T23:41:23.796000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Bob Milton",
+        "program": "D:\\VBoxWindowsAdditions-amd64.exe",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Bob Milton",
+        "program": "{6D809377-6AF0-444B-8957-A3773F02200E}\\Oracle\\VirtualBox Guest Additions\\Tools\\VBoxDrvInst.exe",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Bob Milton",
+        "program": "Microsoft.Windows.ShellExperienceHost_cw5n1h2txyewy!App",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Bob Milton",
+        "program": "Microsoft.Windows.ControlPanel",
+        "run_count": 0,
+        "last_run": "",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Bob Milton",
+        "program": "{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\\mmc.exe",
+        "run_count": 1,
+        "last_run": "2026-07-28T17:55:57.126000+00:00",
+        "guid": "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+        "layout": "vista+"
+      },
+      {
+        "username": "Bob Milton",
+        "program": "{9E3995AB-1F9C-4F13-B827-48B24B6C7174}\\TaskBar\\File Explorer.lnk",
+        "run_count": 10,
+        "last_run": "2026-07-27T23:46:51.802000+00:00",
+        "guid": "F4E57C4B-2036-45F0-A9AB-443BCFE33D9F",
+        "layout": "vista+"
+      },
+      {
+        "username": "Bob Milton",
+        "program": "{A77F5D77-2E2B-44C3-A6A2-ABA601054A51}\\Windows PowerShell\\Windows PowerShell.lnk",
+        "run_count": 3,
+        "last_run": "2026-07-28T17:47:52.038000+00:00",
+        "guid": "F4E57C4B-2036-45F0-A9AB-443BCFE33D9F",
+        "layout": "vista+"
+      },
+      {
+        "username": "Bob Milton",
+        "program": "{A77F5D77-2E2B-44C3-A6A2-ABA601054A51}\\File Explorer.lnk",
+        "run_count": 2,
+        "last_run": "2026-07-27T23:41:17.484000+00:00",
+        "guid": "F4E57C4B-2036-45F0-A9AB-443BCFE33D9F",
+        "layout": "vista+"
+      }
+    ]
+  }
+}

@@ -1,76 +1,86 @@
 {
   "artifact": "correlated_results",
-  "parsed_at": "2026-07-22T08:11:45.185838+00:00",
+  "parsed_at": "2026-07-29T02:40:38.580671+00:00",
   "shared_pool_app_activity": [
     {
       "exe": "regsvr32.exe",
       "category": "execution",
       "multiplier": 2.0,
       "run_count": 1,
-      "last_run": ""
+      "last_run": "",
+      "attribution_method": "unattributed"
     },
     {
       "exe": "rundll32.exe",
       "category": "execution",
       "multiplier": 2.0,
       "run_count": 1,
-      "last_run": ""
+      "last_run": "",
+      "attribution_method": "unattributed"
     },
     {
       "exe": "rundll32.exe",
       "category": "execution",
       "multiplier": 2.0,
       "run_count": 1,
-      "last_run": ""
+      "last_run": "",
+      "attribution_method": "unattributed"
     },
     {
       "exe": "rundll32.exe",
       "category": "execution",
       "multiplier": 2.0,
       "run_count": 1,
-      "last_run": ""
+      "last_run": "",
+      "attribution_method": "unattributed"
     },
     {
       "exe": "rundll32.exe",
       "category": "execution",
       "multiplier": 2.0,
       "run_count": 1,
-      "last_run": ""
+      "last_run": "",
+      "attribution_method": "unattributed"
     },
     {
       "exe": "rundll32.exe",
       "category": "execution",
       "multiplier": 2.0,
       "run_count": 1,
-      "last_run": ""
+      "last_run": "",
+      "attribution_method": "unattributed"
     },
     {
       "exe": "rundll32.exe",
       "category": "execution",
       "multiplier": 2.0,
       "run_count": 1,
-      "last_run": ""
+      "last_run": "",
+      "attribution_method": "unattributed"
     },
     {
       "exe": "rundll32.exe",
       "category": "execution",
       "multiplier": 2.0,
       "run_count": 1,
-      "last_run": ""
+      "last_run": "",
+      "attribution_method": "unattributed"
     },
     {
       "exe": "rundll32.exe",
       "category": "execution",
       "multiplier": 2.0,
       "run_count": 1,
-      "last_run": ""
+      "last_run": "",
+      "attribution_method": "unattributed"
     },
     {
       "exe": "rundll32.exe",
       "category": "execution",
       "multiplier": 2.0,
       "run_count": 1,
-      "last_run": ""
+      "last_run": "",
+      "attribution_method": "unattributed"
     }
   ],
   "summary": {
@@ -82,7 +92,12 @@
     "total_deleted": 5,
     "total_apps": 160,
     "unattributed_app_activity_weighted": 20.0,
-    "parsed_at": "2026-07-22T08:11:45.185838+00:00"
+    "security_log_coverage": {
+      "security_events_observed": 7137,
+      "status": "OBSERVED",
+      "note": "7137 Security-channel event(s) observed."
+    },
+    "parsed_at": "2026-07-29T02:40:38.580671+00:00"
   },
   "user_correlations": [
     {
@@ -90,21 +105,39 @@
       "display_name": "jcloudy",
       "account_type": "user",
       "rankable": true,
-      "artifact_score": 85.16,
-      "timeline_bonus": 6,
+      "artifact_score": 69.94,
+      "timeline_bonus": 18,
       "timeline_patterns": [
         {
           "pattern": "activity_then_log_gap",
           "bonus": 6,
           "detail": "11.8h silence after burst of 5 events (last: 2018-03-27T09:57:28.844371+00:00)",
           "timestamp": "2018-03-27T09:57:28.844371+00:00"
+        },
+        {
+          "pattern": "privileged_logon_then_activity",
+          "bonus": 4,
+          "detail": "Privileged logon after 'document_access: C:\\Users\\jcloudy\\OneDrive\\Getting started with OneDrive.pdf' (386s apart)",
+          "timestamp": "2018-03-27T09:56:41.912533+00:00"
+        },
+        {
+          "pattern": "privileged_logon_then_activity",
+          "bonus": 4,
+          "detail": "Privileged logon after 'document_access: C:\\Users\\jcloudy\\OneDrive\\Getting started with OneDrive.pdf' (433s apart)",
+          "timestamp": "2018-03-27T09:57:28.844371+00:00"
+        },
+        {
+          "pattern": "privileged_logon_then_activity",
+          "bonus": 4,
+          "detail": "Privileged logon before 'document_access: C:\\Users\\jcloudy\\Downloads\\rootkey.csv' (1769s apart)",
+          "timestamp": "2018-03-27T23:29:51.073555+00:00"
         }
       ],
-      "final_score": 91.16,
+      "final_score": 87.94,
       "risk_label": "HIGH",
-      "risk_rationale": "Score 91.16 (>= 18.0) across 3 independent evidence categories, including 3 strong (user-attributed) source(s).",
+      "risk_rationale": "Score 87.94 (>= 18.0) across 2 independent evidence categories, including 2 strong (user-attributed) source(s).",
       "diversity": {
-        "category_count": 3
+        "category_count": 2
       },
       "artifact_breakdown": {
         "deleted_files": {
@@ -112,8 +145,8 @@
           "score": 20
         },
         "event_anomalies": {
-          "count": 23,
-          "score": 60.0
+          "count": 0,
+          "score": 0.0
         },
         "app_activity": {
           "effective": 0.0,
@@ -128,8 +161,8 @@
         },
         "document_access": {
           "count": 38,
-          "sensitive": 11,
-          "score": 22
+          "sensitive": 12,
+          "score": 24
         },
         "browser_history": {
           "count": 2293,
@@ -164,128 +197,7 @@
             "deleted_at": "2018-04-05T02:20:17.095000+00:00"
           }
         ],
-        "event_anomalies": [
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T12:26:27.575105+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T08:24:46.006054+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T06:56:30.410484+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T06:14:43.746482+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T03:30:58.632403+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-05T07:54:33.897725+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-05T07:01:30.317962+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-05T01:48:36.836584+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-04T04:30:48.054434+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-03T05:58:13.354180+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-02T00:53:03.720543+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-01T22:43:39.369167+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-31T17:41:07.525763+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-31T04:11:32.540569+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-30T21:09:22.034770+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-30T04:23:47.278200+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-30T03:27:57.338845+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-27T23:29:51.073555+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-27T21:45:44.769848+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-27T09:57:28.844371+00:00"
-          }
-        ],
+        "event_anomalies": [],
         "network_activity": [],
         "browser_history": [],
         "app_activity": [],
@@ -340,6 +252,11 @@
             "target": "C:\\Users\\jcloudy\\Desktop\\UKknifeBan.pdf",
             "extension": ".pdf",
             "accessed_at": ""
+          },
+          {
+            "target": "D:\\key.txt",
+            "extension": ".txt",
+            "accessed_at": "2018-03-22T03:05:24+00:00"
           },
           {
             "target": "C:\\Users\\jcloudy\\Downloads\\rootkey.csv",
@@ -531,353 +448,6 @@
       "rank": 4
     },
     {
-      "username": "defaultuser0",
-      "display_name": "defaultuser0",
-      "account_type": "system",
-      "rankable": false,
-      "artifact_score": 59.14,
-      "timeline_bonus": 0,
-      "timeline_patterns": [],
-      "final_score": 59.14,
-      "risk_label": null,
-      "risk_rationale": "",
-      "diversity": {
-        "category_count": 1
-      },
-      "artifact_breakdown": {
-        "deleted_files": {
-          "count": 0,
-          "score": 0
-        },
-        "event_anomalies": {
-          "count": 2,
-          "score": 24.0
-        },
-        "app_activity": {
-          "effective": 0.0,
-          "attributed_count": 0,
-          "score": 0.0,
-          "shared_pool_weighted": 20.0
-        },
-        "network_activity": {
-          "weighted": 0.0,
-          "raw_count": 0,
-          "score": 0.0
-        },
-        "document_access": {
-          "count": 0,
-          "sensitive": 0,
-          "score": 0
-        },
-        "browser_history": {
-          "count": 0,
-          "flagged": 0,
-          "score": 0.0
-        },
-        "user_accounts": {
-          "count": 0,
-          "score": 0
-        }
-      },
-      "evidence": {
-        "deleted_files": [],
-        "event_anomalies": [
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-27T12:13:28.851422+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-27T12:13:21.931904+00:00"
-          }
-        ],
-        "network_activity": [],
-        "browser_history": [],
-        "app_activity": [],
-        "user_accounts": [],
-        "document_access": []
-      },
-      "rank": null
-    },
-    {
-      "username": "dwm-1",
-      "display_name": "dwm-1",
-      "account_type": "system",
-      "rankable": false,
-      "artifact_score": 75.53,
-      "timeline_bonus": 6,
-      "timeline_patterns": [
-        {
-          "pattern": "activity_then_log_gap",
-          "bonus": 6,
-          "detail": "9.5h silence after burst of 4 events (last: 2018-03-27T12:13:15.626825+00:00)",
-          "timestamp": "2018-03-27T12:13:15.626825+00:00"
-        }
-      ],
-      "final_score": 81.53,
-      "risk_label": null,
-      "risk_rationale": "",
-      "diversity": {
-        "category_count": 1
-      },
-      "artifact_breakdown": {
-        "deleted_files": {
-          "count": 0,
-          "score": 0
-        },
-        "event_anomalies": {
-          "count": 8,
-          "score": 60.0
-        },
-        "app_activity": {
-          "effective": 0.0,
-          "attributed_count": 0,
-          "score": 0.0,
-          "shared_pool_weighted": 20.0
-        },
-        "network_activity": {
-          "weighted": 0.0,
-          "raw_count": 0,
-          "score": 0.0
-        },
-        "document_access": {
-          "count": 0,
-          "sensitive": 0,
-          "score": 0
-        },
-        "browser_history": {
-          "count": 0,
-          "flagged": 0,
-          "score": 0.0
-        },
-        "user_accounts": {
-          "count": 0,
-          "score": 0
-        }
-      },
-      "evidence": {
-        "deleted_files": [],
-        "event_anomalies": [
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-27T21:45:44.105149+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-27T21:45:44.105146+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-27T12:13:15.626825+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-27T12:13:15.626823+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-27T12:11:46.335512+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-27T12:11:46.335510+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-27T09:56:21.475864+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-27T09:56:21.475861+00:00"
-          }
-        ],
-        "network_activity": [],
-        "browser_history": [],
-        "app_activity": [],
-        "user_accounts": [],
-        "document_access": []
-      },
-      "rank": null
-    },
-    {
-      "username": "dwm-2",
-      "display_name": "dwm-2",
-      "account_type": "system",
-      "rankable": false,
-      "artifact_score": 59.14,
-      "timeline_bonus": 0,
-      "timeline_patterns": [],
-      "final_score": 59.14,
-      "risk_label": null,
-      "risk_rationale": "",
-      "diversity": {
-        "category_count": 1
-      },
-      "artifact_breakdown": {
-        "deleted_files": {
-          "count": 0,
-          "score": 0
-        },
-        "event_anomalies": {
-          "count": 2,
-          "score": 24.0
-        },
-        "app_activity": {
-          "effective": 0.0,
-          "attributed_count": 0,
-          "score": 0.0,
-          "shared_pool_weighted": 20.0
-        },
-        "network_activity": {
-          "weighted": 0.0,
-          "raw_count": 0,
-          "score": 0.0
-        },
-        "document_access": {
-          "count": 0,
-          "sensitive": 0,
-          "score": 0
-        },
-        "browser_history": {
-          "count": 0,
-          "flagged": 0,
-          "score": 0.0
-        },
-        "user_accounts": {
-          "count": 0,
-          "score": 0
-        }
-      },
-      "evidence": {
-        "deleted_files": [],
-        "event_anomalies": [
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-27T09:19:58.570774+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-27T09:19:58.570771+00:00"
-          }
-        ],
-        "network_activity": [],
-        "browser_history": [],
-        "app_activity": [],
-        "user_accounts": [],
-        "document_access": []
-      },
-      "rank": null
-    },
-    {
-      "username": "local service",
-      "display_name": "local service",
-      "account_type": "system",
-      "rankable": false,
-      "artifact_score": 71.51,
-      "timeline_bonus": 0,
-      "timeline_patterns": [],
-      "final_score": 71.51,
-      "risk_label": null,
-      "risk_rationale": "",
-      "diversity": {
-        "category_count": 1
-      },
-      "artifact_breakdown": {
-        "deleted_files": {
-          "count": 0,
-          "score": 0
-        },
-        "event_anomalies": {
-          "count": 4,
-          "score": 48.0
-        },
-        "app_activity": {
-          "effective": 0.0,
-          "attributed_count": 0,
-          "score": 0.0,
-          "shared_pool_weighted": 20.0
-        },
-        "network_activity": {
-          "weighted": 0.0,
-          "raw_count": 0,
-          "score": 0.0
-        },
-        "document_access": {
-          "count": 0,
-          "sensitive": 0,
-          "score": 0
-        },
-        "browser_history": {
-          "count": 0,
-          "flagged": 0,
-          "score": 0.0
-        },
-        "user_accounts": {
-          "count": 0,
-          "score": 0
-        }
-      },
-      "evidence": {
-        "deleted_files": [],
-        "event_anomalies": [
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-27T21:45:44.189158+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-27T12:13:15.697414+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-27T12:11:46.438355+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-27T09:56:21.564590+00:00"
-          }
-        ],
-        "network_activity": [],
-        "browser_history": [],
-        "app_activity": [],
-        "user_accounts": [],
-        "document_access": []
-      },
-      "rank": null
-    },
-    {
       "username": "localsystem",
       "display_name": "localsystem",
       "account_type": "system",
@@ -1042,297 +612,6 @@
       "rank": null
     },
     {
-      "username": "network service",
-      "display_name": "network service",
-      "account_type": "system",
-      "rankable": false,
-      "artifact_score": 71.51,
-      "timeline_bonus": 0,
-      "timeline_patterns": [],
-      "final_score": 71.51,
-      "risk_label": null,
-      "risk_rationale": "",
-      "diversity": {
-        "category_count": 1
-      },
-      "artifact_breakdown": {
-        "deleted_files": {
-          "count": 0,
-          "score": 0
-        },
-        "event_anomalies": {
-          "count": 4,
-          "score": 48.0
-        },
-        "app_activity": {
-          "effective": 0.0,
-          "attributed_count": 0,
-          "score": 0.0,
-          "shared_pool_weighted": 20.0
-        },
-        "network_activity": {
-          "weighted": 0.0,
-          "raw_count": 0,
-          "score": 0.0
-        },
-        "document_access": {
-          "count": 0,
-          "sensitive": 0,
-          "score": 0
-        },
-        "browser_history": {
-          "count": 0,
-          "flagged": 0,
-          "score": 0.0
-        },
-        "user_accounts": {
-          "count": 0,
-          "score": 0
-        }
-      },
-      "evidence": {
-        "deleted_files": [],
-        "event_anomalies": [
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-27T21:45:43.983746+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-27T12:13:15.523372+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-27T12:11:45.970834+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-27T09:56:21.358507+00:00"
-          }
-        ],
-        "network_activity": [],
-        "browser_history": [],
-        "app_activity": [],
-        "user_accounts": [],
-        "document_access": []
-      },
-      "rank": null
-    },
-    {
-      "username": "system",
-      "display_name": "system",
-      "account_type": "system",
-      "rankable": false,
-      "artifact_score": 75.53,
-      "timeline_bonus": 15,
-      "timeline_patterns": [
-        {
-          "pattern": "activity_then_log_gap",
-          "bonus": 6,
-          "detail": "1.2h silence after burst of 13 events (last: 2018-03-27T10:58:34.544123+00:00)",
-          "timestamp": "2018-03-27T10:58:34.544123+00:00"
-        },
-        {
-          "pattern": "rapid_actions",
-          "bonus": 3,
-          "detail": "6 events in 60s starting 2018-03-27T09:16:00.901277+00:00",
-          "timestamp": "2018-03-27T09:16:00.901277+00:00"
-        },
-        {
-          "pattern": "rapid_actions",
-          "bonus": 3,
-          "detail": "5 events in 60s starting 2018-03-27T09:16:04.658739+00:00",
-          "timestamp": "2018-03-27T09:16:04.658739+00:00"
-        },
-        {
-          "pattern": "rapid_actions",
-          "bonus": 3,
-          "detail": "5 events in 60s starting 2018-03-27T09:16:48.283982+00:00",
-          "timestamp": "2018-03-27T09:16:48.283982+00:00"
-        }
-      ],
-      "final_score": 90.53,
-      "risk_label": null,
-      "risk_rationale": "",
-      "diversity": {
-        "category_count": 1
-      },
-      "artifact_breakdown": {
-        "deleted_files": {
-          "count": 0,
-          "score": 0
-        },
-        "event_anomalies": {
-          "count": 746,
-          "score": 60.0
-        },
-        "app_activity": {
-          "effective": 0.0,
-          "attributed_count": 0,
-          "score": 0.0,
-          "shared_pool_weighted": 20.0
-        },
-        "network_activity": {
-          "weighted": 0.0,
-          "raw_count": 0,
-          "score": 0.0
-        },
-        "document_access": {
-          "count": 0,
-          "sensitive": 0,
-          "score": 0
-        },
-        "browser_history": {
-          "count": 0,
-          "flagged": 0,
-          "score": 0.0
-        },
-        "user_accounts": {
-          "count": 0,
-          "score": 0
-        }
-      },
-      "evidence": {
-        "deleted_files": [],
-        "event_anomalies": [
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T12:46:32.491786+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T12:46:32.338850+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T12:40:38.578918+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T12:35:52.422377+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T12:35:08.717696+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T12:35:08.678596+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T12:35:08.631746+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T12:29:32.684585+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T12:26:33.592192+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T12:26:31.996024+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T12:26:16.005212+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T12:26:15.922108+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T08:34:56.052225+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T08:34:55.951567+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T08:30:51.077556+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T08:29:08.273451+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T08:26:06.842652+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T08:25:25.587645+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T08:24:51.138480+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T08:24:38.881748+00:00"
-          }
-        ],
-        "network_activity": [],
-        "browser_history": [],
-        "app_activity": [],
-        "user_accounts": [],
-        "document_access": []
-      },
-      "rank": null
-    },
-    {
       "username": "wdagutilityaccount",
       "display_name": "WDAGUtilityAccount",
       "account_type": "system",
@@ -1400,10 +679,17 @@
       "description": "jcloudy: 11.8h silence after burst of 5 events (last: 2018-03-27T09:57:28.844371+00:00)",
       "count": 1,
       "time": "2018-03-27T09:57:28.844371+00:00"
+    },
+    {
+      "type": "Privileged Logon Then Activity",
+      "severity": "LOW",
+      "description": "jcloudy: Privileged logon after 'document_access: C:\\Users\\jcloudy\\OneDrive\\Getting started with OneDrive.pdf' (386s apart)",
+      "count": 3,
+      "time": "2018-03-27T09:56:41.912533+00:00"
     }
   ],
   "threats": [],
-  "total_anomalies": 1,
+  "total_anomalies": 2,
   "total_threats": 0,
   "high_risk_users": [
     {
@@ -1411,21 +697,39 @@
       "display_name": "jcloudy",
       "account_type": "user",
       "rankable": true,
-      "artifact_score": 85.16,
-      "timeline_bonus": 6,
+      "artifact_score": 69.94,
+      "timeline_bonus": 18,
       "timeline_patterns": [
         {
           "pattern": "activity_then_log_gap",
           "bonus": 6,
           "detail": "11.8h silence after burst of 5 events (last: 2018-03-27T09:57:28.844371+00:00)",
           "timestamp": "2018-03-27T09:57:28.844371+00:00"
+        },
+        {
+          "pattern": "privileged_logon_then_activity",
+          "bonus": 4,
+          "detail": "Privileged logon after 'document_access: C:\\Users\\jcloudy\\OneDrive\\Getting started with OneDrive.pdf' (386s apart)",
+          "timestamp": "2018-03-27T09:56:41.912533+00:00"
+        },
+        {
+          "pattern": "privileged_logon_then_activity",
+          "bonus": 4,
+          "detail": "Privileged logon after 'document_access: C:\\Users\\jcloudy\\OneDrive\\Getting started with OneDrive.pdf' (433s apart)",
+          "timestamp": "2018-03-27T09:57:28.844371+00:00"
+        },
+        {
+          "pattern": "privileged_logon_then_activity",
+          "bonus": 4,
+          "detail": "Privileged logon before 'document_access: C:\\Users\\jcloudy\\Downloads\\rootkey.csv' (1769s apart)",
+          "timestamp": "2018-03-27T23:29:51.073555+00:00"
         }
       ],
-      "final_score": 91.16,
+      "final_score": 87.94,
       "risk_label": "HIGH",
-      "risk_rationale": "Score 91.16 (>= 18.0) across 3 independent evidence categories, including 3 strong (user-attributed) source(s).",
+      "risk_rationale": "Score 87.94 (>= 18.0) across 2 independent evidence categories, including 2 strong (user-attributed) source(s).",
       "diversity": {
-        "category_count": 3
+        "category_count": 2
       },
       "artifact_breakdown": {
         "deleted_files": {
@@ -1433,8 +737,8 @@
           "score": 20
         },
         "event_anomalies": {
-          "count": 23,
-          "score": 60.0
+          "count": 0,
+          "score": 0.0
         },
         "app_activity": {
           "effective": 0.0,
@@ -1449,8 +753,8 @@
         },
         "document_access": {
           "count": 38,
-          "sensitive": 11,
-          "score": 22
+          "sensitive": 12,
+          "score": 24
         },
         "browser_history": {
           "count": 2293,
@@ -1485,128 +789,7 @@
             "deleted_at": "2018-04-05T02:20:17.095000+00:00"
           }
         ],
-        "event_anomalies": [
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T12:26:27.575105+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T08:24:46.006054+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T06:56:30.410484+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T06:14:43.746482+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-06T03:30:58.632403+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-05T07:54:33.897725+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-05T07:01:30.317962+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-05T01:48:36.836584+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-04T04:30:48.054434+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-03T05:58:13.354180+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-02T00:53:03.720543+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-04-01T22:43:39.369167+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-31T17:41:07.525763+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-31T04:11:32.540569+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-30T21:09:22.034770+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-30T04:23:47.278200+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-30T03:27:57.338845+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-27T23:29:51.073555+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-27T21:45:44.769848+00:00"
-          },
-          {
-            "event_id": 4672,
-            "label": "privilege_escalation",
-            "weight": 3,
-            "timestamp": "2018-03-27T09:57:28.844371+00:00"
-          }
-        ],
+        "event_anomalies": [],
         "network_activity": [],
         "browser_history": [],
         "app_activity": [],
@@ -1661,6 +844,11 @@
             "target": "C:\\Users\\jcloudy\\Desktop\\UKknifeBan.pdf",
             "extension": ".pdf",
             "accessed_at": ""
+          },
+          {
+            "target": "D:\\key.txt",
+            "extension": ".txt",
+            "accessed_at": "2018-03-22T03:05:24+00:00"
           },
           {
             "target": "C:\\Users\\jcloudy\\Downloads\\rootkey.csv",
