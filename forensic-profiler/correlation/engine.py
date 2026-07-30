@@ -60,18 +60,22 @@ STRONG_EVIDENCE_CATEGORIES = {
 }
 
 TIMELINE_BONUS = {
-    "file_access_then_deletion":  5,
-    "app_exec_then_network":      4,
-    "activity_then_log_gap":      6,
-    "rapid_actions":              3,
-    "multi_source_consistency":   5,
+    "file_access_then_deletion":     5,
+    "app_exec_then_network":         4,
+    "activity_then_log_gap":         6,
+    "rapid_actions":                 3,
+    "multi_source_consistency":      5,
+    # Only path by which a privileged logon (event 4672/576) can
+    # contribute anything at all — see PRIVILEGED_LOGON_EVENT_IDS above.
+    "privileged_logon_then_activity":4,
 }
 TIMELINE_BONUS_CAP = {
-    "file_access_then_deletion": 15,
-    "app_exec_then_network":     12,
-    "activity_then_log_gap":      6,
-    "rapid_actions":              9,
-    "multi_source_consistency":  10,
+    "file_access_then_deletion":     15,
+    "app_exec_then_network":         12,
+    "activity_then_log_gap":          6,
+    "rapid_actions":                  9,
+    "multi_source_consistency":      10,
+    "privileged_logon_then_activity":12,
 }
 
 SYSTEM_ACCOUNTS = {
@@ -129,16 +133,101 @@ SUSPICIOUS_DOMAINS: dict[str, tuple[str, int]] = {
 
 SENSITIVE_EXTS = {".docx",".doc",".xlsx",".xls",".pdf",".pptx",".ppt",
                   ".pst",".ost",".msg",".kdbx",".pfx",".p12",".cer",
-                  ".key",".sql",".db",".sqlite",".bak",".backup",".csv"}
+                  ".key",".sql",".db",".sqlite",".bak",".backup",".csv",
+                  # Archive formats: a strong data-staging/exfiltration
+                  # signal on their own (compressing files is rarely
+                  # incidental) — confirmed missing by a real case
+                  # (Adam/GroundTruth_Adam) where a "Client_Backup.zip"
+                  # staged from exactly the sensitive files below was
+                  # invisible to scoring.
+                  ".zip",".rar",".7z",".gz",".tar",
+                  # .txt: genuinely common for real sensitive content (the
+                  # same case's actual insider-threat evidence — client
+                  # lists, analysis drafts — was plain text) and this
+                  # extension's absence was the single biggest scoring gap
+                  # found. Included despite being a more generic extension
+                  # than the others here (a stray readme.txt/changelog.txt
+                  # will also count) — accepted as a deliberate false-
+                  # positive/false-negative tradeoff in favor of not
+                  # missing real evidence, consistent with document_access
+                  # only ever contributing a modest, capped category score
+                  # (WEIGHTS["document_access"]=2, CATEGORY_CAP=30) rather
+                  # than being able to single-handedly drive a HIGH rating.
+                  ".txt"}
+
+# .txt is too generic an extension to treat as unconditionally sensitive
+# the way the formats above are — confirmed by a real false positive found
+# during validation: Windows' own default placeholder filename ("New Text
+# Document.txt") tripped it immediately. Every other extension in
+# SENSITIVE_EXTS already implies structured business/personal content by
+# construction (a .docx or .kdbx doesn't get created by accident); .txt
+# does not, so it additionally requires a sensitivity-suggestive keyword in
+# the filename itself.
+SENSITIVE_TXT_KEYWORDS = (
+    "client", "customer", "confidential", "password", "credential", "secret",
+    "private", "financial", "finance", "report", "backup", "draft",
+    "contract", "salary", "ssn", "account", "invoice", "budget",
+    "database", "internal", "project", "aws", "key",
+)
+
+
+def _is_sensitive_target(target: str, ext: str) -> bool:
+    """
+    True if `target` (a full file path) should count as a sensitive
+    document. Structured formats (.docx/.pdf/.kdbx/... and archives —
+    .zip/.rar/.7z/.gz/.tar) are sensitive by extension alone: the format
+    itself implies deliberate, structured content or a deliberate staging/
+    bundling action, not something created by accident. ".txt" is the one
+    exception — far too generic an extension to treat as unconditionally
+    sensitive (confirmed by a real false positive: Windows' own default
+    placeholder filename, "New Text Document.txt") — so it additionally
+    requires a sensitivity-suggestive keyword, checked against BOTH the
+    filename and the full containing directory path. Directory context
+    matters because a file's folder often carries more signal than its own
+    name (e.g. a generically-named file sitting inside a folder called
+    "Client_Project" or "Confidential" is still elevated risk) — this is
+    the same read a human analyst would make, still expressed as a plain
+    deterministic keyword-membership test, not a similarity score.
+    """
+    if ext not in SENSITIVE_EXTS:
+        return False
+    if ext != ".txt":
+        return True
+    if not target:
+        return False
+    p = Path(target)
+    text = f"{p.stem} {p.parent}".lower()
+    return any(kw in text for kw in SENSITIVE_TXT_KEYWORDS)
 
 ANOMALY_EVENT_IDS: dict[int, tuple[str, int]] = {
     4625:("logon_failure",2), 529:("logon_failure",2),
     4740:("account_lockout",3), 539:("account_lockout",3),
     1102:("log_cleared",5), 517:("log_cleared",5),
     7045:("service_install",3), 4697:("service_install",3),
-    4672:("privilege_escalation",3), 576:("privilege_escalation",3),
     4688:("process_creation",1), 592:("process_creation",1),
 }
+
+# Event 4672/576 ("Special privileges assigned to new logon") is
+# deliberately NOT in ANOMALY_EVENT_IDS above — it carries zero standalone
+# weight in event_anomalies scoring. It fires on every admin-equivalent
+# logon (any local admin, or any UAC-elevated session) with zero attack
+# involved, and standard DFIR guidance treats it as informative only in
+# temporal correlation with independently-suspicious activity, never
+# alone. A real captured case (Adam/GroundTruth_Adam) demonstrated the
+# failure mode concretely: an uninvolved bystander account racked up
+# enough 4672 events alone to outscore the actual ground-truth-confirmed
+# suspect, while the case's own curated "events that matter" list
+# contained zero 4672 events.
+#
+# Instead, these events are tracked separately (score_privileged_logons())
+# and can only ever contribute via the "privileged_logon_then_activity"
+# timeline-correlation pattern (see calculate_timeline_bonuses()) — i.e.
+# only when a privileged session falls within PRIVILEGED_LOGON_WINDOW_S of
+# other independently-scored real evidence for the same user. This mirrors
+# the same "only meaningful in correlation" architecture the five existing
+# timeline patterns already use for other single-artifact-type evidence.
+PRIVILEGED_LOGON_EVENT_IDS: dict[int, str] = {4672: "privileged_logon", 576: "privileged_logon"}
+PRIVILEGED_LOGON_WINDOW_S = 1800  # 30 min: an elevated session/token's practical scope
 
 # ── Threat / Anomaly classification (report-only) ──────────────────────────
 # Severity used to populate the HTML report's "Threats Detected" and
@@ -158,6 +247,9 @@ THREAT_EXE_SEVERITY = {
 THREAT_DOMAIN_SEVERITY = {
     "anonymization": "HIGH", "exfil_site": "HIGH", "hacking": "HIGH",
     "paste_site": "MEDIUM",
+    # Behavior-text categories (see parsers/parse_browser_history.py's
+    # BEHAVIOR_PATTERNS) reuse this same severity map via build_threats().
+    "anti_forensic": "HIGH", "evasion": "HIGH",
 }
 THREAT_EVENT_SEVERITY = {
     "log_cleared": "HIGH", "account_lockout": "MEDIUM", "service_install": "MEDIUM",
@@ -547,21 +639,57 @@ class CorrelationEngine:
                                      "deleted_at":r.get("deleted_at","")})
         return dict(s)
 
-    def score_app(self, data):
+    def _userassist_basename(self, program: str) -> str:
+        """Normalize a UserAssist "program" string down to a bare, lowercased
+        filename comparable to Prefetch's _exe_basename() output (e.g.
+        "C:\\WINDOWS\\system32\\wupdmgr.exe" -> "wupdmgr.exe")."""
+        name = (program or "").replace("/", "\\").rsplit("\\", 1)[-1]
+        return name.strip().lower()
+
+    def _build_userassist_index(self, records) -> Dict[str, set]:
+        """
+        basename -> set of usernames whose own UserAssist history
+        references it. Built once per run() from user_accounts.json's
+        "userassist" records (see parsers/parse_user_accounts.py's
+        parse_ntuser_userassist()) and used only as an attribution
+        fallback in score_app() — never as its own scored evidence
+        category.
+        """
+        idx: Dict[str, set] = defaultdict(set)
+        for r in records or []:
+            uname = self._norm(r.get("username", ""))
+            key = self._userassist_basename(r.get("program", ""))
+            if uname and key:
+                idx[key].add(uname)
+        return dict(idx)
+
+    def score_app(self, data, userassist_index: Optional[Dict[str, set]] = None):
         """
         Score suspicious Prefetch executions. Matching is an exact lookup
         of the cleaned basename against SUSPICIOUS_EXES (see
         _exe_basename()) — not a substring scan — so an unrelated binary
         that merely contains a keyword (e.g. "powershell_backup.exe")
-        cannot be mistaken for the real tool. Prefetch records carry no SID
-        at all, so attribution here is path-only; anything that can't be
-        resolved to a specific user is pooled under "__apps__" and is
+        cannot be mistaken for the real tool.
+
+        Attribution is tried in two steps:
+          1. Prefetch's own exe_path/section_c_paths (path-based — see
+             _resolve_user()). This is the primary, most direct signal.
+          2. If that fails, UserAssist correlation: a UserAssist entry can
+             only exist inside the specific user's own NTUSER.DAT, so it is
+             unambiguous per-user evidence by construction — but only when
+             EXACTLY ONE user's UserAssist history references this exe's
+             basename. A tie (2+ candidate users) is deliberately left
+             unattributed rather than guessed at, since attributing to an
+             arbitrary one of several candidates would fabricate evidence.
+        Anything neither step resolves is pooled under "__apps__" and is
         deliberately NOT split across every account by the caller (see
         calculate_aggregate()) — it is case-wide evidence, not
-        per-account evidence.
+        per-account evidence. Every evidence item records which method
+        (if any) attributed it, via "attribution_method".
         """
         s = defaultdict(lambda: {"count":0,"weighted_count":0.0,"evidence":[]})
-        attributed = shared = 0
+        userassist_index = userassist_index or {}
+        attributed = shared = ua_attributed = 0
         for r in (data or {}).get("records", []):
             exe = self._exe_basename(r.get("exe_name",""))
             hit = SUSPICIOUS_EXES.get(exe)
@@ -576,14 +704,26 @@ class CorrelationEngine:
             for cp in [path] + (paths if isinstance(paths, list) else []):
                 user = self._resolve_user(cp)
                 if user: break
-            if not user:
-                user = "__apps__"; shared += 1
-            else:
+
+            if user:
+                attribution_method = "prefetch_path"
                 attributed += 1
+            else:
+                candidates = userassist_index.get(exe, set())
+                if len(candidates) == 1:
+                    user = next(iter(candidates))
+                    attribution_method = "userassist_correlation"
+                    ua_attributed += 1
+                else:
+                    user = "__apps__"
+                    attribution_method = "unattributed"
+                    shared += 1
+
             s[user]["count"] += cnt
             s[user]["weighted_count"] += cnt * mult
             s[user]["evidence"].append({"exe":exe,"category":cat,
-                "multiplier":mult,"run_count":cnt,"last_run":lrun})
+                "multiplier":mult,"run_count":cnt,"last_run":lrun,
+                "attribution_method":attribution_method})
         return dict(s)
     
     def score_events(self, data):
@@ -603,6 +743,29 @@ class CorrelationEngine:
                                      "timestamp":e.get("timestamp","")})
         return dict(s)
     
+    def score_privileged_logons(self, data):
+        """
+        Track privileged-logon events (4672/576) per user WITHOUT scoring
+        them — no weighted_count, no category contribution. Purely a
+        timestamped evidence source for calculate_timeline_bonuses()'s
+        "privileged_logon_then_activity" correlation check; see
+        PRIVILEGED_LOGON_EVENT_IDS for why these carry no standalone
+        weight.
+        """
+        s = defaultdict(lambda: {"count":0,"evidence":[]})
+        for e in (data or {}).get("all_events", []):
+            eid = e.get("event_id")
+            if eid not in PRIVILEGED_LOGON_EVENT_IDS: continue
+            ed = e.get("event_data",{})
+            u = (ed.get("SubjectUserName") or ed.get("TargetUserName") or
+                 ed.get("AccountName") or ed.get("String0") or "")
+            if not u: continue
+            k = self._norm(u)
+            s[k]["count"] += 1
+            s[k]["evidence"].append({"event_id":eid,"label":PRIVILEGED_LOGON_EVENT_IDS[eid],
+                                     "timestamp":e.get("timestamp","")})
+        return dict(s)
+
     def score_network(self, data):
         """
         Score network events, differentiating destinations into
@@ -657,13 +820,25 @@ class CorrelationEngine:
             s[k]["count"] += 1
             target = r.get("target_path","")
             ext = Path(target).suffix.lower() if target else ""
-            if ext in SENSITIVE_EXTS:
+            if _is_sensitive_target(target, ext):
                 s[k]["sensitive_count"] += 1
                 s[k]["evidence"].append({"target":target,"extension":ext,
                     "accessed_at":r.get("target_accessed","")})
         return dict(s)
     
     def score_browser(self, data):
+        """
+        Flag browser-history evidence from two independent signals:
+          1. Known-bad *destination* (SUSPICIOUS_DOMAINS, matched against
+             the URL's host — unchanged from before).
+          2. Anti-forensic/evasive *intent* expressed in the page title,
+             URL query string, or URL path text, regardless of which
+             domain it's on (see parsers/parse_browser_history.py's
+             BEHAVIOR_PATTERNS / _annotate_behavior() — the parser computes
+             "behavior_category"/"behavior_weight" once per record; this
+             just consumes it). A record can be flagged by both signals
+             independently — they represent different kinds of evidence.
+        """
         s = defaultdict(lambda: {"count":0,"flagged_count":0,"flagged_weight":0.0,"evidence":[]})
         for r in (data or {}).get("records", []):
             u = r.get("username","")
@@ -676,8 +851,17 @@ class CorrelationEngine:
                     s[k]["flagged_count"] += 1
                     s[k]["flagged_weight"] += dw
                     s[k]["evidence"].append({"url":r.get("url",""),"category":cat,
-                        "weight":dw,"visited":r.get("visited_at","")})
+                        "weight":dw,"visited":r.get("visited_at",""),"signal":"domain"})
                     break
+
+            behavior_cat = r.get("behavior_category")
+            if behavior_cat:
+                bw = r.get("behavior_weight", 0) or 0
+                s[k]["flagged_count"] += 1
+                s[k]["flagged_weight"] += bw
+                s[k]["evidence"].append({"url":r.get("url",""),"category":behavior_cat,
+                    "weight":bw,"visited":r.get("visited_at",""),"signal":"behavior_text",
+                    "matched_on":r.get("behavior_matched_on","")})
         return dict(s)
     
     def score_accounts(self, data):
@@ -692,14 +876,20 @@ class CorrelationEngine:
                                          "failed_logins":r.get("failed_logins")})
         return dict(s)
     
-    def _build_timeline(self, user, doc_s, del_s, app_s, net_s, evt_s) -> List[Dict]:
+    def _build_timeline(self, user, doc_s, del_s, app_s, net_s, evt_s, priv_s=None) -> List[Dict]:
         """
-        Merge every timestamped evidence item for `user` across the five
+        Merge every timestamped evidence item for `user` across the
         "real evidence" sources into one chronological list. This is the
         per-user activity sequence that calculate_timeline_bonuses() walks
-        to detect cross-artifact temporal patterns (P1-P5) — separate from
+        to detect cross-artifact temporal patterns (P1-P6) — separate from
         reporting.html_report's _build_timeline(), which does the same kind
         of merge but for display in the HTML report, not for scoring.
+
+        priv_s (privileged-logon evidence, from score_privileged_logons())
+        is included here purely as timeline context for P6
+        ("privileged_logon_then_activity") — unlike the other five sources,
+        it never independently contributes to event_anomalies scoring; see
+        PRIVILEGED_LOGON_EVENT_IDS.
         """
         events: List[Dict] = []
         for ev in doc_s.get(user, {}).get("evidence", []):
@@ -722,16 +912,20 @@ class CorrelationEngine:
             ts = self._parse_ts(ev.get("last_run"))
             if ts:
                 events.append({"ts": ts, "type": "application_exec", "detail": ev.get("exe", "")})
+        for ev in (priv_s or {}).get(user, {}).get("evidence", []):
+            ts = self._parse_ts(ev.get("timestamp"))
+            if ts:
+                events.append({"ts": ts, "type": "privileged_logon", "detail": ev.get("label", "")})
         return sorted(events, key=lambda x: x["ts"])
 
-    def calculate_timeline_bonuses(self, user, doc_s, del_s, app_s, net_s, evt_s):
+    def calculate_timeline_bonuses(self, user, doc_s, del_s, app_s, net_s, evt_s, priv_s=None):
         """
         Detect cross-artifact temporal patterns in `user`'s timeline and
         return (bonus, patterns), ported from correlate_artifacts_v11.py's
         calculate_timeline_bonuses(). Each pattern is capped independently
         (TIMELINE_BONUS_CAP) so one repeated pattern can't dominate the score.
         """
-        timeline = self._build_timeline(user, doc_s, del_s, app_s, net_s, evt_s)
+        timeline = self._build_timeline(user, doc_s, del_s, app_s, net_s, evt_s, priv_s)
         if not timeline:
             return 0, []
 
@@ -839,6 +1033,32 @@ class CorrelationEngine:
                     ):
                         bonus += TIMELINE_BONUS["multi_source_consistency"]
 
+        # P6: Privileged logon (4672/576) correlated with other real
+        # evidence within PRIVILEGED_LOGON_WINDOW_S, in either order — an
+        # elevated session used to act, or elevated right after acting to
+        # cover tracks, are both meaningful. This is the ONLY way a
+        # privileged-logon event can contribute anything at all; see
+        # PRIVILEGED_LOGON_EVENT_IDS for why it carries no standalone
+        # weight in event_anomalies.
+        priv_events = [(i, e) for i, e in enumerate(timeline) if e["type"] == "privileged_logon"]
+        other_events = [(i, e) for i, e in enumerate(timeline) if e["type"] != "privileged_logon"]
+        for pi, priv in priv_events:
+            for oi, other in other_events:
+                pair = ("priv", pi, oi)
+                if pair in used:
+                    continue
+                delta = abs((other["ts"] - priv["ts"]).total_seconds())
+                if delta <= PRIVILEGED_LOGON_WINDOW_S:
+                    used.add(pair)
+                    order = "before" if other["ts"] >= priv["ts"] else "after"
+                    if add_bonus(
+                        "privileged_logon_then_activity",
+                        f"Privileged logon {order} '{other['type']}: {other['detail']}' "
+                        f"({int(delta)}s apart)",
+                        priv["ts"].isoformat(),
+                    ):
+                        bonus += TIMELINE_BONUS["privileged_logon_then_activity"]
+
         return bonus, patterns
 
     def _category_scores(self, del_c, evt_wc, app_own, net_total, doc_sc, brw_fw, usr_c) -> Dict[str, float]:
@@ -860,7 +1080,7 @@ class CorrelationEngine:
             "user_accounts":    min(usr_c * WEIGHTS["user_accounts"], CATEGORY_CAP["user_accounts"]),
         }
 
-    def calculate_aggregate(self, users, del_s, app_s, evt_s, net_s, doc_s, brw_s, usr_s, net_brw_s):
+    def calculate_aggregate(self, users, del_s, app_s, evt_s, net_s, doc_s, brw_s, usr_s, net_brw_s, priv_s=None):
         all_keys = set(users.keys())
         for d in (del_s, evt_s, net_s, doc_s, brw_s, usr_s, net_brw_s):
             all_keys.update(d.keys())
@@ -917,7 +1137,7 @@ class CorrelationEngine:
             )
 
             tl_bonus, tl_patterns = self.calculate_timeline_bonuses(
-                u, doc_s, del_s, app_s, net_s, evt_s
+                u, doc_s, del_s, app_s, net_s, evt_s, priv_s
             )
             final_score = artifact_score + tl_bonus
 
@@ -968,6 +1188,41 @@ class CorrelationEngine:
 
         return results
     
+    def _security_log_coverage(self, events: List[Dict]) -> Dict[str, Any]:
+        """
+        Distinguish "zero event_anomalies because nothing happened" from
+        "zero event_anomalies because there is no visibility into the
+        Security log at all" — Windows XP ships with Security-channel
+        auditing disabled by default, so an unmodified XP image very
+        commonly has no usable Security-log evidence regardless of what
+        the user actually did. Report-only: purely a coverage/confidence
+        annotation surfaced in summary/the HTML report, and does not feed
+        into scoring — event_anomalies' score is unaffected either way.
+        """
+        sec_events = [
+            e for e in events
+            if str(e.get("channel", "")).strip().lower() in ("security", "secevent")
+        ]
+        observed = len(sec_events)
+        if observed > 0:
+            return {
+                "security_events_observed": observed,
+                "status": "OBSERVED",
+                "note": f"{observed} Security-channel event(s) observed.",
+            }
+        return {
+            "security_events_observed": 0,
+            "status": "NO_VISIBILITY",
+            "note": (
+                "No Security-channel events were found in this image's event "
+                "logs. This commonly means Security auditing was never "
+                "enabled (the Windows XP default) or the Security log "
+                "wasn't captured, rather than a clean audit trail — a LOW "
+                "event_anomalies score here should not be read as proof "
+                "nothing happened."
+            ),
+        }
+
     def _has_real_evidence(self, r: Dict) -> bool:
         """
         Check if user has REAL evidence (not just a slice of the shared,
@@ -1160,17 +1415,23 @@ class CorrelationEngine:
         self._build_sid_map()
 
         print("[*] Scoring artifacts...")
+        user_accounts_data = self.load_json("user_accounts.json") or {}
+        userassist_records = user_accounts_data.get("userassist", {}).get("records", [])
+        userassist_index = self._build_userassist_index(userassist_records)
+
+        event_logs_data = self.load_json("event_logs.json")
         del_s = self.score_deleted(self.load_json("deleted_files.json"))
-        app_s = self.score_app(self.load_json("application_activity.json"))
-        evt_s = self.score_events(self.load_json("event_logs.json"))
+        app_s = self.score_app(self.load_json("application_activity.json"), userassist_index=userassist_index)
+        evt_s = self.score_events(event_logs_data)
+        priv_s = self.score_privileged_logons(event_logs_data)
         net_s = self.score_network(self.load_json("network_activity.json"))
         doc_s = self.score_documents(self.load_json("document_folder_access.json"))
         brw_s = self.score_browser(self.load_json("browser_history.json"))
         usr_s = self.score_accounts(self.load_json("user_accounts.json"))
         net_brw_s = self.score_network_from_browser(self.load_json("browser_history.json"))
-        
+
         print("[*] Aggregating scores...")
-        results = self.calculate_aggregate(users, del_s, app_s, evt_s, net_s, doc_s, brw_s, usr_s, net_brw_s)
+        results = self.calculate_aggregate(users, del_s, app_s, evt_s, net_s, doc_s, brw_s, usr_s, net_brw_s, priv_s)
         
         # Rank and assign risk labels
         ranked = sorted([r for r in results if r["rankable"]], key=lambda x: x["final_score"], reverse=True)
@@ -1202,6 +1463,7 @@ class CorrelationEngine:
             # case-wide context. Deliberately not divided across accounts —
             # see calculate_aggregate() — so this is visible here instead.
             'unattributed_app_activity_weighted': round(app_s.get("__apps__", {}).get("weighted_count", 0.0), 2),
+            'security_log_coverage': self._security_log_coverage(self.events),
             'parsed_at': now_iso,
         }
 

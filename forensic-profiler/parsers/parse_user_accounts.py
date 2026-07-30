@@ -7,8 +7,11 @@ No EZ Tools required.
 """
 
 import argparse
+import codecs
 import json
 import os
+import re
+import struct
 import sys
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
@@ -84,11 +87,11 @@ def parse_sam(sam_path: Path) -> list[dict]:
             if cm_len > 0 and cm_off + cm_len <= len(v_val):
                 user["description"] = v_val[cm_off:cm_off + cm_len].decode("utf-16-le", errors="replace")
 
-            # Account flags (at fixed offset 0x90 in V value on XP)
-            acc_flags = struct.unpack_from("<H", v_val, 0x90)[0] if len(v_val) > 0x92 else 0
-            user["account_disabled"] = bool(acc_flags & 0x01)
-            user["password_never_expires"] = bool(acc_flags & 0x08)
-            user["account_locked"] = bool(acc_flags & 0x10)
+            # NOTE: account control flags (disabled/locked/pwd-never-expires)
+            # are NOT stored here. V is a variable-length string/SID blob —
+            # it has no fixed flags field. Those flags live in the F value
+            # (see below); see also account_disabled/account_locked/
+            # password_never_expires there.
 
         except Exception as e:
             user["v_parse_error"] = str(e)
@@ -108,6 +111,24 @@ def parse_sam(sam_path: Path) -> list[dict]:
             # Account expiry at 0x20
             ex_ft = struct.unpack_from("<Q", f_val, 0x20)[0]
             user["account_expires"] = filetime_to_iso(ex_ft) if ex_ft not in (0, 0x7FFFFFFFFFFFFFFF) else "Never"
+
+            # Account Control Block (ACB) flags — WORD at 0x38 in the F
+            # value (not the V value — see the comment left in the V-value
+            # block above). Bit layout per the documented SAM F-value
+            # structure (RegRipper samparse.pl / Passcape SAM notes — the
+            # same reference family the other F-value offsets above follow):
+            #   0x0001  Account Disabled
+            #   0x0002  Home directory required
+            #   0x0004  Password not required
+            #   0x0008  Temporary duplicate account
+            #   0x0010  Normal user account
+            #   0x0020  MNS logon user account
+            #   0x0200  Password does not expire
+            #   0x0400  Account auto locked
+            acb_flags = struct.unpack_from("<H", f_val, 0x38)[0] if len(f_val) > 0x3A else 0
+            user["account_disabled"] = bool(acb_flags & 0x0001)
+            user["password_never_expires"] = bool(acb_flags & 0x0200)
+            user["account_locked"] = bool(acb_flags & 0x0400)
 
             # Failed login count at 0x40 (2 bytes)
             user["failed_logins"] = struct.unpack_from("<H", f_val, 0x40)[0] if len(f_val) > 0x42 else 0
@@ -177,6 +198,165 @@ def parse_ntuser_run_keys(ntuser_path: Path, username: str) -> list[dict]:
     return entries
 
 
+# =============================================================================
+# UserAssist — per-user program execution history
+#
+# UserAssist tracks GUI-launched programs (Explorer double-clicks, Start
+# Menu, taskbar) under each user's own NTUSER.DAT. Unlike Prefetch (system-
+# wide, weak per-user attribution — see correlation/engine.py's score_app()),
+# a UserAssist entry can only exist inside the specific user's own hive, so
+# it is unambiguous per-user evidence by construction.
+#
+# Value names under each GUID's \Count subkey are ROT13-encoded (a long-
+# standing, non-cryptographic Windows convention — not a security measure),
+# uniformly — including the housekeeping/counter entries, not just program
+# launches. Two confirmed naming conventions exist across Windows versions
+# (confirmed against real captured hives during validation, one XP-era
+# image and one Windows 10 image):
+#   XP/Vista: decoded name is prefixed "UEME_RUNPATH:" (executables) or
+#             "UEME_RUNPIDL:"/"UEME_RUNCPL:" (shell namespace items).
+#   Win7+:    no "UEME_RUN*" prefix at all — the decoded name IS the raw
+#             path / AppUserModelID / .lnk target directly (e.g.
+#             "Microsoft.Getstarted_8wekyb3d8bbwe!App", "C:\Users\Public\
+#             Desktop\Google Chrome.lnk").
+# Across every version, "UEME_CTL*" entries (e.g. "UEME_CTLSESSION", a
+# session counter; "UEME_CTLCUACount:ctor", a UAC-prompt counter) are
+# session/UI bookkeeping, never a program launch, and must be excluded —
+# checked on the *decoded* name, since they are ROT13-encoded exactly like
+# every other value name in this key, not stored literally.
+# =============================================================================
+
+# GUIDs differ entirely between XP and Vista+ (confirmed against a real XP
+# hive during validation, which has no CEBFF5CD-.../F4E57C4B-... subkeys at
+# all — only the pair below). Both pairs are checked unconditionally; a
+# hive only ever populates the pair matching its own OS version, and the
+# other pair's reg.open() simply fails and is skipped (see below).
+#   XP:      5E6AB780-... : EXE launch history
+#            75048700-... : Explorer/shell namespace item history
+#   Vista+:  CEBFF5CD-... : EXE launch history
+#            F4E57C4B-... : Explorer/shell namespace item history
+USERASSIST_GUIDS = [
+    "5E6AB780-7743-11CF-A12B-00AA004AE837",
+    "75048700-EF1F-11D0-9888-006097DEACF9",
+    "CEBFF5CD-ACE2-4F4F-9178-9926F41749EA",
+    "F4E57C4B-2036-45F0-A9AB-443BCFE33D9F",
+]
+
+_UEME_RUN_PREFIX_RE = re.compile(r"^UEME_RUN(?:PATH|PIDL|CPL):", re.I)
+
+
+def _rot13(s: str) -> str:
+    return codecs.decode(s, "rot_13")
+
+
+def _userassist_program_name(decoded_name: str) -> str | None:
+    """
+    Given an already-ROT13-decoded UserAssist value name, return the
+    program/path it represents, or None if the name is UI/session
+    bookkeeping rather than an actual program-launch record.
+
+    Any "UEME_"-prefixed name is either a real XP/Vista-era program record
+    ("UEME_RUNPATH:<path>"/"UEME_RUNPIDL:<pidl>", with an actual identifier
+    after the colon) or an aggregate UI/session counter that is NOT tied to
+    a specific program — confirmed present in real captured hives:
+    "UEME_CTLSESSION", "UEME_CTLCUACount:ctor", "UEME_UITOOLBAR",
+    "UEME_UITOOLBAR:0x1,120", "UEME_UISCUT", and even a bare
+    "UEME_RUNPATH"/"UEME_RUNPIDL" with nothing after it at all. Only a
+    genuine "UEME_RUNPATH:"/"UEME_RUNPIDL:"/"UEME_RUNCPL:" prefix (colon
+    required) counts as a program record; anything else "UEME_"-shaped is
+    bookkeeping and returns None.
+
+    A name with no "UEME_" prefix at all is the Win7+ convention: no
+    wrapper — the decoded name IS the path/AppUserModelID/.lnk target
+    directly (e.g. "Microsoft.Getstarted_8wekyb3d8bbwe!App",
+    "C:\\Users\\Public\\Desktop\\Google Chrome.lnk").
+    """
+    if decoded_name.upper().startswith("UEME_"):
+        m = _UEME_RUN_PREFIX_RE.match(decoded_name)
+        if not m:
+            return None
+        program = decoded_name[m.end():].strip()
+    else:
+        program = decoded_name.strip()
+    return program or None
+
+
+def _parse_userassist_count_value(raw: bytes) -> dict | None:
+    """
+    Decode a UserAssist \\Count value's binary payload into run_count and
+    last_run. Layout differs by Windows version, keyed off the value's
+    total length (there is no in-band version field):
+      16-67 bytes (XP):     run_count DWORD @ 0x04, last_run FILETIME @ 0x08
+      68+ bytes   (Vista+): run_count DWORD @ 0x04, last_run FILETIME @ 0x3C
+    Any other (shorter) length is skipped rather than guessed at.
+    """
+    n = len(raw)
+    try:
+        if 16 <= n < 68:
+            run_count = struct.unpack_from("<I", raw, 0x04)[0]
+            ft = struct.unpack_from("<Q", raw, 0x08)[0]
+            layout = "xp"
+        elif n >= 68:
+            run_count = struct.unpack_from("<I", raw, 0x04)[0]
+            ft = struct.unpack_from("<Q", raw, 0x3C)[0]
+            layout = "vista+"
+        else:
+            return None
+    except Exception:
+        return None
+    return {
+        "run_count": run_count,
+        "last_run": filetime_to_iso(ft) if ft else "",
+        "layout": layout,
+    }
+
+
+def parse_ntuser_userassist(ntuser_path: Path, username: str) -> list[dict]:
+    """Extract UserAssist program-execution history from NTUSER.DAT."""
+    entries: list[dict] = []
+    reg = open_hive(ntuser_path)
+    if not reg:
+        return entries
+
+    for guid in USERASSIST_GUIDS:
+        key_path = (
+            "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\"
+            f"UserAssist\\{{{guid}}}\\Count"
+        )
+        try:
+            key = reg.open(key_path)
+        except Exception:
+            continue
+
+        for val in key.values():
+            raw_name = val.name()
+            try:
+                decoded_name = _rot13(raw_name)
+            except Exception:
+                continue
+
+            program = _userassist_program_name(decoded_name)
+            if not program:
+                continue
+            try:
+                raw_val = val.raw_data()
+            except Exception:
+                continue
+            parsed = _parse_userassist_count_value(raw_val)
+            if parsed is None:
+                continue
+            entries.append({
+                "username": username,
+                "program": program,
+                "run_count": parsed["run_count"],
+                "last_run": parsed["last_run"],
+                "guid": guid,
+                "layout": parsed["layout"],
+            })
+
+    return entries
+
+
 def parse_ntuser_typed_paths(ntuser_path: Path, username: str) -> list[dict]:
     """Extract TypedPaths (address bar history) from NTUSER.DAT."""
     entries = []
@@ -210,6 +390,7 @@ def main() -> int:
     users: list[dict] = []
     autorun: list[dict] = []
     typed_paths: list[dict] = []
+    userassist: list[dict] = []
 
     # SAM
     sam_path = hives_dir / "system" / "SAM"
@@ -232,6 +413,9 @@ def main() -> int:
                 print(f"[*] Parsing NTUSER.DAT: {uname}")
                 autorun.extend(parse_ntuser_run_keys(ntuser, uname))
                 typed_paths.extend(parse_ntuser_typed_paths(ntuser, uname))
+                ua = parse_ntuser_userassist(ntuser, uname)
+                userassist.extend(ua)
+                print(f"    UserAssist: {len(ua)} entries")
 
     result = {
         "artifact": "user_accounts",
@@ -239,6 +423,7 @@ def main() -> int:
         "users": {"count": len(users), "records": users},
         "autorun_entries": {"count": len(autorun), "records": autorun},
         "typed_paths": {"count": len(typed_paths), "records": typed_paths},
+        "userassist": {"count": len(userassist), "records": userassist},
     }
 
     Path(args.output).parent.mkdir(parents=True, exist_ok=True)

@@ -36,17 +36,27 @@ def filetime_to_iso(ft: int) -> str:
 def parse_info2(info2_path: Path) -> list[dict]:
     """
     Parse RECYCLER/INFO2 (Windows 9x/XP/2003).
+
     File layout:
-      Header: 20 bytes
-      Records: 280 bytes each (ANSI path) or variable if Unicode suffix present
-    Record layout (280 bytes):
-      0x00  deleted_flag   DWORD  (0x00 = free, non-zero = deleted)
-      0x04  drive_number   DWORD
-      0x08  deletion_time  FILETIME (8 bytes)
-      0x10  file_size      DWORD
-      0x14  original_path  ANSI 260 bytes (null-terminated)
-    Optional Unicode suffix (appended after the ANSI path in later XP builds):
-      The record block may be 280+520 bytes if Unicode path is present.
+      Header: 20 bytes (version/reserved fields; only record_size at 0x0C
+      is used here to distinguish ANSI-only from ANSI+Unicode records).
+      Records: 280 bytes each (ANSI path only) or 800 bytes each (ANSI path
+      plus a trailing Unicode path, written by Windows 2000/XP for
+      long/Unicode filenames).
+
+    Record layout, offsets relative to the start of each record:
+      0x000  original_path  ANSI, 260 bytes, null-terminated. This is the
+             FIRST field in the record, not the last — a record whose path
+             starts with a NUL byte has never been written (an empty,
+             pre-allocated slot) and is skipped.
+      0x104  record_number  DWORD  — index assigned to the entry in the bin
+      0x108  drive_number   DWORD  — drive letter as an index (A=0, B=1, ...)
+      0x10C  deletion_time  FILETIME (8 bytes) — when the file was deleted
+      0x114  file_size      DWORD  — original file size in bytes
+      0x118  original_path (Unicode)  520 bytes (260 UTF-16LE chars),
+             null-terminated — present only in 800-byte records; preferred
+             over the ANSI path when non-empty, since it isn't truncated to
+             8.3/ANSI-safe characters.
     """
     records = []
     RECORD_SIZE = 280
@@ -60,9 +70,9 @@ def parse_info2(info2_path: Path) -> list[dict]:
     if len(data) < 20:
         return records
 
-    # Header: version at 0x00, record_size at 0x0C, record_count at 0x10
-    version     = struct.unpack_from("<I", data, 0x00)[0]
-    rec_size    = struct.unpack_from("<I", data, 0x0C)[0] if len(data) >= 16 else RECORD_SIZE
+    # Header: record_size at 0x0C tells us whether records are 280 bytes
+    # (ANSI-only) or 800 bytes (ANSI + trailing Unicode path).
+    rec_size = struct.unpack_from("<I", data, 0x0C)[0] if len(data) >= 16 else RECORD_SIZE
 
     # Use detected record size if reasonable
     if rec_size not in (280, 800):
@@ -72,23 +82,24 @@ def parse_info2(info2_path: Path) -> list[dict]:
     while offset + rec_size <= len(data):
         chunk = data[offset: offset + rec_size]
 
-        deleted_flag = struct.unpack_from("<I", chunk, 0x00)[0]
-        if deleted_flag == 0:
+        # ANSI path is the first field in the record (0x000-0x103). A record
+        # that was never written has an all-NUL path and is skipped — this
+        # replaces the old (incorrect) "deleted_flag DWORD at 0x00" check,
+        # which was actually reading the first bytes of this same path field.
+        raw_path = chunk[0x000:0x000 + 260]
+        if raw_path[:1] == b"\x00":
             offset += rec_size
             continue
-
-        drive_num    = struct.unpack_from("<I", chunk, 0x04)[0]
-        deletion_ft  = struct.unpack_from("<Q", chunk, 0x08)[0]
-        file_size    = struct.unpack_from("<I", chunk, 0x10)[0]
-
-        # ANSI path
-        raw_path = chunk[0x14:0x14 + 260]
         ansi_path = raw_path.split(b"\x00")[0].decode("latin-1", errors="replace")
 
-        # Unicode path (if 800-byte record)
+        drive_num   = struct.unpack_from("<I", chunk, 0x108)[0]
+        deletion_ft = struct.unpack_from("<Q", chunk, 0x10C)[0]
+        file_size   = struct.unpack_from("<I", chunk, 0x114)[0]
+
+        # Unicode path (only present in 800-byte records)
         uni_path = ""
-        if rec_size >= 800 and len(chunk) >= 800:
-            uni_raw = chunk[280:280 + 520]
+        if rec_size >= 800 and len(chunk) >= 0x118 + 520:
+            uni_raw = chunk[0x118:0x118 + 520]
             uni_path = uni_raw.decode("utf-16-le", errors="replace").split("\x00")[0]
 
         original_path = uni_path if uni_path else ansi_path
@@ -139,8 +150,16 @@ def parse_i_file(i_path: Path, sid: str) -> dict | None:
     original_path = ""
     if header == 1:
         # Version 1: path starts at 0x18
+        # Decode first, then cut at the first NUL *character* in the decoded
+        # string. A byte-level rstrip(b"\x00") done before decoding (as this
+        # used to do) is both unnecessary and destructive: UTF-16LE encodes
+        # every Latin-alphabet/ASCII-range character with a 0x00 high byte,
+        # so trailing-null-byte stripping at the byte level can eat into the
+        # last real character's own high byte whenever nothing but the
+        # double-NUL terminator follows it in the file — silently corrupting
+        # the last character of the recovered path.
         raw = data[0x18:]
-        original_path = raw.rstrip(b"\x00").decode("utf-16-le", errors="replace").split("\x00")[0]
+        original_path = raw.decode("utf-16-le", errors="replace").split("\x00")[0]
     elif header == 2:
         # Version 2: path length DWORD at 0x18, then path
         if len(data) >= 0x1C:
@@ -149,8 +168,16 @@ def parse_i_file(i_path: Path, sid: str) -> dict | None:
             original_path = raw.decode("utf-16-le", errors="replace")
     else:
         # Unknown version — try both offsets
+        # Decode first, then cut at the first NUL *character* in the decoded
+        # string. A byte-level rstrip(b"\x00") done before decoding (as this
+        # used to do) is both unnecessary and destructive: UTF-16LE encodes
+        # every Latin-alphabet/ASCII-range character with a 0x00 high byte,
+        # so trailing-null-byte stripping at the byte level can eat into the
+        # last real character's own high byte whenever nothing but the
+        # double-NUL terminator follows it in the file — silently corrupting
+        # the last character of the recovered path.
         raw = data[0x18:]
-        original_path = raw.rstrip(b"\x00").decode("utf-16-le", errors="replace").split("\x00")[0]
+        original_path = raw.decode("utf-16-le", errors="replace").split("\x00")[0]
 
     return {
         "source":        "$I_file",

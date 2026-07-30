@@ -1,20 +1,11 @@
 #!/usr/bin/env python3
 """
 Parsers Package - All forensic artifact parsers
+
+Each module in this package is designed to run standalone (`python3
+parsers/parse_X.py --raw-dir ... --output ...`, as extract_artifacts.sh
+invokes them) and does not define a module-level function named after
+itself, so this package intentionally does not re-export one. Import the
+specific function you need directly, e.g.
+`from parsers.parse_deleted_files import parse_info2`.
 """
-
-from .parse_browser_history import parse_browser_history
-from .parse_event_logs import parse_event_logs
-from .parse_application_activity import parse_application_activity
-from .parse_user_accounts import parse_user_accounts
-from .parse_document_folder_access import parse_document_folder_access
-from .parse_deleted_files import parse_deleted_files
-
-__all__ = [
-    'parse_browser_history',
-    'parse_event_logs',
-    'parse_application_activity',
-    'parse_user_accounts',
-    'parse_document_folder_access',
-    'parse_deleted_files'
-]

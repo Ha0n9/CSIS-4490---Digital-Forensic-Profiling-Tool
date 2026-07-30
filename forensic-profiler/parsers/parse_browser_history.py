@@ -21,11 +21,102 @@ import sys
 import tempfile
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
+from urllib.parse import unquote, urlparse
 
 # Chrome/Edge epoch starts 1601-01-01
 CHROME_EPOCH = datetime(1601, 1, 1, tzinfo=timezone.utc)
 # Firefox epoch is Unix time in microseconds
 FIREFOX_EPOCH = datetime(1970, 1, 1, tzinfo=timezone.utc)
+
+# =============================================================================
+# Behavior-intent matching — flags search/browsing text that indicates
+# anti-forensic or evasive intent (e.g. "how to clear browser history"),
+# independent of correlation/engine.py's SUSPICIOUS_DOMAINS (which flags
+# known-bad *destinations*, not intent expressed in ordinary search text on
+# any domain). Deliberately conservative: only clearly anti-forensic/
+# evasion phrasing, not generic privacy-conscious searches.
+# =============================================================================
+BEHAVIOR_PATTERNS: dict[str, tuple[str, int]] = {
+    r"clear\s+(my\s+)?(browser|browsing|internet)\s*history": ("anti_forensic", 3),
+    r"delete\s+(my\s+)?(browser|browsing|internet)\s*history": ("anti_forensic", 3),
+    r"(permanently|securely)\s+(delete|erase)\s+files?": ("anti_forensic", 3),
+    r"wipe\s+(free\s+space|hard\s*drive|disk)": ("anti_forensic", 3),
+    r"how\s+to\s+(hide|permanently\s+delete)\s+(files?|folders?|evidence)": ("anti_forensic", 3),
+    r"shred(der)?\s+(files?|documents?)": ("anti_forensic", 2),
+    r"bypass\s+(firewall|antivirus|admin(istrator)?\s*password)": ("evasion", 3),
+    r"disable\s+(antivirus|windows\s*defender|firewall)": ("evasion", 3),
+    r"undetectable\s+(keylogger|malware|rat|spyware)": ("evasion", 4),
+    r"how\s+to\s+avoid\s+detection": ("evasion", 3),
+}
+_BEHAVIOR_PATTERNS_COMPILED = [
+    (re.compile(pattern, re.I), cat, weight)
+    for pattern, (cat, weight) in BEHAVIOR_PATTERNS.items()
+]
+
+
+def _path_text(url: str) -> str:
+    """
+    Decode a URL's path segments into plain, matchable text: percent-decode,
+    then replace the common "pretty URL" slug separators -/_/+ with spaces.
+    Used as a last-resort fallback when neither the page title nor the
+    query string carries any readable text (e.g. a search engine result
+    page whose own URL encodes the query as a slug, or a static site page
+    like "/how-to-clear-your-browser-history.html").
+    """
+    try:
+        path = unquote(urlparse(url).path or "")
+    except Exception:
+        return ""
+    return re.sub(r"[-_+]", " ", path).lower()
+
+
+def _query_text(url: str) -> str:
+    """Decode a URL's query string into plain, matchable text."""
+    try:
+        query = unquote(urlparse(url).query or "")
+    except Exception:
+        return ""
+    return re.sub(r"[+]", " ", query).lower()
+
+
+def _match_behavior(text: str) -> tuple[str, int] | None:
+    if not text:
+        return None
+    for regex, cat, weight in _BEHAVIOR_PATTERNS_COMPILED:
+        if regex.search(text):
+            return cat, weight
+    return None
+
+
+def _annotate_behavior(record: dict) -> dict:
+    """
+    Flag a browser-history record with anti-forensic/evasion intent, if
+    any, checking page title first, then the URL's query-string text, and
+    only falling back to the URL's path-segment text (_path_text()) if
+    neither found a match — title/query text is more reliably human-
+    readable than a path slug, so it's checked first.
+    """
+    title = (record.get("title") or "").lower()
+    url = record.get("url") or ""
+
+    match = _match_behavior(title)
+    matched_on = "title"
+    if not match:
+        match = _match_behavior(_query_text(url))
+        matched_on = "query"
+    if not match:
+        match = _match_behavior(_path_text(url))
+        matched_on = "path"
+
+    if match:
+        record["behavior_category"] = match[0]
+        record["behavior_weight"] = match[1]
+        record["behavior_matched_on"] = matched_on
+    else:
+        record["behavior_category"] = None
+        record["behavior_weight"] = 0
+        record["behavior_matched_on"] = ""
+    return record
 
 
 def chrome_time_to_iso(microseconds: int) -> str:
@@ -45,12 +136,36 @@ def firefox_time_to_iso(microseconds: int) -> str:
 
 
 def query_sqlite(db_path: Path, query: str, params: tuple = ()) -> list[tuple]:
-    """Copy DB to temp location (avoids WAL/lock issues) and run query."""
+    """
+    Copy DB (+ any WAL/SHM sidecars sitting next to it) to a temp location
+    and run query.
+
+    Chrome/Edge/Brave/Firefox all default to SQLite WAL journal mode, so the
+    most recently visited pages can live only in a "<db>-wal" file that
+    hasn't been checkpointed into the main database yet. Copying just the
+    main file (as this used to do) silently drops that recent activity.
+    Copying the "-wal"/"-shm" sidecars alongside the main file under the
+    *same* temp base name lets SQLite merge committed WAL frames back in
+    when the copy is opened, exactly as it would for the live file.
+
+    Opened read-write (not mode=ro): this is already a disposable temp copy
+    — the original evidence file under raw/ is never touched either way —
+    and read-write access avoids relying on this SQLite build's read-only
+    WAL-recovery support, which isn't guaranteed on every version.
+    """
     with tempfile.NamedTemporaryFile(suffix=".sqlite", delete=False) as tmp:
         tmp_path = Path(tmp.name)
+    sidecar_paths: list[Path] = []
     try:
         shutil.copy2(db_path, tmp_path)
-        con = sqlite3.connect(f"file:{tmp_path}?mode=ro", uri=True)
+        for ext in ("-wal", "-shm"):
+            src = Path(str(db_path) + ext)
+            if src.exists():
+                dst = Path(str(tmp_path) + ext)
+                shutil.copy2(src, dst)
+                sidecar_paths.append(dst)
+
+        con = sqlite3.connect(str(tmp_path))
         con.row_factory = sqlite3.Row
         cur = con.execute(query, params)
         rows = cur.fetchall()
@@ -61,6 +176,8 @@ def query_sqlite(db_path: Path, query: str, params: tuple = ()) -> list[tuple]:
         return []
     finally:
         tmp_path.unlink(missing_ok=True)
+        for sidecar in sidecar_paths:
+            sidecar.unlink(missing_ok=True)
 
 
 def parse_chrome(db_path: Path, browser: str, username: str) -> list[dict]:
@@ -88,6 +205,8 @@ def parse_chrome(db_path: Path, browser: str, username: str) -> list[dict]:
                 "transition": row["transition"],
             }
         )
+    for r in records:
+        _annotate_behavior(r)
     return records
 
 
@@ -116,6 +235,8 @@ def parse_firefox(db_path: Path, username: str) -> list[dict]:
                 "visit_type": row["visit_type"],
             }
         )
+    for r in records:
+        _annotate_behavior(r)
     return records
 
 
@@ -145,6 +266,8 @@ def parse_ie_index_dat(dat_path: Path, username: str) -> list[dict]:
             )
     except Exception as exc:
         print(f"[!] IE index.dat parse error {dat_path}: {exc}", file=sys.stderr)
+    for r in records:
+        _annotate_behavior(r)
     return records
 
 

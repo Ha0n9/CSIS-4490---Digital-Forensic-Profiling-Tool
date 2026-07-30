@@ -247,8 +247,13 @@ build_config_block() {
     write_alias() {
         local aname="$1" dll="$2"
         if [[ -n "$dll" && -f "$dll" ]]; then
-            # Quote dotnet path and DLL path; works in both bash and zsh
-            printf "alias %s='%s' '%s'\n" "$aname" "$DOTNET_BIN" "$dll"
+            # Both paths must sit INSIDE one quoted alias value so the shell
+            # expands "$aname" to a single command string "dotnet tool.dll",
+            # not two separate quoted arguments to `alias` (which silently
+            # aliased the name to bare `dotnet` and left the DLL path as a
+            # dangling, invalid second `alias` argument). Works in both bash
+            # and zsh.
+            printf "alias %s='%s %s'\n" "$aname" "$DOTNET_BIN" "$dll"
         else
             printf '# %s: DLL not found\n' "$aname"
         fi

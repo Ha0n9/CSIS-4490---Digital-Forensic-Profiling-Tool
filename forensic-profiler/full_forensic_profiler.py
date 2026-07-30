@@ -132,37 +132,48 @@ class ForensicProfiler:
         log_info(f"Output directory: {self.output_dir}")
     
     def _run_script(self, script_name: str, args: List[str]) -> Tuple[bool, str]:
-        """Run a bash script and capture output"""
+        """
+        Run a bash script, streaming its combined stdout/stderr to the
+        terminal line-by-line as it's produced (not after the process
+        exits). The extraction/mount and parsing stages this drives
+        (ewfverify, ewfmount, per-file copy/parse loops) can each take
+        several minutes; buffering everything via subprocess.run(...,
+        capture_output=True) — the previous approach here — meant the
+        terminal showed nothing at all for the whole stage, which looks
+        indistinguishable from a hang during a live demo.
+        """
         script_path = PROJECT_ROOT / script_name
         if not script_path.exists():
             log_error(f"Script not found: {script_path}")
             return False, "Script not found"
-        
+
         cmd = ["bash", str(script_path)] + args
         log_info(f"Running: {' '.join(cmd)}")
-        
+
+        output_lines: List[str] = []
         try:
-            result = subprocess.run(
+            # stderr merged into stdout so error output interleaves live in
+            # the order it actually happened, instead of being held back
+            # and dumped separately (and truncated) only on failure.
+            process = subprocess.Popen(
                 cmd,
-                capture_output=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
                 text=True,
-                check=False
+                bufsize=1,
             )
-            
-            # Print stdout in real-time (for user feedback)
-            if result.stdout:
-                for line in result.stdout.split('\n'):
-                    if line.strip():
-                        print(line)
-            
-            if result.returncode == 0:
-                return True, result.stdout
+            for line in process.stdout:
+                print(line, end="")
+                output_lines.append(line)
+            process.wait()
+
+            combined_output = "".join(output_lines)
+            if process.returncode == 0:
+                return True, combined_output
             else:
-                log_error(f"Script failed with code {result.returncode}")
-                if result.stderr:
-                    log_error(f"Error: {result.stderr[:500]}")
-                return False, result.stderr
-                
+                log_error(f"Script failed with code {process.returncode}")
+                return False, combined_output
+
         except Exception as e:
             log_error(f"Failed to run script: {e}")
             return False, str(e)

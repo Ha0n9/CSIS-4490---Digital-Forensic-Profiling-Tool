@@ -664,6 +664,17 @@ if [[ -n "$USERS_DIR" ]]; then
             PROFILE=$(basename "$(dirname "$pdb")")
             BASE="$RAW/browser/firefox/${USERNAME}_${PROFILE}"
             sudo cp "$pdb" "${BASE}_places.sqlite" 2>/dev/null || true
+            # WAL-mode sidecars: Firefox defaults to SQLite WAL journal mode,
+            # so the most recent visits can sit only in -wal (not yet
+            # checkpointed into places.sqlite itself). Copy them alongside
+            # the main file, under the same destination base name, so the
+            # parser can merge them on open instead of silently missing the
+            # newest history.
+            for wal_ext in -wal -shm -journal; do
+                WAL_SRC="${pdb}${wal_ext}"
+                [[ -f "$WAL_SRC" ]] && \
+                    sudo cp "$WAL_SRC" "${BASE}_places.sqlite${wal_ext}" 2>/dev/null || true
+            done
             for extra in cookies.sqlite downloads.sqlite formhistory.sqlite; do
                 SRC="$(dirname "$pdb")/$extra"
                 [[ -f "$SRC" ]] && sudo cp "$SRC" "${BASE}_${extra}" 2>/dev/null || true
@@ -682,6 +693,18 @@ if [[ -n "$USERS_DIR" ]]; then
                     PROFILE=$(basename "$(dirname "$hist")")
                     BASE="$RAW/browser/chrome/${USERNAME}_${BNAME}_${PROFILE}"
                     sudo cp "$hist" "${BASE}_History" 2>/dev/null || true
+                    # WAL-mode sidecars: Chrome/Edge/Brave default to SQLite
+                    # WAL journal mode, so the most recent visits can sit
+                    # only in History-wal (not yet checkpointed into History
+                    # itself). Copy them alongside the main file, under the
+                    # same destination base name, so the parser can merge
+                    # them on open instead of silently missing the newest
+                    # browsing activity.
+                    for wal_ext in -wal -shm -journal; do
+                        WAL_SRC="${hist}${wal_ext}"
+                        [[ -f "$WAL_SRC" ]] && \
+                            sudo cp "$WAL_SRC" "${BASE}_History${wal_ext}" 2>/dev/null || true
+                    done
                     for extra in Cookies "Login Data" "Web Data"; do
                         SRC="$(dirname "$hist")/$extra"
                         SAFE_NAME=$(echo "$extra" | tr ' ' '_')

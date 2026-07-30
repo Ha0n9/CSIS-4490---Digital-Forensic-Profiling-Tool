@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-parse_prefetch.py
+parse_application_activity.py
 Artifact : Application Activity — Prefetch files (.pf)
 Source   : raw/prefetch/*.pf
 Output   : application_activity.json
@@ -124,10 +124,16 @@ def parse_pf_file(pf_path: Path) -> dict | None:
     version   = struct.unpack_from("<I", data, 0)[0]
     file_size = struct.unpack_from("<I", data, 0x0C)[0]
 
-    # Exe name: UTF-16LE, 29 chars at 0x10
+    # Exe name: UTF-16LE, 29 chars (58 bytes) at 0x10. Cut at the first NUL
+    # *character* after decoding, not rstrip(): Prefetch files are reused in
+    # place, so a name shorter than whatever previously occupied this fixed
+    # field can leave non-NUL leftover bytes after the real name's own
+    # terminator — rstrip("\x00") only trims trailing NULs and leaves that
+    # stale garbage attached (observed against a real Windows XP image: e.g.
+    # "WUAUCLT.EXE" recovered with trailing binary junk still appended).
     try:
         exe_raw  = data[0x10:0x10 + 58]
-        exe_name = exe_raw.decode("utf-16-le", errors="replace").rstrip("\x00")
+        exe_name = exe_raw.decode("utf-16-le", errors="replace").split("\x00")[0]
     except Exception:
         exe_name = pf_path.stem
 
@@ -165,7 +171,7 @@ def parse_pf_file(pf_path: Path) -> dict | None:
             last_run = all_runs[0] if all_runs else ""
 
     # Parse Section C (file string table) to extract exe_path for user attribution
-    section_c_paths = parse_pf_section_c(data, version)
+    section_c_paths = parse_pf_section_c(data)
     exe_path = _exe_path_from_section_c(section_c_paths, exe_name)
 
     return {
@@ -187,48 +193,32 @@ def parse_pf_file(pf_path: Path) -> dict | None:
 # Contains the full paths of files accessed during execution.
 # These paths often include the user's home directory, enabling attribution.
 #
-# Section header layout (per-version offset):
-#   v17 (XP):   section_offset_table at 0x98 (4 section entries)
-#   v23 (7):    section_offset_table at 0xA0
-#   v26/30/31:  section_offset_table at 0x84 (but C is section index 1)
-#
-# Each section entry (8 bytes):
-#   0x00 DWORD  section_offset (from start of file)
-#   0x04 DWORD  section_size   (bytes)
-# Section A = index 0 (file metrics)
-# Section B = index 1 (trace chains) — skip
-# Section C = index 2 (filename strings, UTF-16LE)
-# Section D = index 3 (volumes)
+# Unlike the per-version run-timestamp/run-count layout above, the (offset,
+# length) pair that locates Section C is stored at a FIXED position in the
+# file-information header for every supported version (v17/23/26/30/31) —
+# it is not part of a version-dependent "section table" indexed by entry.
+# Each of Sections A/B/C/D has its own independently-located (offset,
+# size/count) pair elsewhere in that header; only Section C's pair is needed
+# here, for user-attribution purposes:
+#   0x64  DWORD  section_c_offset  (absolute offset from start of file)
+#   0x68  DWORD  section_c_length  (bytes)
 # =============================================================================
 
-def _section_table_offset(version: int) -> int:
-    return {17: 0x98, 23: 0xA0, 26: 0x84, 30: 0x84, 31: 0x84}.get(version, 0)
+SECTION_C_OFFSET_FIELD = 0x64
+SECTION_C_LENGTH_FIELD = 0x68
 
 
-def _section_c_index(version: int) -> int:
-    # In v17/v23 there are 4 sections: A(0) B(1) C(2) D(3)
-    # In v26/30/31 layout may vary but C is typically index 1 of a 4-entry table
-    return 2
-
-
-def parse_pf_section_c(data: bytes, version: int) -> list[str]:
+def parse_pf_section_c(data: bytes) -> list[str]:
     """
     Extract the filename string table (Section C) from a Prefetch file.
     Returns a list of full Windows path strings.
     """
-    table_off = _section_table_offset(version)
-    if table_off == 0 or table_off + 32 > len(data):
-        return []
-
-    # Section C = entry index 2 in the 4-entry section table (each entry = 8 bytes)
-    c_idx = _section_c_index(version)
-    entry_off = table_off + c_idx * 8
-    if entry_off + 8 > len(data):
+    if SECTION_C_LENGTH_FIELD + 4 > len(data):
         return []
 
     try:
-        sec_offset = struct.unpack_from("<I", data, entry_off)[0]
-        sec_size   = struct.unpack_from("<I", data, entry_off + 4)[0]
+        sec_offset = struct.unpack_from("<I", data, SECTION_C_OFFSET_FIELD)[0]
+        sec_size   = struct.unpack_from("<I", data, SECTION_C_LENGTH_FIELD)[0]
     except Exception:
         return []
 

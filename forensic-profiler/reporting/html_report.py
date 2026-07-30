@@ -72,6 +72,34 @@ class HTMLReporter:
             except Exception as e:
                 print(f"Warning: Failed to load correlation results: {e}")
         return None
+
+    def load_image_metadata(self) -> Dict[str, str]:
+        """
+        Parse mount_and_extract_hives.sh's extraction_report.txt for
+        acquisition/image identification fields, for display at the top of
+        the report. That file sits alongside json/ and reports/ under the
+        case's output directory — json_dir's parent — per the pipeline's
+        fixed directory layout (see full_forensic_profiler.py). Returns {}
+        (never raises) if the report is missing or unparseable, e.g. when
+        the reporter is run standalone against hand-built JSON.
+        """
+        report_path = self.json_dir.parent / 'extraction_report.txt'
+        if not report_path.exists():
+            return {}
+        fields = {}
+        try:
+            for line in report_path.read_text(encoding='utf-8', errors='replace').splitlines():
+                if ':' not in line:
+                    continue
+                key, _, value = line.partition(':')
+                key = key.strip()
+                value = value.strip()
+                if key in ('Date', 'E01 Image', 'Image Size', 'Windows Ver',
+                           'Mount Method', 'Total Extracted', 'Failed/Missing'):
+                    fields[key] = value
+        except Exception as e:
+            print(f"Warning: Failed to parse extraction report: {e}")
+        return fields
     
     def _esc(self, s) -> str:
         """HTML-escape a value."""
@@ -279,11 +307,38 @@ class HTMLReporter:
         </details>
         '''
 
+    def _render_image_metadata_html(self, meta: Dict[str, str]) -> str:
+        """Case/image identification panel shown at the top of the report,
+        above Executive Summary — acquisition-time facts about the source
+        image, not analysis results."""
+        rows = [
+            ('Source Image', meta.get('E01 Image')),
+            ('Image Size', meta.get('Image Size')),
+            ('Windows Version', meta.get('Windows Ver')),
+            ('Mount Method', meta.get('Mount Method')),
+            ('Extraction Date', meta.get('Date')),
+            ('Artifacts Extracted', meta.get('Total Extracted')),
+        ]
+        rows = [(label, value) for label, value in rows if value]
+        if not rows:
+            return ''
+        body = "".join(
+            f'<tr><td class="meta-label">{self._esc(label)}</td><td>{self._esc(value)}</td></tr>'
+            for label, value in rows
+        )
+        return f'''
+        <section class="image-meta">
+            <h2>Forensic Image Information</h2>
+            <p class="section-desc">Acquisition and extraction details for the source image analyzed in this report.</p>
+            <table class="tbl meta-tbl"><tbody>{body}</tbody></table>
+        </section>
+        '''
+
     def generate(self) -> Path:
         """Generate the final report"""
         print("[*] Loading correlation results...")
         correlation_results = self.load_correlation_results()
-        
+
         if not correlation_results:
             print("[!] No correlation results found. Generating empty report.")
             correlation_results = {
@@ -307,7 +362,9 @@ class HTMLReporter:
     
     def generate_html(self, data: Dict) -> str:
         """Generate complete HTML report"""
-        
+
+        image_metadata_html = self._render_image_metadata_html(self.load_image_metadata())
+
         summary = data.get('summary', {})
         users = data.get('user_correlations', [])
         anomalies = data.get('anomalies', [])
@@ -338,6 +395,23 @@ class HTMLReporter:
                 <div class="stat-value">{value}</div>
                 <div class="stat-label">{label}</div>
             </div>
+            '''
+
+        # ── Security-log coverage note ────────────────────────────────────────
+        # A LOW/zero event_anomalies score can mean "nothing happened" or
+        # "no visibility into the Security log at all" (e.g. XP's disabled-
+        # by-default auditing) — these look identical in the score alone,
+        # so make the distinction explicit rather than let a reader
+        # over-interpret an absence of Security-log evidence as a clean
+        # audit trail. See CorrelationEngine._security_log_coverage().
+        coverage = summary.get('security_log_coverage') or {}
+        coverage_html = ""
+        if coverage.get('status') == 'NO_VISIBILITY':
+            coverage_html = f'''
+            <p class="section-desc coverage-warning">
+                ⚠ Security-log coverage: <strong>no visibility</strong> —
+                {self._esc(coverage.get('note', ''))}
+            </p>
             '''
         
         # ── Threats ────────────────────────────────────────────────────────────
@@ -388,6 +462,7 @@ class HTMLReporter:
             <table class="tbl">
                 <thead>
                     <tr>
+                        <th class="r">Rank</th>
                         <th>User</th>
                         <th class="r">Events</th>
                         <th class="r">Network</th>
@@ -399,7 +474,7 @@ class HTMLReporter:
                 </thead>
                 <tbody>
             '''
-            
+
             for user in users[:50]:
                 username = user.get('display_name') or user.get('username', 'Unknown')
                 risk_level = user.get('risk_label') or 'NONE'
@@ -410,9 +485,12 @@ class HTMLReporter:
                 file_count = breakdown.get('document_access', {}).get('count', 0)
                 browser_count = breakdown.get('browser_history', {}).get('count', 0)
                 risk_score = user.get('final_score', 0)
+                rank = user.get('rank')
+                rank_display = rank if rank is not None else '—'
 
                 users_html += f'''
                 <tr>
+                    <td class="rank-cell">{rank_display}</td>
                     <td><strong>{self._esc(username)}</strong></td>
                     <td class="r">{event_count}</td>
                     <td class="r">{network_count}</td>
@@ -495,6 +573,11 @@ class HTMLReporter:
   .tbl tbody tr:hover {{ background:#f0f7ff; }}
   .r {{ text-align:right; }}
   .muted {{ color:#6b7280; font-size:12px; }}
+
+  .meta-tbl {{ width:auto; }}
+  .meta-tbl td {{ padding:6px 16px 6px 0; border-bottom:1px solid #f0f1f3; font-size:13px; }}
+  .meta-label {{ color:#6b7280; font-weight:600; white-space:nowrap; padding-right:20px !important; }}
+  .rank-cell {{ font-weight:700; color:var(--navy); text-align:center; width:36px; }}
   
   .badge {{ display:inline-block; padding:2px 10px; border-radius:12px;
             font-size:11px; font-weight:700; letter-spacing:.5px; }}
@@ -523,6 +606,8 @@ class HTMLReporter:
   .anomaly-meta small {{ margin-right:16px; }}
   
   .section-desc {{ color:#6b7280; margin-bottom:12px; font-size:13px; }}
+  .coverage-warning {{ color:var(--amber); background:#fef9e7; border:1px solid #fde68a;
+                        border-radius:6px; padding:8px 12px; margin-top:12px; }}
 
   .user-detail {{ border:1px solid var(--border); border-radius:6px; margin-bottom:10px;
                    background:#fafbfc; overflow:hidden; }}
@@ -573,9 +658,11 @@ class HTMLReporter:
   <div class="sub">Generated: {gen_at}</div>
 </header>
 <main>
+  {image_metadata_html}
   <section>
     <h2>Executive Summary</h2>
     <div class="summary-grid">{stats_html}</div>
+    {coverage_html}
   </section>
 
   <section>

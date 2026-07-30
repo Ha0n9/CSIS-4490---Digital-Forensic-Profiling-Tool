@@ -165,29 +165,48 @@ else
     fi
 fi
 
-# Final fallback: try to detect from raw directory structure
+# Final fallback: try to detect from raw artifact *formats* already on
+# disk. These signals are image-agnostic (they key off file format, not any
+# specific username or dataset), unlike an earlier version of this check
+# that matched literal test-image account names.
 if [[ "$WIN_VER" == "unknown" ]]; then
-    log_info "Attempting to detect Windows version from raw artifacts..."
-    if [[ -d "$RAW/hives/users" ]]; then
-        # Check for XP-style user hives (Administrator, Jean, etc.)
-        if ls "$RAW/hives/users" 2>/dev/null | grep -qiE "administrator|jean|devon"; then
-            WIN_VER="xp"
-            log_info "Detected Windows XP from raw user hives"
-        else
+    log_info "Attempting to detect Windows version from raw artifact formats..."
+
+    # Signal 1: event log file extension — legacy Windows XP/2003 writes
+    # .evt, Vista+ writes .evtx. Direct format signal, no naming assumptions.
+    if [[ -d "$RAW/event_logs" ]]; then
+        if find "$RAW/event_logs" -iname "*.evtx" 2>/dev/null | grep -q .; then
             WIN_VER="modern"
-            log_info "Detected Windows 10/11 from raw user hives"
+            log_info "Detected Windows 10/11 from .evtx event log format"
+        elif find "$RAW/event_logs" -iname "*.evt" 2>/dev/null | grep -q .; then
+            WIN_VER="xp"
+            log_info "Detected Windows XP from .evt event log format"
         fi
-    elif [[ -d "$RAW/prefetch" ]] && [[ -n "$(ls -A "$RAW/prefetch" 2>/dev/null)" ]]; then
-        # Check prefetch files for XP-style naming
+    fi
+
+    # Signal 2: Recycle Bin layout — INFO2 is XP-only; $I/$R-prefixed
+    # filenames are the Vista+ $Recycle.Bin format.
+    if [[ "$WIN_VER" == "unknown" && -d "$RAW/recycle_bin" ]]; then
+        if find "$RAW/recycle_bin" -iname "INFO2" 2>/dev/null | grep -q .; then
+            WIN_VER="xp"
+            log_info "Detected Windows XP from INFO2 Recycle Bin format"
+        elif find "$RAW/recycle_bin" -iname '$I*' 2>/dev/null | grep -q .; then
+            WIN_VER="modern"
+            log_info "Detected Windows 10/11 from \$I/\$R Recycle Bin format"
+        fi
+    fi
+
+    # Signal 3 (last resort): Prefetch filename length — XP's 8-char hash
+    # produces a shorter filename than Vista+'s longer hash.
+    if [[ "$WIN_VER" == "unknown" && -d "$RAW/prefetch" ]] && [[ -n "$(ls -A "$RAW/prefetch" 2>/dev/null)" ]]; then
         if ls "$RAW/prefetch" 2>/dev/null | head -1 | grep -qiE "\.pf$"; then
-            # Check if prefetch filenames contain XP-style hash (8 chars)
             PF_NAME=$(ls "$RAW/prefetch" 2>/dev/null | head -1)
             if [[ ${#PF_NAME} -gt 15 ]]; then
                 WIN_VER="modern"
             else
                 WIN_VER="xp"
             fi
-            log_info "Detected Windows version from prefetch: $WIN_VER"
+            log_info "Detected Windows version from prefetch filename length: $WIN_VER"
         fi
     fi
 fi
