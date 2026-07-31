@@ -217,11 +217,16 @@ class ForensicProfiler:
         # Check if raw artifacts already exist
         if self.raw_dir.exists() and any(self.raw_dir.iterdir()):
             log_warn(f"Raw artifacts already exist in {self.raw_dir}")
-            self.extraction_report = self._read_extraction_report()
-            if self.extraction_report:
-                self.win_version = self.extraction_report.get('windows_version', 'unknown')
-                log_info(f"Windows version from report: {self.win_version}")
-            return True
+            reuse = input(
+                f"    Reuse this existing data instead of re-extracting from {self.image_path}? [y/N]: "
+            ).strip().lower()
+            if reuse == "y":
+                self.extraction_report = self._read_extraction_report()
+                if self.extraction_report:
+                    self.win_version = self.extraction_report.get('windows_version', 'unknown')
+                    log_info(f"Windows version from report: {self.win_version}")
+                return True
+            log_info("Proceeding with fresh extraction...")
         
         # Validate image exists
         if not self.image_path.exists():
@@ -261,7 +266,12 @@ class ForensicProfiler:
         
         if self.json_dir.exists() and any(self.json_dir.glob("*.json")):
             log_warn(f"JSON artifacts already exist in {self.json_dir}")
-            return True
+            reuse = input(
+                f"    Reuse this existing data instead of re-parsing? [y/N]: "
+            ).strip().lower()
+            if reuse == "y":
+                return True
+            log_info("Proceeding with fresh parsing...")
         
         # Try to find mount point from extraction report
         mount_point = None
