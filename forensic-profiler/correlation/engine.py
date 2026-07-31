@@ -250,6 +250,7 @@ THREAT_DOMAIN_SEVERITY = {
     # Behavior-text categories (see parsers/parse_browser_history.py's
     # BEHAVIOR_PATTERNS) reuse this same severity map via build_threats().
     "anti_forensic": "HIGH", "evasion": "HIGH",
+    "weapon_acquisition": "HIGH", "violence_planning": "HIGH",
 }
 THREAT_EVENT_SEVERITY = {
     "log_cleared": "HIGH", "account_lockout": "MEDIUM", "service_install": "MEDIUM",

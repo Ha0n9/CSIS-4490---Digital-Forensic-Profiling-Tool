@@ -30,11 +30,16 @@ FIREFOX_EPOCH = datetime(1970, 1, 1, tzinfo=timezone.utc)
 
 # =============================================================================
 # Behavior-intent matching — flags search/browsing text that indicates
-# anti-forensic or evasive intent (e.g. "how to clear browser history"),
-# independent of correlation/engine.py's SUSPICIOUS_DOMAINS (which flags
-# known-bad *destinations*, not intent expressed in ordinary search text on
-# any domain). Deliberately conservative: only clearly anti-forensic/
-# evasion phrasing, not generic privacy-conscious searches.
+# anti-forensic/evasive intent (e.g. "how to clear browser history") or
+# weapon-acquisition/violence-planning intent (e.g. "ffl transfers", "map of
+# gun free zones"), independent of correlation/engine.py's SUSPICIOUS_DOMAINS
+# (which flags known-bad *destinations*, not intent expressed in ordinary
+# search text on any domain). Deliberately conservative in every category:
+# only clearly actionable/planning phrasing, never a bare topic mention —
+# e.g. weapon_acquisition/violence_planning patterns require explicit
+# purchase or attack-planning language, so ordinary political commentary or
+# news coverage about firearms ("gun control debate", "mass shooting
+# statistics") does not match.
 # =============================================================================
 BEHAVIOR_PATTERNS: dict[str, tuple[str, int]] = {
     r"clear\s+(my\s+)?(browser|browsing|internet)\s*history": ("anti_forensic", 3),
@@ -47,6 +52,16 @@ BEHAVIOR_PATTERNS: dict[str, tuple[str, int]] = {
     r"disable\s+(antivirus|windows\s*defender|firewall)": ("evasion", 3),
     r"undetectable\s+(keylogger|malware|rat|spyware)": ("evasion", 4),
     r"how\s+to\s+avoid\s+detection": ("evasion", 3),
+    r"\b(buy|purchase|order)\s+(an?\s+)?(illegal\s+)?(gun|firearm|rifle|pistol|handgun|shotgun|ammo|ammunition)\b": ("weapon_acquisition", 3),
+    r"\b(guns?|firearms?|rifles?|pistols?|ammo|ammunition)\s+for\s+sale\b": ("weapon_acquisition", 2),
+    r"\bgun\s*(store|shop)s?\s+near\s+me\b": ("weapon_acquisition", 2),
+    r"\bffl\b[\s&,-]*transfers?\b": ("weapon_acquisition", 3),
+    r"\b(ghost\s+gun|untraceable\s+(firearm|gun)|no\s+background\s+check\s+(gun|firearm))\b": ("weapon_acquisition", 4),
+    r"how\s+to\s+(plan|carry\s+out|commit)\s+(an?\s+)?(mass\s+)?(shooting|attack|massacre)\b": ("violence_planning", 4),
+    r"\b(mass\s+shooting|active\s+shooter)\s+(plan|target|location)s?\b": ("violence_planning", 4),
+    r"\bmap\s+of\s+gun[-\s]free\s+zones?\b": ("violence_planning", 4),
+    r"\bkill\s+(my|the)\s+(coworkers?|classmates?|boss|family)\b": ("violence_planning", 3),
+    r"how\s+to\s+(build|make)\s+(an?\s+)?bomb\b": ("violence_planning", 4),
 }
 _BEHAVIOR_PATTERNS_COMPILED = [
     (re.compile(pattern, re.I), cat, weight)
