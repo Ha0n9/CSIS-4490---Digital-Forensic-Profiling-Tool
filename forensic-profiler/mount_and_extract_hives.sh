@@ -227,7 +227,7 @@ log_step "Step 3: Mounting E01 image"
 
 sudo mkdir -p "$EWF_MOUNT" "$IMG_MOUNT"
 sudo ewfmount "$E01_FILE" "$EWF_MOUNT"
-log_success "ewfmount OK → $EWF_MOUNT"
+[[ $? -eq 0 ]] && log_success "ewfmount OK → $EWF_MOUNT"
 
 # FIX: use sudo find — FUSE mount owned by root, non-root find returns nothing
 EWF_DEVICE=$(sudo find "$EWF_MOUNT" -maxdepth 1 \( -type f -o -type b \) 2>/dev/null | head -1 || true)
